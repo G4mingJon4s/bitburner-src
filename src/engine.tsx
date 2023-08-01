@@ -110,6 +110,8 @@ const Engine: {
     // Bladeburner
     if (Player.bladeburner) Player.bladeburner.storeCycles(numCycles);
 
+		if (Player.worm) Player.worm.process(numCycles);
+
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
 
@@ -323,6 +325,8 @@ const Engine: {
       // Bladeburner offline progress
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
 
+			if (Player.worm) Player.worm.process(numCyclesOffline);
+			
       staneksGift.process(numCyclesOffline);
 
       // Sleeves offline progress
