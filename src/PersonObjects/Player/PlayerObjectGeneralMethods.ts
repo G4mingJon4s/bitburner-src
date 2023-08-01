@@ -50,7 +50,11 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
-import { isMember } from "../../utils/EnumHelper";
+import { serverMetadata } from "../../Server/data/servers";
+import { getEnumHelper, isMember } from "../../utils/EnumHelper";
+import { staneksGift } from "../../CotMG/Helper";
+import { mergeMultipliers } from "../Multipliers";
+import { calculateWormMults } from "../../Worm/helpers/calculations";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -425,6 +429,21 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   }
   applyExploit();
   this.updateSkillLevels();
+}
+
+export function reapplyMultipliers(this: PlayerObject): void {
+	// Generalizes reapplying multipliers. Includes stanek and worm.
+
+	this.resetMultipliers();
+
+	this.applyEntropy(this.entropy);
+
+	const stanekMults = staneksGift.calculateMults();
+	const wormMults = calculateWormMults(this.worm);
+	this.mults = mergeMultipliers(this.mults, mergeMultipliers(stanekMults, wormMults));
+
+	this.reapplyAllSourceFiles();
+	this.updateSkillLevels();
 }
 
 /**
