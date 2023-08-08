@@ -87,6 +87,8 @@ const Engine: {
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
 
+		numCycles *= Player.mults.game_tick_speed;
+
     Terminal.process(numCycles);
 
     Player.processWork(numCycles);
