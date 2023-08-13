@@ -162,7 +162,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
-	const canWorm = true;
+	const canWorm = Player.worm !== null;
 
   const clickPage = useCallback(
     (page: Page) => {
