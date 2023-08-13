@@ -256,4 +256,8 @@ export function initSourceFiles() {
       </>
     ),
   );
+	SourceFiles.SourceFile16 = new SourceFile(
+		16,
+		<>Each level of this Source-File increases the time between changes to the Worm.</>
+	);
 }
