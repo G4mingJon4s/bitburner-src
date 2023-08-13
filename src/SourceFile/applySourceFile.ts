@@ -170,6 +170,9 @@ export function applySourceFile(bn: number, lvl: number): void {
     case 14: // IPvGO
       // Grands increased buffs and favor limit from IPvGO
       break;
+		case 16: // The Worm
+			// Increases time between changes to the worm.
+			break;
     default:
       console.error(`Invalid source file number: ${bn}`);
       break;
