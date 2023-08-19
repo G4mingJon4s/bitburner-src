@@ -5128,6 +5128,8 @@ interface Worm {
 	 * Get the current insight of the worm.
 	 * @remarks
 	 * RAM cost: 1 GB
+	 * 
+	 * @returns The current insight.
 	 */
 	getCurrentInsight(): number;
 }
