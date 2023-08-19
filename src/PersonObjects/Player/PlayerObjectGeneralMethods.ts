@@ -53,7 +53,7 @@ import { isCompanyWork } from "../../Work/CompanyWork";
 import { serverMetadata } from "../../Server/data/servers";
 import { getEnumHelper, isMember } from "../../utils/EnumHelper";
 import { staneksGift } from "../../CotMG/Helper";
-import { mergeMultipliers } from "../Multipliers";
+import { Multipliers, mergeMultipliers } from "../Multipliers";
 import { calculateWormMults } from "../../Worm/calculations";
 
 export function init(this: PlayerObject): void {
@@ -431,19 +431,21 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   this.updateSkillLevels();
 }
 
-export function reapplyMultipliers(this: PlayerObject): void {
+export function reapplyMultipliers(this: PlayerObject): Multipliers {
 	// Generalizes reapplying multipliers. Includes stanek and worm.
 
 	this.resetMultipliers();
 
-	this.applyEntropy(this.entropy);
+	// handles augmentations and source files
+	const withoutMechanics = this.applyEntropy(this.entropy);
 
 	const stanekMults = staneksGift.calculateMults();
 	const wormMults = calculateWormMults(this.worm);
 	this.mults = mergeMultipliers(this.mults, mergeMultipliers(stanekMults, wormMults));
 
-	this.reapplyAllSourceFiles();
 	this.updateSkillLevels();
+
+	return withoutMechanics;
 }
 
 /**

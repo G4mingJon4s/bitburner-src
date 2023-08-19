@@ -13,7 +13,8 @@ export function applyEntropy(this: PlayerObject, stacks = 1): void {
   this.reapplyAllAugmentations();
   this.reapplyAllSourceFiles();
 
-  this.mults = calculateEntropy(stacks);
+  const entropyMults = calculateEntropy(stacks);
+  this.mults = entropyMults;
   staneksGift.updateMults();
   updateGoMults();
 
