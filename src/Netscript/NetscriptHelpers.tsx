@@ -51,6 +51,7 @@ import { assertString, debugType } from "./TypeAssertion";
 export const helpers = {
   string,
   number,
+	boolean,
 	array,
   positiveInteger,
   positiveSafeInteger,
@@ -65,6 +66,7 @@ export const helpers = {
   checkSingularityAccess,
   netscriptDelay,
   updateDynamicRam,
+	wormInputArray,
   getServer,
   scriptIdentifier,
   hack,
@@ -100,6 +102,32 @@ export interface CompleteHGWOptions {
   threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
+}
+
+const userFriendlyString = (v: unknown): string => {
+  const clip = (s: string): string => {
+    if (s.length > 15) return s.slice(0, 12) + "...";
+    return s;
+  };
+  if (typeof v === "number") return String(v);
+  if (typeof v === "string") {
+    if (v === "") return "empty string";
+    return `'${clip(v)}'`;
+  }
+  const json = JSON.stringify(v);
+  if (!json) return "???";
+  return `'${clip(json)}'`;
+};
+
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+	if (typeof v === "string") {
+		if (v.toLowerCase() === "true") return true;
+		if (v.toLowerCase() === "false") return false;
+	} else if (typeof v === "number") {
+		if (v === 1) return true;
+		if (v === 0) return false;
+	} else if (typeof v === "boolean") return v;
+	throw makeRuntimeErrorMsg(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -161,6 +189,16 @@ function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): Pos
 function scriptArgs(ctx: NetscriptContext, args: unknown) {
   if (!isScriptArgs(args)) throw errorMessage(ctx, "'args' is not an array of script args", "TYPE");
   return args;
+}
+
+function wormInputArray(ctx: NetscriptContext, argName: string, v: unknown): WormInputArray {
+	if (typeof v !== "object" || !Array.isArray(v)) throw makeRuntimeErrorMsg(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
+	return [
+		boolean(ctx, `${argName}[0]`, v[0]),
+		string(ctx, `${argName}[1]`, v[1]),
+		number(ctx, `${argName}[2]`, v[2]),
+		number(ctx, `${argName}[3]`, v[3])
+	]
 }
 
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
