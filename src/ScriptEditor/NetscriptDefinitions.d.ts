@@ -5153,8 +5153,23 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
-/**@public */
+/**
+ * @public
+ * The order is:
+ * 1. Bipartite
+ * 2. Shortest path
+ * 3. node value
+ * 4. node indegree
+ * */
 type WormInputArray = [boolean, string, number, number];
+
+/**
+ * @public
+ * The order is:
+ * 1. Chosen node for the value property
+ * 2. Chosen node for the indegree property
+ * */
+type WormChosenNodesArray = [string, string];
 
 /**
  * Worm API.
@@ -5189,13 +5204,13 @@ interface Worm {
 
 	/**
 	 * Attempts to solve the worm using the provided properties.
-	 * This does not reset the worm, if some properties are not correct.
+	 * This does reset the worm, even if some properties are not correct.
 	 * @remarks
 	 * RAM cost: 64 GB
 	 * 
-	 * @returns Returns wether or not the properties are correct.
+	 * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
 	 */
-	attemptSolve(properties: WormInputArray): boolean;
+	attemptSolve(properties: WormInputArray): number;
 
 	/**
 	 * Get the current guess time.
@@ -5213,7 +5228,7 @@ interface Worm {
 	 * 
 	 * @returns All possible states.
 	 */
-	getStates(): string[];
+	getWormStates(): string[];
 
 	/**
 	 * Get the current symbols of the worm.
@@ -5222,21 +5237,14 @@ interface Worm {
 	 * 
 	 * @returns All possible symbols.
 	 */
-	getSymbols(): string[];
+	getWormSymbols(): string[];
 
 	/**
-	 * Get the chosen node for the indegree property.
+	 * Get the chosen nodes for the node specific properties.
 	 * @remarks
-	 * RAM cost: 0.5 GB
+	 * RAM cost: 1 GB
 	 */
-	getChosenNodeIndegree(): string;
-
-	/**
-	 * Get the chosen node for the value property.
-	 * @remarks
-	 * RAM cost: 0.5 GB
-	 */
-	getChosenNodeValue(): string;
+	getChosenNodes(): WormChosenNodesArray;
 }
 
 /** @public */
