@@ -1,5 +1,6 @@
+import { WormChosenValues } from "@nsdefs";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
+import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 
 export interface AutomataData {
 	states: string[];
@@ -15,13 +16,14 @@ export interface AutomataProperties {
 	shortestInput: number;
 	nodeValues: Record<string, number>;
 	nodeIndegrees: Record<string, number>;
+	depthFirstSearchEnumeration: string[];
 }
 
 export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
 
-export function AutomataFactory(completions: number): [AutomataData, [string, string]] {
+export function AutomataFactory(completions: number): [AutomataData, WormChosenValues] {
 	const numStates = getRandomInt(2, 5) * 3 + Math.floor(completions);
 	const numSymbols = 2 + Math.floor(Math.log10(numStates + 1));
 
@@ -43,7 +45,11 @@ export function AutomataFactory(completions: number): [AutomataData, [string, st
 	return [{
 		...data,
 		properties
-	}, [chooseRandomState(states), chooseRandomState(states)]];
+	}, {
+		indegree: chooseRandomState(states),
+		value: chooseRandomState(states),
+		depthFirstSearchEnumeration: Math.floor(Math.random() * states.length)
+	}];
 }
 
 export function generateGraph(states: string[], symbols: string[]): Record<string, Record<string, string>> {
@@ -226,11 +232,14 @@ export function calculateProperties(data: Omit<AutomataData, "properties">): Aut
 		degrees[state] = nodeIndegree(data.transitions, state);
 	});
 
+	const depthFirstSearch = depthFirstSearchEnumeration(data.transitions, data.startState, data.symbols);
+
 	return {
 		isBipartite: bipartite,
 		shortestInput: input.length,
 		nodeValues: values,
-		nodeIndegrees: degrees
+		nodeIndegrees: degrees,
+		depthFirstSearchEnumeration: depthFirstSearch
 	}
 }
 
@@ -238,11 +247,11 @@ export function evaluateInput(data: AutomataData, input: string) {
 	let currentState = data.startState;
 
 	for (let i = 0; i < input.length; i++) {
-		if (currentState === null) break;
-		currentState = data.transitions[currentState][input[i]];
+		if (currentState === undefined) break;
+		currentState = data.transitions[currentState]?.[input[i]];
 	}
 
-	if (currentState === null) return "snull"
+	if (currentState === undefined) return "snull"
 	return currentState;
 }
 
