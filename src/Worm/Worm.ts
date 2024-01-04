@@ -2,90 +2,67 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
-import { AutomataData, AutomataFactory, evaluateInput, isValidInput } from "./Automata";
-import { WormChosenValues } from "@nsdefs";
+import { AutomataSession, evaluateInput } from "./Automata";
+import { removeIdleWormSessions } from "./WormSessions";
 
 export class Worm {
 	bonus: BonusType;
-	data: AutomataData;
-	userValues: WormChosenValues;
-	providedValues: {
-		path: string,
-		bipartite: boolean,
-		value: number,
-		indegree: number,
-		dfsState: string,
-	}
-
 	completions = 0;
-
-	processCount = 0;
 
 	constructor() {
 		this.bonus = bonuses[0];
-
-		[this.data, this.userValues] = AutomataFactory(this.completions);
-
-		this.providedValues = {
-			path: "",
-			bipartite: false,
-			value: 0,
-			indegree: 0,
-			dfsState: this.data.states[0]
-		};
 	}
 
 	process(numCycles = 1) {
 		this.updateMults();
 		applySpecialBonus(this, numCycles);
 
-		console.log(this);
+		removeIdleWormSessions();
 
 		WormEvents.emit();
 	}
 
-	evaluate(input: string): string | null {
-		if (!isValidInput(this.data, input)) return null;
-
-		return evaluateInput(this.data, input);
+	evaluate(session: AutomataSession, input: string): string | null {
+		return evaluateInput(session.data, input);
 	}
 
-	isPathCorrect() {
-		return this.providedValues.path.length === this.data.properties.shortestInput && this.evaluate(this.providedValues.path) === this.data.targetState;
+	isPathCorrect(session: AutomataSession) {
+		return session.guess.path.length === session.data.properties.shortestInput && this.evaluate(session, session.guess.path) === session.data.targetState;
 	}
 
-	isBipartiteCorrect() {
-		return this.providedValues.bipartite === this.data.properties.isBipartite;
+	isBipartiteCorrect(session: AutomataSession) {
+		return session.guess.bipartite === session.data.properties.isBipartite;
 	}
 
-	isNodeValueCorrect() {
-		return this.providedValues.value === this.data.properties.nodeValues[this.userValues.value];
+	isNodeValueCorrect(session: AutomataSession) {
+		return session.guess.value === session.data.properties.nodeValues[session.params.value];
 	}
 
-	isNodeIndegreeCorrect() {
-		return this.providedValues.indegree ===  this.data.properties.nodeIndegrees[this.userValues.indegree];
+	isNodeIndegreeCorrect(session: AutomataSession) {
+		return session.guess.indegree ===  session.data.properties.nodeIndegrees[session.params.indegree];
 	}
 
-	isDFSStateCorrect() {
-		return this.providedValues.dfsState === this.data.properties.depthFirstSearchEnumeration[this.userValues.depthFirstSearchEnumeration];
+	isDFSStateCorrect(session: AutomataSession) {
+		return session.guess.dfsState === session.data.properties.depthFirstSearchEnumeration[session.params.depthFirstSearchEnumeration];
 	}
 	
-	solve()  {
+	solve(session: AutomataSession)  {
 		const comparisons = [
-			this.isPathCorrect(),
-			this.isBipartiteCorrect(),
-			this.isNodeIndegreeCorrect(),
-			this.isNodeValueCorrect(),
-			this.isDFSStateCorrect()
+			this.isPathCorrect(session),
+			this.isBipartiteCorrect(session),
+			this.isNodeIndegreeCorrect(session),
+			this.isNodeValueCorrect(session),
+			this.isDFSStateCorrect(session)
 		];
 
-		[this.data, this.userValues] = AutomataFactory(this.completions);
-		if (!this.isPathCorrect()) return 0;
+		if (!this.isPathCorrect(session)) return 0;
 
 		const amountCorrect = comparisons.filter(b => b).length;
 
 		const rewardValue = amountCorrect / comparisons.length;
 		this.completions += rewardValue;
+
+		session.done = true;
 
 		return rewardValue;
 	}
