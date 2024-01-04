@@ -40,9 +40,9 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			checkWormAPIAccess(ctx);
 			return [...getWorm().data.symbols];
 		},
-		getChosenNodes: (ctx) => () => {
+		getChosenValues: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			return [...getWorm().chosenNodes];
+			return { ...getWorm().userValues };
 		},
 		getGuessTime: (ctx) => (_threads) => {
 			checkWormAPIAccess(ctx);
@@ -59,11 +59,35 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 				return Promise.resolve(finalState);
 			});
 		},
-		attemptSolve: (ctx) => (_properties) => {
+		attemptSolve: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			const properties = helpers.wormInputArray(ctx, "properties", _properties);
-			const result = getWorm().solve(properties);
+			const result = getWorm().solve();
 			return result;
+		},
+		setDepthFirstSearchState: (ctx) => (_state) => {
+			checkWormAPIAccess(ctx);
+			const state = helpers.string(ctx, "state", _state);
+			getWorm().providedValues.dfsState = state;
+		},
+		setIsBipartite: (ctx) => (_bipartite) => {
+			checkWormAPIAccess(ctx);
+			const bipartite = helpers.boolean(ctx, "bipartite", _bipartite);
+			getWorm().providedValues.bipartite = bipartite;
+		},
+		setNodeIndegree: (ctx) => (_indegree) => {
+			checkWormAPIAccess(ctx);
+			const indegree = helpers.number(ctx, "indegree", _indegree);
+			getWorm().providedValues.indegree = indegree;
+		},
+		setNodeValue: (ctx) => (_value) => {
+			checkWormAPIAccess(ctx);
+			const value = helpers.number(ctx, "value", _value);
+			getWorm().providedValues.value = value;
+		},
+		setShortestPath: (ctx) => (_path) => {
+			checkWormAPIAccess(ctx);
+			const path = helpers.string(ctx, "path", _path);
+			getWorm().providedValues.path = path;
 		}
   }
 }

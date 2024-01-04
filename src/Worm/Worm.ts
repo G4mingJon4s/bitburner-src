@@ -3,13 +3,19 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
 import { AutomataData, AutomataFactory, evaluateInput, isValidInput } from "./Automata";
-import { WormChosenNodesArray, WormInputArray } from "@nsdefs";
+import { WormChosenValues } from "@nsdefs";
 
 export class Worm {
 	bonus: BonusType;
 	data: AutomataData;
-	/**[0] = values, [1] = indegrees */
-	chosenNodes: WormChosenNodesArray;
+	userValues: WormChosenValues;
+	providedValues: {
+		path: string,
+		bipartite: boolean,
+		value: number,
+		indegree: number,
+		dfsState: string,
+	}
 
 	completions = 0;
 
@@ -18,7 +24,15 @@ export class Worm {
 	constructor() {
 		this.bonus = bonuses[0];
 
-		[this.data, this.chosenNodes] = AutomataFactory(this.completions);
+		[this.data, this.userValues] = AutomataFactory(this.completions);
+
+		this.providedValues = {
+			path: "",
+			bipartite: false,
+			value: 0,
+			indegree: 0,
+			dfsState: this.data.states[0]
+		};
 	}
 
 	process(numCycles = 1) {
@@ -36,18 +50,37 @@ export class Worm {
 		return evaluateInput(this.data, input);
 	}
 
-	solve(providedProperties: WormInputArray)  {
-		const isCorrectShortestInput = providedProperties[1].length === this.data.properties.shortestInput
-		&& evaluateInput(this.data, providedProperties[1]) === this.data.states[this.data.states.length - 1];
+	isPathCorrect() {
+		return this.providedValues.path.length === this.data.properties.shortestInput && this.evaluate(this.providedValues.path) === this.data.targetState;
+	}
+
+	isBipartiteCorrect() {
+		return this.providedValues.bipartite === this.data.properties.isBipartite;
+	}
+
+	isNodeValueCorrect() {
+		return this.providedValues.value === this.data.properties.nodeValues[this.userValues.value];
+	}
+
+	isNodeIndegreeCorrect() {
+		return this.providedValues.indegree ===  this.data.properties.nodeIndegrees[this.userValues.indegree];
+	}
+
+	isDFSStateCorrect() {
+		return this.providedValues.dfsState === this.data.properties.depthFirstSearchEnumeration[this.userValues.depthFirstSearchEnumeration];
+	}
+	
+	solve()  {
 		const comparisons = [
-			providedProperties[0] === this.data.properties.isBipartite,
-			isCorrectShortestInput,
-			providedProperties[2] === this.data.properties.nodeValues[this.chosenNodes[0]],
-			providedProperties[3] === this.data.properties.nodeIndegrees[this.chosenNodes[1]]
+			this.isPathCorrect(),
+			this.isBipartiteCorrect(),
+			this.isNodeIndegreeCorrect(),
+			this.isNodeValueCorrect(),
+			this.isDFSStateCorrect()
 		];
 
-		[this.data, this.chosenNodes] = AutomataFactory(this.completions);
-		if (!isCorrectShortestInput) return 0;
+		[this.data, this.userValues] = AutomataFactory(this.completions);
+		if (!this.isPathCorrect()) return 0;
 
 		const amountCorrect = comparisons.filter(b => b).length;
 

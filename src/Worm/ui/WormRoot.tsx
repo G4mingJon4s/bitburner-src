@@ -1,5 +1,5 @@
 import { Info } from '@mui/icons-material';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Paper, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { dialogBoxCreate } from '../../ui/React/DialogBox';
 import { BonusSelector } from './BonusSelector';
@@ -49,6 +49,7 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 								You only have to submit one of them.<br/>
 								3. The node values for a given state. The value of a node is the highest state it connects to, minus its own value.<br/>
 								4. The node indegrees for a given state. The indegree of a state is the amount of connections that lead to that state.<br/>
+								5. The n-th state in the depth-first-search enumeration. When traversing the graph using depth-first-search the states are being traversed in a specific order. You have to return the state at the given index in this enumeration.
 								If a property for a specific state is requested, you can gather the specified state through the worm API.<br/><br/>
 
 								<Box sx={{ fontWeight: "bold" }}>Solving a network</Box>
@@ -76,13 +77,15 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
 					)}
 				/>
 			</Typography>
+			<Paper sx={{ p: 1 }}>
 			<Typography>
-				The Worm is a highly complex program that infected the entire bitnode and create a giant network of resources.<br/>
-				Simulating the behaviour of the virus gives you access to a small portion of this wealth.<br/>
-				Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to bypass most of its security measures.<br/>
-				It is your task to develop a program that can solve the networks properties as efficient as possible.<br/>
-				For a detailed description of the problem at hand click the I at the top of the page.<br/>
-			</Typography>
+					The Worm is a highly complex program that infected the entire bitnode and create a giant network of resources.<br/>
+					Simulating the behaviour of the virus gives you access to a small portion of this wealth.<br/>
+					Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to bypass most of its security measures.<br/>
+					It is your task to develop a program that can solve the networks properties as efficient as possible.<br/>
+					For a detailed description of the problem at hand click the I at the top of the page.<br/>
+				</Typography>
+			</Paper>
 			<BonusSelector // might want to pass entire worm
 				bonus={worm.bonus}
 				completions={worm.completions}

@@ -5066,21 +5066,12 @@ interface Stanek {
 
 /**
  * @public
- * The order is:
- * 1. Bipartite
- * 2. Shortest path
- * 3. node value
- * 4. node indegree
- * */
-type WormInputArray = [boolean, string, number, number];
-
-/**
- * @public
- * The order is:
- * 1. Chosen node for the value property
- * 2. Chosen node for the indegree property
- * */
-type WormChosenNodesArray = [string, string];
+ */
+type WormChosenValues = {
+	indegree: string;
+	value: string;
+	depthFirstSearchEnumeration: number;
+};
 
 /**
  * Worm API.
@@ -5121,7 +5112,41 @@ interface Worm {
 	 * 
 	 * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
 	 */
-	attemptSolve(properties: WormInputArray): number;
+	attemptSolve(): number;
+
+	/**
+	 * Sets the shortest path the current worm has.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 * @param path The path to set. Can only include valid symbols of the worm.
+	 */
+	setShortestPath(path: string): void;
+
+	/**
+	 * Sets wether or not the current worm is bipartite.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 * @param bipartite Wether or not the current worm is bipartite.
+	 */
+	setIsBipartite(bipartite: boolean): void;
+
+	/**
+	 * Sets the indegree of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+	 * @param indegree The indegree of the chosen node.
+	 */
+	setNodeIndegree(indegree: number): void;
+
+	/**
+	 * Sets the value of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+	 * @param value The value of the chosen node.
+	 */
+	setNodeValue(value: number): void;
+
+	/**
+	 * Sets the n-th state in the depth first search enumeration. The chosen n can be gathered using the respective API function.
+	 * @param state The n-th state of the depth first search enumeration.
+	 */
+	setDepthFirstSearchState(state: string): void;
 
 	/**
 	 * Get the current guess time.
@@ -5155,7 +5180,7 @@ interface Worm {
 	 * @remarks
 	 * RAM cost: 1 GB
 	 */
-	getChosenNodes(): WormChosenNodesArray;
+	getChosenValues(): WormChosenValues;
 }
 
 /** @public */

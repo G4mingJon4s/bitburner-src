@@ -7,7 +7,7 @@ import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
 import { ScriptArg } from "./ScriptArg";
-import { RunningScript as IRunningScript, Person as IPerson, Server as IServer, WormInputArray } from "@nsdefs";
+import { RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,
@@ -58,7 +58,6 @@ export const helpers = {
   checkSingularityAccess,
   netscriptDelay,
   updateDynamicRam,
-	wormInputArray,
   getServer,
   scriptIdentifier,
   hack,
@@ -171,16 +170,6 @@ function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): Pos
 function scriptArgs(ctx: NetscriptContext, args: unknown) {
   if (!isScriptArgs(args)) throw errorMessage(ctx, "'args' is not an array of script args", "TYPE");
   return args;
-}
-
-function wormInputArray(ctx: NetscriptContext, argName: string, v: unknown): WormInputArray {
-	if (typeof v !== "object" || !Array.isArray(v)) throw makeRuntimeErrorMsg(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
-	return [
-		boolean(ctx, `${argName}[0]`, v[0]),
-		string(ctx, `${argName}[1]`, v[1]),
-		number(ctx, `${argName}[2]`, v[2]),
-		number(ctx, `${argName}[3]`, v[3])
-	]
 }
 
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
