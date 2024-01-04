@@ -6,7 +6,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
 import { getGuessTime } from "../Worm/calculations";
-import { isValidInput } from "../Worm/Automata";
+import { endWormSession, getWormSession } from "../Worm/WormSessions";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
@@ -34,15 +34,18 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		},
 		getWormStates: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			return [...getWorm().data.states];
+			const session = getWormSession(ctx.workerScript.pid);
+			return [...session.data.states];
 		},
 		getWormSymbols: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			return [...getWorm().data.symbols];
+			const session = getWormSession(ctx.workerScript.pid);
+			return [...session.data.symbols];
 		},
 		getChosenValues: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			return { ...getWorm().userValues };
+			const session = getWormSession(ctx.workerScript.pid);
+			return { ...session.params };
 		},
 		getGuessTime: (ctx) => (_threads) => {
 			checkWormAPIAccess(ctx);
@@ -51,43 +54,50 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		},
 		testInput: (ctx) => (_input) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const input = helpers.string(ctx, "input", _input);
-			if (!isValidInput(getWorm().data, input)) throw new Error(`input "${input} uses invalid symbols."`);
 			return helpers.netscriptDelay(ctx, getGuessTime(ctx.workerScript.scriptRef.threads)).then(() => {
-				const finalState = getWorm().evaluate(input);
+				const finalState = getWorm().evaluate(session, input);
 				if (finalState === null) throw new Error(`Error while computing input "${input}", got null.`);
 				return Promise.resolve(finalState);
 			});
 		},
 		attemptSolve: (ctx) => () => {
 			checkWormAPIAccess(ctx);
-			const result = getWorm().solve();
+			const session = getWormSession(ctx.workerScript.pid);
+			const result = getWorm().solve(session);
+			endWormSession(ctx.workerScript.pid);
 			return result;
 		},
 		setDepthFirstSearchState: (ctx) => (_state) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const state = helpers.string(ctx, "state", _state);
-			getWorm().providedValues.dfsState = state;
+			session.guess.dfsState = state;
 		},
 		setIsBipartite: (ctx) => (_bipartite) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const bipartite = helpers.boolean(ctx, "bipartite", _bipartite);
-			getWorm().providedValues.bipartite = bipartite;
+			session.guess.bipartite = bipartite;
 		},
 		setNodeIndegree: (ctx) => (_indegree) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const indegree = helpers.number(ctx, "indegree", _indegree);
-			getWorm().providedValues.indegree = indegree;
+			session.guess.indegree = indegree;
 		},
 		setNodeValue: (ctx) => (_value) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const value = helpers.number(ctx, "value", _value);
-			getWorm().providedValues.value = value;
+			session.guess.value = value;
 		},
 		setShortestPath: (ctx) => (_path) => {
 			checkWormAPIAccess(ctx);
+			const session = getWormSession(ctx.workerScript.pid);
 			const path = helpers.string(ctx, "path", _path);
-			getWorm().providedValues.path = path;
+			session.guess.path = path;
 		}
   }
 }
