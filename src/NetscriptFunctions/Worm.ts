@@ -35,17 +35,17 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		getWormStates: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
-			return [...session.data.states];
+			return [...session.data.graph.states];
 		},
 		getWormSymbols: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
-			return [...session.data.symbols];
+			return [...session.data.graph.symbols];
 		},
 		getChosenValues: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
-			return { ...session.params };
+			return { ...session.data.params };
 		},
 		getGuessTime: (ctx) => (_threads) => {
 			checkWormAPIAccess(ctx);
@@ -73,31 +73,31 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
 			const state = helpers.string(ctx, "state", _state);
-			session.guess.dfsState = state;
+			session.data.guess.dfsState = state;
 		},
 		setIsBipartite: (ctx) => (_bipartite) => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
 			const bipartite = helpers.boolean(ctx, "bipartite", _bipartite);
-			session.guess.bipartite = bipartite;
+			session.data.guess.bipartite = bipartite;
 		},
 		setNodeIndegree: (ctx) => (_indegree) => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
 			const indegree = helpers.number(ctx, "indegree", _indegree);
-			session.guess.indegree = indegree;
+			session.data.guess.indegree = indegree;
 		},
 		setNodeValue: (ctx) => (_value) => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
 			const value = helpers.number(ctx, "value", _value);
-			session.guess.value = value;
+			session.data.guess.value = value;
 		},
 		setShortestPath: (ctx) => (_path) => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
 			const path = helpers.string(ctx, "path", _path);
-			session.guess.path = path;
+			session.data.guess.path = path;
 		}
   }
 }

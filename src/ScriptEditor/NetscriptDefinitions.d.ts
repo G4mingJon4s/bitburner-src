@@ -5159,7 +5159,7 @@ interface Stanek {
 type WormChosenValues = {
 	indegree: string;
 	value: string;
-	depthFirstSearchEnumeration: number;
+	dfsOrder: number;
 };
 
 /**
