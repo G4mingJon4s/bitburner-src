@@ -3,21 +3,27 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 import { generateGraph } from "./GraphGenerator";
 
-export type AutomataSession = {
-	data: AutomataData;
-	guess: AutomataGuess;
-	params: WormChosenValues;
-} & ({
-	done: false,
+export type WormSession = {
+	data: WormData;
+
 	startTime: number;
-	finishTime: null;
+	finishTime: number | null;
+} & ({
+	pid: -1;
 } | {
-	done: true,
-	startTime: number,
-	finishTime: number;
+	pid: number;
+
+	host: string;
+	script: string;
 })
 
-export interface AutomataGuess {
+export type WormData = {
+	graph: GraphData;
+	guess: WormGuess;
+	params: WormChosenValues;
+}
+
+export interface WormGuess {
 	path: string;
 	bipartite: boolean;
 	value: number;
@@ -25,28 +31,28 @@ export interface AutomataGuess {
 	dfsState: string;
 }
 
-export interface AutomataData {
+export interface GraphData {
 	states: string[];
 	symbols: string[];
 	targetState: string;
 	startState: string;
 	transitions: Record<string, Record<string, string>>;
-	properties: AutomataProperties;
+	properties: GraphProperties;
 }
 
-export interface AutomataProperties {
-	isBipartite: boolean;
-	shortestInput: number;
-	nodeValues: Record<string, number>;
-	nodeIndegrees: Record<string, number>;
-	depthFirstSearchEnumeration: string[];
+export interface GraphProperties {
+	pathLength: number;
+	bipartite: boolean;
+	values: Record<string, number>;
+	indegrees: Record<string, number>;
+	dfsOrder: string[];
 }
 
 export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
 
-export function AutomataFactory(completions: number): AutomataSession {
+export function WormDataFactory(completions: number): WormData {
 	const numStates = getRandomInt(2, 5) * 3 + Math.floor(completions);
 	const numSymbols = 2 + Math.floor(Math.log10(numStates + 1));
 
@@ -55,7 +61,7 @@ export function AutomataFactory(completions: number): AutomataSession {
 
 	const transitions = generateGraph(states, symbols);
 
-	const data: Omit<AutomataData, "properties"> = {
+	const graph: Omit<GraphData, "properties"> = {
 		states,
 		targetState: states[states.length - 1],
 		startState: states[0],
@@ -63,11 +69,11 @@ export function AutomataFactory(completions: number): AutomataSession {
 		transitions
 	};
 
-	const properties = calculateProperties(data);
+	const properties = calculateProperties(graph);
 
 	return {
-		data: {
-			...data,
+		graph: {
+			...graph,
 			properties
 		},
 		guess: {
@@ -80,42 +86,39 @@ export function AutomataFactory(completions: number): AutomataSession {
 		params: {
 			indegree: chooseRandomState(states),
 			value: chooseRandomState(states),
-			depthFirstSearchEnumeration: Math.floor(Math.random() * states.length)
-		},
-		done: false,
-		startTime: Date.now(),
-		finishTime: null
+			dfsOrder: Math.floor(Math.random() * states.length)
+		}
 	};
 }
 
-export function calculateProperties(data: Omit<AutomataData, "properties">): AutomataProperties {
-	const bipartite = isBipartite(data.transitions);
-	const input = shortestInput(data.transitions, data.startState, data.targetState);
+export function calculateProperties(graph: Omit<GraphData, "properties">): GraphProperties {
+	const bipartite = isBipartite(graph.transitions);
+	const input = shortestInput(graph.transitions, graph.startState, graph.targetState);
 
 	const values: Record<string, number> = {};
 	const degrees: Record<string, number> = {};
-	data.states.forEach(state => {
-		values[state] = nodeValue(data.transitions, state, data.states);
-		degrees[state] = nodeIndegree(data.transitions, state);
+	graph.states.forEach(state => {
+		values[state] = nodeValue(graph.transitions, state, graph.states);
+		degrees[state] = nodeIndegree(graph.transitions, state);
 	});
 
-	const depthFirstSearch = depthFirstSearchEnumeration(data.transitions, data.startState, data.symbols);
+	const dfs = depthFirstSearchEnumeration(graph.transitions, graph.startState, graph.symbols);
 
 	return {
-		isBipartite: bipartite,
-		shortestInput: input.length,
-		nodeValues: values,
-		nodeIndegrees: degrees,
-		depthFirstSearchEnumeration: depthFirstSearch
+		pathLength: input.length,
+		bipartite: bipartite,
+		values: values,
+		indegrees: degrees,
+		dfsOrder: dfs
 	}
 }
 
-export function evaluateInput(data: AutomataData, input: string) {
-	let currentState = data.startState;
+export function evaluateInput(graph: GraphData, input: string) {
+	let currentState = graph.startState;
 
 	for (let i = 0; i < input.length; i++) {
 		if (currentState === undefined) break;
-		currentState = data.transitions[currentState]?.[input[i]];
+		currentState = graph.transitions[currentState]?.[input[i]];
 	}
 
 	if (currentState === undefined) return "snull"

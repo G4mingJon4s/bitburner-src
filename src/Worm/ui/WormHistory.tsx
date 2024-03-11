@@ -3,11 +3,11 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react'
 import { useRerender } from '../../ui/React/hooks';
 import { WormSessionEvents } from '../WormEvents';
-import { wormPreviousSessions, wormSessions } from '../WormSessions';
-import { AutomataSession } from '../Automata';
 import { workerScripts } from '../../Netscript/WorkerScripts';
 import { convertTimeMsToTimeElapsedString } from '../../utils/StringHelperFunctions';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { currentWormSessions, finishedWormSessions } from '../WormSessions';
+import { WormSession } from '../Automata';
 
 export function WormHistory() {
 	const rerender = useRerender();
@@ -18,13 +18,13 @@ export function WormHistory() {
 		<>
 			<Typography>History</Typography>
 			<List dense>
-				{Array.from(wormSessions.entries()).map(
-					entry => <WormSessionDisplay key={entry[0] +  " " + entry[1].startTime} session={{ pid: entry[0], ...entry[1] }}/>
+				{Array.from(currentWormSessions.values()).map(
+					session => <WormSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
 			<Divider />
 			<List dense>
-				{wormPreviousSessions.map(
+				{finishedWormSessions.map(
 					session => <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
@@ -38,12 +38,11 @@ const useStyles = makeStyles({
 	}
 });
 
-export function WormSessionDisplay({ session }: { session: AutomataSession & { pid: number } }) {
+export function WormSessionDisplay({ session }: { session: WormSession }) {
 	const [open, setOpen] = useState(false);
 	const classes = useStyles();
 
 	if (session.pid === -1) return null;
-	if (session.done) return null;
 
 	const workerScript = workerScripts.get(session.pid);
 	if (workerScript === undefined) return null;
@@ -73,7 +72,7 @@ export function WormSessionDisplay({ session }: { session: AutomataSession & { p
 								<Typography>└ Amount of states:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.states.length}</Typography>
+								<Typography>{session.data.graph.states.length}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -81,7 +80,7 @@ export function WormSessionDisplay({ session }: { session: AutomataSession & { p
 								<Typography>└ Alphabet:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.symbols.join(", ")}</Typography>
+								<Typography>{session.data.graph.symbols.join(", ")}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -110,19 +109,19 @@ export function WormSessionDisplay({ session }: { session: AutomataSession & { p
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.guess.path}"</Typography>
+								<Typography>"{session.data.guess.path}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.bipartite ? "true" : "false"}</Typography>
+								<Typography>{session.data.guess.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.value}</Typography>
+								<Typography>{session.data.guess.value}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.indegree}</Typography>
+								<Typography>{session.data.guess.indegree}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.dfsState || "None"}</Typography>
+								<Typography>{session.data.guess.dfsState || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 					</Table>
@@ -132,7 +131,7 @@ export function WormSessionDisplay({ session }: { session: AutomataSession & { p
 	);
 }
 
-export function WormPreviousSessionDisplay({ session }: { session: AutomataSession & { pid: number } }) {
+export function WormPreviousSessionDisplay({ session }: { session: WormSession }) {
 	const [open, setOpen] = useState(false);
 	const classes = useStyles();
 
@@ -140,10 +139,9 @@ export function WormPreviousSessionDisplay({ session }: { session: AutomataSessi
     <Box component={Paper}>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={
-					<Typography style={{ whiteSpace: "pre-wrap" }}>
-						Host: {"HOST HERE"} - Script: {"SCRIPT HERE"} 
-					</Typography>} />
-        {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
+					<Typography>SOME TEXT HERE PLEASE</Typography>
+				} />
+      {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Box mx={2}>
         <Collapse in={open} timeout={0} unmountOnExit>
@@ -161,7 +159,7 @@ export function WormPreviousSessionDisplay({ session }: { session: AutomataSessi
 								<Typography>└ Amount of states:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.states.length}</Typography>
+								<Typography>{session.data.graph.states.length}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -169,7 +167,7 @@ export function WormPreviousSessionDisplay({ session }: { session: AutomataSessi
 								<Typography>└ Alphabet:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.symbols.join(", ")}</Typography>
+								<Typography>{session.data.graph.symbols.join(", ")}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -198,19 +196,19 @@ export function WormPreviousSessionDisplay({ session }: { session: AutomataSessi
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.guess.path}"</Typography>
+								<Typography>"{session.data.guess.path}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.bipartite ? "true" : "false"}</Typography>
+								<Typography>{session.data.guess.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.value}</Typography>
+								<Typography>{session.data.guess.value}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.indegree}</Typography>
+								<Typography>{session.data.guess.indegree}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.guess.dfsState || "None"}</Typography>
+								<Typography>{session.data.guess.dfsState || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -239,19 +237,19 @@ export function WormPreviousSessionDisplay({ session }: { session: AutomataSessi
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.data.properties.shortestInput}"</Typography>
+								<Typography>"{session.data.graph.properties.pathLength}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.properties.isBipartite ? "true" : "false"}</Typography>
+								<Typography>{session.data.graph.properties.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.properties.nodeValues[session.params.value]}</Typography>
+								<Typography>{session.data.graph.properties.values[session.data.params.value]}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.properties.nodeIndegrees[session.params.indegree]}</Typography>
+								<Typography>{session.data.graph.properties.indegrees[session.data.params.indegree]}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.properties.depthFirstSearchEnumeration[session.params.depthFirstSearchEnumeration] || "None"}</Typography>
+								<Typography>{session.data.graph.properties.dfsOrder[session.data.params.dfsOrder] || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 					</Table>
