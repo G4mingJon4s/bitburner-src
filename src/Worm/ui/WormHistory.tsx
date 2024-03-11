@@ -15,13 +15,14 @@ export function WormHistory() {
 
 	return (
 		<>
-			<Typography>History</Typography>
+			<Typography>Current Sessions</Typography>
 			<List dense>
 				{Array.from(currentWormSessions.values()).map(
 					session => <WormSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
 			<Divider />
+			<Typography>Finished Sessions</Typography>
 			<List dense>
 				{finishedWormSessions.map(
 					session => <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
@@ -138,7 +139,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
     <Box component={Paper}>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={
-					<Typography>SOME TEXT HERE PLEASE</Typography>
+					<Typography>{session.pid === -1 ? "Host: User - Script: User" : `Host: ${session.host ?? "No host"} - Script: ${session.script ?? "No script"}`}</Typography>
 				} />
       {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
