@@ -6,8 +6,7 @@ import { WormSessionEvents } from '../WormEvents';
 import { workerScripts } from '../../Netscript/WorkerScripts';
 import { convertTimeMsToTimeElapsedString } from '../../utils/StringHelperFunctions';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { currentWormSessions, finishedWormSessions } from '../WormSessions';
-import { WormSession } from '../Automata';
+import { WormSession, currentWormSessions, finishedWormSessions } from '../WormSession';
 
 export function WormHistory() {
 	const rerender = useRerender();
@@ -72,7 +71,7 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
 								<Typography>└ Amount of states:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.states.length}</Typography>
+								<Typography>{session.graph.states.length}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -80,7 +79,7 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
 								<Typography>└ Alphabet:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.symbols.join(", ")}</Typography>
+								<Typography>{session.graph.symbols.join(", ")}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -109,19 +108,19 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.data.guess.path}"</Typography>
+								<Typography>"{session.guess.path}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.bipartite ? "true" : "false"}</Typography>
+								<Typography>{session.guess.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.value}</Typography>
+								<Typography>{session.guess.value}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.indegree}</Typography>
+								<Typography>{session.guess.indegree}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.dfsState || "None"}</Typography>
+								<Typography>{session.guess.dfsState || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 					</Table>
@@ -159,7 +158,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 								<Typography>└ Amount of states:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.states.length}</Typography>
+								<Typography>{session.graph.states.length}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -167,7 +166,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 								<Typography>└ Alphabet:</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.symbols.join(", ")}</Typography>
+								<Typography>{session.graph.symbols.join(", ")}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -196,19 +195,19 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.data.guess.path}"</Typography>
+								<Typography>"{session.guess.path}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.bipartite ? "true" : "false"}</Typography>
+								<Typography>{session.guess.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.value}</Typography>
+								<Typography>{session.guess.value}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.indegree}</Typography>
+								<Typography>{session.guess.indegree}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.guess.dfsState || "None"}</Typography>
+								<Typography>{session.guess.dfsState || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
@@ -237,19 +236,19 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.data.graph.properties.pathLength}"</Typography>
+								<Typography>"{session.graph.properties.pathLength}"</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.properties.bipartite ? "true" : "false"}</Typography>
+								<Typography>{session.graph.properties.bipartite ? "true" : "false"}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.properties.values[session.data.params.value]}</Typography>
+								<Typography>{session.graph.properties.values[session.params.value]}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.properties.indegrees[session.data.params.indegree]}</Typography>
+								<Typography>{session.graph.properties.indegrees[session.params.indegree]}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
-								<Typography>{session.data.graph.properties.dfsOrder[session.data.params.dfsOrder] || "None"}</Typography>
+								<Typography>{session.graph.properties.dfsOrder[session.params.dfsOrder] || "None"}</Typography>
 							</TableCell>
 						</TableRow>
 					</Table>
