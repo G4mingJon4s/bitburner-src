@@ -3,26 +3,6 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 import { generateGraph } from "./GraphGenerator";
 
-export type WormSession = {
-	data: WormData;
-
-	startTime: number;
-	finishTime: number | null;
-} & ({
-	pid: -1;
-} | {
-	pid: number;
-
-	host: string;
-	script: string;
-})
-
-export type WormData = {
-	graph: GraphData;
-	guess: WormGuess;
-	params: WormChosenValues;
-}
-
 export interface WormGuess {
 	path: string;
 	bipartite: boolean;
@@ -52,7 +32,11 @@ export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu
 
 const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
 
-export function WormDataFactory(completions: number): WormData {
+export function WormDataFactory(completions: number): {
+	graph: GraphData,
+	guess: WormGuess,
+	params: WormChosenValues
+} {
 	const numStates = getRandomInt(2, 5) * 3 + Math.floor(completions);
 	const numSymbols = 2 + Math.floor(Math.log10(numStates + 1));
 
