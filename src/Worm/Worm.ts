@@ -47,6 +47,9 @@ export class Worm {
 	}
 	
 	solve(session: AutomataSession)  {
+		session.done = true;
+		session.finishTime = Date.now();
+
 		const comparisons = [
 			this.isPathCorrect(session),
 			this.isBipartiteCorrect(session),
@@ -61,8 +64,6 @@ export class Worm {
 
 		const rewardValue = amountCorrect / comparisons.length;
 		this.completions += rewardValue;
-
-		session.done = true;
 
 		return rewardValue;
 	}

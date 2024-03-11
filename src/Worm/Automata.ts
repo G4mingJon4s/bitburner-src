@@ -3,12 +3,19 @@ import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 import { generateGraph } from "./GraphGenerator";
 
-export interface AutomataSession {
+export type AutomataSession = {
 	data: AutomataData;
 	guess: AutomataGuess;
 	params: WormChosenValues;
-	done: boolean;
-}
+} & ({
+	done: false,
+	startTime: number;
+	finishTime: null;
+} | {
+	done: true,
+	startTime: number,
+	finishTime: number;
+})
 
 export interface AutomataGuess {
 	path: string;
@@ -75,7 +82,9 @@ export function AutomataFactory(completions: number): AutomataSession {
 			value: chooseRandomState(states),
 			depthFirstSearchEnumeration: Math.floor(Math.random() * states.length)
 		},
-		done: false
+		done: false,
+		startTime: Date.now(),
+		finishTime: null
 	};
 }
 
