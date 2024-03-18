@@ -1,4 +1,4 @@
-import { Box, Collapse, Divider, List, ListItemButton, ListItemText, Paper, Table, TableCell, TableRow, Typography } from '@mui/material';
+import { Box, Collapse, Container, Divider, List, ListItemButton, ListItemText, Paper, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react'
 import { useRerender } from '../../ui/React/hooks';
@@ -14,21 +14,21 @@ export function WormHistory() {
 	useEffect(() => WormSessionEvents.subscribe(() => rerender()));
 
 	return (
-		<>
+		<Container disableGutters sx={{ mx: 0 }}>
 			<Typography>Current Sessions</Typography>
-			<List dense>
+			<List dense sx={{ mb: "8px" }}>
 				{Array.from(currentWormSessions.values()).map(
 					session => <WormSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
 			<Divider />
-			<Typography>Finished Sessions</Typography>
+			<Typography sx={{ mt: "8px" }}>Finished Sessions</Typography>
 			<List dense>
 				{finishedWormSessions.map(
 					session => <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
-		</>
+		</Container>
 	);
 }
 
@@ -59,6 +59,7 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
       <Box mx={2}>
         <Collapse in={open} timeout={0} unmountOnExit>
 					<Table padding="none" size="small">
+						<TableBody>
 						<TableRow>
 							<TableCell className={classes.noBorder}>
                 <Typography>└ Time elapsed:</Typography>
@@ -124,6 +125,7 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
 								<Typography>{session.guess.dfsState || "None"}</Typography>
 							</TableCell>
 						</TableRow>
+						</TableBody>
 					</Table>
         </Collapse>
       </Box>
@@ -146,6 +148,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
       <Box mx={2}>
         <Collapse in={open} timeout={0} unmountOnExit>
 					<Table padding="none" size="small">
+						<TableBody>
 						{session.finishTime && <TableRow>
 							<TableCell className={classes.noBorder}>
                 <Typography>└ Time spent:</Typography>
@@ -237,7 +240,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 						<TableRow>
 							<TableCell className={classes.noBorder} />
 							<TableCell className={classes.noBorder}>
-								<Typography>"{session.graph.properties.pathLength}"</Typography>
+								<Typography>{session.graph.properties.pathLength}</Typography>
 							</TableCell>
 							<TableCell className={classes.noBorder}>
 								<Typography>{session.graph.properties.bipartite ? "true" : "false"}</Typography>
@@ -252,6 +255,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
 								<Typography>{session.graph.properties.dfsOrder[session.params.dfsOrder] || "None"}</Typography>
 							</TableCell>
 						</TableRow>
+					</TableBody>
 					</Table>
         </Collapse>
       </Box>

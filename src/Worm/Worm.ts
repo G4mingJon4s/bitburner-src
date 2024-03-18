@@ -13,16 +13,16 @@ export class Worm {
 	}
 
 	process(numCycles = 1) {
-		this.updateMults();
-		applySpecialBonus(this, numCycles);
+		this.updateMults(numCycles);
 
 		removeIdleWormSessions();
 
 		WormEvents.emit();
 	}
 
-	updateMults() {
+	updateMults(numCycles: number) {
 		Player.reapplyMultipliers();
+		applySpecialBonus(this, numCycles);
 	}
 
 	setBonus(bonus: BonusType) {
