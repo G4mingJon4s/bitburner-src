@@ -484,10 +484,14 @@ export function initBitNodes() {
 		16,
 		2,
 		"The Worm",
-		"Decipher, adapt, conquer.",
+		"I deciphered, I adapted, I conquered.",
 		<>
-			As the player explored a complex simulation, they came across a mysterious virus spreading rapidly within its virtual world.
-			Surprisingly, this elusive intruder seemed to have unmatched control over the simulation, suggesting a deep understanding of its workings. While examining its encrypted code, they made an interesting discovery: creating a similar version of the worm could provide substantial benefits. The Worm had secretly built a large network of connected nodes, offering the player access to a wealth of resources and information.
+			In the turbulent 2060s, the digital world is besieged by an onslaught of malicious software,
+			with thousands of worms and malware spreading like never seen before.
+			As society became increasingly reliant on advanced technology, the vulnerability of interconnected systems was exposed, providing fertile ground for cyber threats to flourish.
+			<br />
+			<br />
+			Amidst this warfare, a rogue program cracked the code to victory, exploiting software thought to be impenetrable and wielding its newfound power to reshape the digital landscape in its own image.
 			<br />
 			<br />
 			Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade

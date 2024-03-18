@@ -4,7 +4,9 @@ import { getMultiplier } from "./BonusType";
 import { Worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 
-export const getGuessTime = (threads: number) => (60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) * (1 - (0.05 * Player.sourceFileLvl(16)));
+export const wormSourceFilePower = (lvl: number) => (Math.pow(lvl, 3) / 120) - (Math.pow(lvl, 2) / 20) + (17 * lvl / 120); // 0 -> 0; 1 -> 0.1; 2 -> 0.15; 3 -> 0.2
+
+export const getGuessTime = (threads: number) => (60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) * (1 - wormSourceFilePower(Player.sourceFileLvl(16)));
 
 export function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
