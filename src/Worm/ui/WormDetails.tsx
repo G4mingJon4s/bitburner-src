@@ -5,8 +5,8 @@ export function WormDetails() {
 	return (
 		<>
       <Typography component="div">
-				The Worm is a highly complex program that infected the entire bitnode and create a giant network of resources.<br/>
-				Simulating the behaviour of the virus gives you access to a small portion of this wealth.<br/>
+				The Worm is a highly complex program that infected the entire bitnode and created a giant network of resources.<br/>
+				Simulating the behaviour of the virus gives you access to a small portion of its wealth.<br/>
 				Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to bypass most of its security measures.<br/>
 				It is your task to develop a program that can solve the networks properties as efficient as possible.<br/>
 				<br/>
@@ -17,7 +17,8 @@ export function WormDetails() {
 				You can traverse these connections by entering a sequence of symbols from the given alphabet.<br/>
 				The graph behind the network is a directed graph.<br/>
 				Inputting the same symbol twice is not guranteed to bring you back to the predecessor.<br/>
-				Each state is guranteed to have a connection to its successor. In the case of the highest state, it will loop back to state 0.<br/>
+				Each state is guranteed to have a connection to its successor.<br/>
+				In the case of the highest state, it will loop back to state 0.<br/>
 				After testing your sequence of symbols, you will recieve the state you landed on.<br/>
 				<br/>
 				<Box sx={{ fontWeight: "bold" }}>Properties</Box>
@@ -30,22 +31,23 @@ export function WormDetails() {
 				You only have to submit one of them.<br/>
 				3. The node values for a given state. The value of a node is the highest state it connects to, minus its own value.<br/>
 				4. The node indegrees for a given state. The indegree of a state is the amount of connections that lead to that state.<br/>
-				5. The n-th state in the depth-first-search enumeration. When traversing the graph using depth-first-search the states are being traversed in a specific order. You have to return the state at the given index in this enumeration.
+				5. The n-th state in the depth-first-search enumeration. When traversing the graph using depth-first-search the states are being traversed in a specific order. You have to return the state at the given index in this enumeration.<br/>
 				If a property for a specific state is requested, you can gather the specified state through the worm API.<br/>
 				<br/>
 				<Box sx={{ fontWeight: "bold" }}>Solving a network</Box>
-				Once you have gathered enough data about the network and you computed all of the neccessary properties<br/>
+				Once you have gathered enough data about the network and you computed all of the neccessary properties,<br/>
 				you can solve the network by submitting you properties using the worm API.<br/>
 				Your attempt will only be successful, when your shortest path property is correct.<br/>
 				If you only get the shortest path correct, you will recieve the minimum reward amount.<br/>
 				If you do successfully solve a network, you will recieve the percentage of properties you got right as a reward.<br/>
-				Be careful though, the network resets every time you attempt to solve it.<br/>
-				If you submitted 3 out of 4 correct properties, you will recieve 0.75 completions.<br/>
+				If you submitted 3 out of 5 correct properties, you will recieve 0.6 completions.<br/>
 				If you got all properties correct, you will recieve the maximum reward amount of 1.<br/>
+				Be careful though, the network resets every time you attempt to solve it.<br/>
 				<br/>	
 				<Box sx={{ fontWeight: "bold" }}>Completions</Box>
 				The completions metric is a value that will increase with successful attempts.<br/>
-				It controls how hard the underlying graph is going to be. Specifically, it will change how many states the graph has.<br/>
+				It controls how hard the underlying graph is going to be.<br/>
+				It will change how many states the graph has.<br/>
 				The value also increase the bonus you will recieve.<br/>
 				Each time you enter a new bitnode, the completions metric will be reset.<br/>
 				<br/>
