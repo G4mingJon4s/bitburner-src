@@ -1,4 +1,4 @@
-import { Box, Collapse, Container, Divider, List, ListItemButton, ListItemText, Paper, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { Box, Collapse, Divider, List, ListItemButton, ListItemText, Paper, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react'
 import { useRerender } from '../../ui/React/hooks';
@@ -14,21 +14,21 @@ export function WormHistory() {
 	useEffect(() => WormSessionEvents.subscribe(() => rerender()));
 
 	return (
-		<Container disableGutters sx={{ mx: 0 }}>
+		<>
 			<Typography>Current Sessions</Typography>
-			<List dense sx={{ mb: "8px" }}>
+			<List dense>
 				{Array.from(currentWormSessions.values()).map(
 					session => <WormSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
-			<Divider />
-			<Typography sx={{ mt: "8px" }}>Finished Sessions</Typography>
+			<Divider sx={{ my: 1.5 }}/>
+			<Typography>Finished Sessions</Typography>
 			<List dense>
 				{finishedWormSessions.map(
 					session => <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session}/>
 				)}
 			</List>
-		</Container>
+		</>
 	);
 }
 
@@ -56,7 +56,7 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
 					</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
-      <Box mx={2}>
+      <Box mx={2} pb={1}>
         <Collapse in={open} timeout={0} unmountOnExit>
 					<Table padding="none" size="small">
 						<TableBody>
@@ -141,11 +141,13 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
     <Box component={Paper}>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText primary={
-					<Typography>{session.pid === -1 ? "Host: User - Script: User" : `Host: ${session.host ?? "No host"} - Script: ${session.script ?? "No script"}`}</Typography>
+					<Typography>{convertTimeMsToTimeElapsedString(
+						Date.now() - (session.finishTime || session.startTime)
+					)} ago</Typography>
 				} />
       {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
-      <Box mx={2}>
+      <Box mx={2} pb={1}>
         <Collapse in={open} timeout={0} unmountOnExit>
 					<Table padding="none" size="small">
 						<TableBody>
