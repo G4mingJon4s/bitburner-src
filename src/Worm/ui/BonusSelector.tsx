@@ -1,23 +1,11 @@
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import React from 'react'
-import { BonusType, bonuses, getCurrentBonusPower, numberIsBonusValue } from '../BonusType'
-import { formatPercent } from '../../ui/formatNumber';
+import { BonusType, bonuses, formatBonusDescription, getBonusEffect, numberIsBonusValue } from '../BonusType'
 
 interface IProps {
 	completions: number;
 	bonus: BonusType;
 	setBonus(value: BonusType): void;
-}
-
-function formatMultiplier(power: number, data: BonusType): string {
-  if (data.description.includes("+x%")) {
-    return data.description.replace(/-*x%/, formatPercent(power - 1));
-  } else if (data.description.includes("-x%")) {
-    const perc = formatPercent((1 / power) - 1);
-    return data.description.replace(/-x%/, perc);
-  } else {
-    return data.description.replace(/x%/, formatPercent(power - 1));
-  }
 }
 
 export function BonusSelector(props: IProps) {
@@ -55,7 +43,7 @@ export function BonusItem({ bonus, completions }: ItemProps) {
 		<>
 		<Typography component="div">
 			<Box sx={{ fontWeight: "bold" }}>{bonus.id} - {bonus.name}</Box>
-			{formatMultiplier(getCurrentBonusPower(bonus, completions), bonus)}
+			{formatBonusDescription(getBonusEffect(bonus, completions), bonus.description)}
 		</Typography>
 		</>
 	)
