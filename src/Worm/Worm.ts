@@ -25,10 +25,6 @@ export class Worm {
 		applySpecialBonus(this, numCycles);
 	}
 
-	setBonus(bonus: BonusType) {
-		this.bonus = bonus;
-	}
-
 	toJSON(): IReviverValue {
 		return Generic_toJSON("Worm", this);
 	}

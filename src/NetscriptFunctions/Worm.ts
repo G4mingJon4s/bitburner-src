@@ -26,7 +26,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			const bonus = helpers.number(ctx, "bonus", _bonus);
 			const value = bonuses.find(b => b.id === bonus);
 			if (value === undefined) throw new Error(`Value "${bonus}" is not a valid bonus. Valid: ${bonuses.map(d => d.id.toString()).join(", ")}`);
-			getWorm().setBonus(value);
+			getWorm().bonus = value;
 		},
 		getCompletions: (ctx) => () => {
 			checkWormAPIAccess(ctx);
