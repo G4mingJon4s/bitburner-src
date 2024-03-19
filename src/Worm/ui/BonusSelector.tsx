@@ -21,7 +21,7 @@ function formatMultiplier(power: number, data: BonusType): string {
 }
 
 export function BonusSelector(props: IProps) {
-	function onChange(event: SelectChangeEvent) {
+	function onChange(event: SelectChangeEvent<number>) {
 		const value = Number(event.target.value);
 		if (!numberIsBonusValue(value)) throw new Error(`Chosen Bonus "${value}" does not exist.`);
 
@@ -32,7 +32,7 @@ export function BonusSelector(props: IProps) {
 	}
 
 	return (
-		<Select onChange={onChange} value={String(props.bonus.id)}>
+		<Select<number> onChange={onChange} value={props.bonus.id} sx={{ mx: 1, p: 1 }}>
 			{bonuses.map(b => (
 				<MenuItem key={String(b.id)} value={String(b.id)}>
 					<BonusItem
