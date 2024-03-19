@@ -3,11 +3,12 @@ import { Worm } from '../Worm';
 import { Box, Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typography } from '@mui/material';
 import { NumberInput } from '../../ui/React/NumberInput';
 import { Paper } from '@mui/material'; 
-import { finishedWormSessions, getWormSession } from '../WormSession';
+import { finishedWormSessions, getWormSession, serverCanSolveWorm } from '../WormSession';
 import { WormGuess } from '../Graph';
 import { WormPreviousSessionDisplay } from './WormHistory';
 import { BonusSelector } from './BonusSelector';
 import { formatNumber } from '../../ui/formatNumber';
+import { WORM_UI_NAME } from '../calculations';
 
 interface IProps {
 	worm: Worm;
@@ -24,6 +25,8 @@ export function WormInput({ worm }: IProps) {
 		indegree: -1,
 		dfsState: getWormSession(-1).graph.states[0]
 	});
+
+	const canSolve = serverCanSolveWorm(WORM_UI_NAME);
 
 	function handleTest() {
 		const session = getWormSession(-1);
@@ -85,7 +88,7 @@ export function WormInput({ worm }: IProps) {
 				<Typography>Depth-First-Search State</Typography>
 			</Stack>
 			<Stack direction="row">
-				<Button disabled={false} onClick={handleSolve}>Guess</Button>
+				<Button disabled={!canSolve} onClick={handleSolve}>Solve</Button>
 				{reward !== "" && <Typography>Reward: {reward}</Typography>}
 			</Stack>
 		</Paper>

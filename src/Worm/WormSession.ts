@@ -6,9 +6,17 @@ import { GraphData, WormDataFactory, WormGuess, evaluateInput } from "./Graph";
 import { type Worm } from "./Worm";
 import { type WorkerScript } from "src/Netscript/WorkerScript";
 import { WormChosenValues } from "@nsdefs";
+import { WORM_SOLVE_COOLDOWN, WORM_UI_NAME } from "./calculations";
 
 export const currentWormSessions = new Map<number, WormSession>();
 export const finishedWormSessions: WormSession[] = [];
+export const serverLastWormSession = new Map<string, number>();
+
+export function serverCanSolveWorm(hostname: string) {
+	const lastSolve = serverLastWormSession.get(hostname);
+	if (lastSolve === undefined) return true;
+	return Date.now() - lastSolve > WORM_SOLVE_COOLDOWN;
+}
 
 export class WormSession {
 	graph: GraphData;
@@ -88,6 +96,7 @@ export class WormSession {
 
 	end() {
 		this.finishTime = Date.now();
+		serverLastWormSession.set(this.host ?? WORM_UI_NAME, Date.now());
 
 		currentWormSessions.delete(this.pid);
 		pushToFinishedSessions(this);

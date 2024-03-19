@@ -6,6 +6,9 @@ import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligen
 
 export const wormSourceFilePower = (lvl: number) => (Math.pow(lvl, 3) / 120) - (Math.pow(lvl, 2) / 20) + (17 * lvl / 120); // 0 -> 0; 1 -> 0.1; 2 -> 0.15; 3 -> 0.2
 
+export const WORM_SOLVE_COOLDOWN = 5000;
+export const WORM_UI_NAME = "worm-ui";
+
 export const getGuessTime = (threads: number) => (60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) * (1 - wormSourceFilePower(Player.sourceFileLvl(16)));
 
 export function calculateWormMults(worm: Worm | null): Multipliers {

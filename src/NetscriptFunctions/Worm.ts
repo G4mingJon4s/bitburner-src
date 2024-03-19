@@ -6,7 +6,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
 import { getGuessTime } from "../Worm/calculations";
-import { getWormSession } from "../Worm/WormSession";
+import { getWormSession, serverCanSolveWorm } from "../Worm/WormSession";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
@@ -65,6 +65,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		attemptSolve: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
+			if (!serverCanSolveWorm(ctx.workerScript.hostname)) throw helpers.makeRuntimeErrorMsg(ctx, "Cannot solve worm. The server is on cooldown.")
 			return session.solve(getWorm());
 		},
 		setDepthFirstSearchState: (ctx) => (_state) => {
