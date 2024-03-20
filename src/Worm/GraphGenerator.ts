@@ -139,7 +139,7 @@ export class GraphGenerator {
 			let currentConnections = Object.keys(this.graph[vertex]).length;
 
 			while (currentConnections / this.symbols.length < percentageConnected && currentConnections < this.symbols.length) {
-				const target = this.pickRandomVertex(v => this.vertexExists(v) && this.set[v] !== this.set[vertex]);
+				const target = this.pickRandomVertex(v => this.vertexExists(v) && (!this.isBipartite || this.set[v] !== this.set[vertex]));
 				this.createRandomConnection(vertex, target);
 				currentConnections++;
 			}
@@ -152,7 +152,7 @@ export class GraphGenerator {
 		if (!this.hasStatesLeft()) return this;
 
 		const tailEnd = this.createTail(length);
-		const detourEnd = this.pickRandomVertex(vertex => this.vertexExists(vertex) && this.set[vertex] !== this.set[tailEnd]);
+		const detourEnd = this.pickRandomVertex(vertex => this.vertexExists(vertex) && (!this.isBipartite || this.set[vertex] !== this.set[tailEnd]));
 
 		this.createRandomConnection(tailEnd, detourEnd);
 		return this;
