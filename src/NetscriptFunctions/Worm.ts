@@ -11,7 +11,7 @@ import { getWormSession, serverCanSolveWorm } from "../Worm/WormSession";
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
     if (Player.worm === null) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You have no access to the Worm API", "API ACCESS");
+      throw helpers.errorMessage(ctx, "You have no access to the Worm API", "API ACCESS");
     }
   }
 
@@ -65,7 +65,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		attemptSolve: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			const session = getWormSession(ctx.workerScript.pid);
-			if (!serverCanSolveWorm(ctx.workerScript.hostname)) throw helpers.makeRuntimeErrorMsg(ctx, "Cannot solve worm. The server is on cooldown.")
+			if (!serverCanSolveWorm(ctx.workerScript.hostname)) throw helpers.errorMessage(ctx, "Cannot solve worm. The server is on cooldown.")
 			return session.solve(getWorm());
 		},
 		setDepthFirstSearchState: (ctx) => (_state) => {

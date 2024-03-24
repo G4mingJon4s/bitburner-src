@@ -4,6 +4,7 @@ import { staneksGift } from "../../CotMG/Helper";
 import { updateGoMults } from "../../Go/effects/effect";
 
 import type { PlayerObject } from "./PlayerObject";
+import { updateWormMults } from "../../Worm/calculations";
 
 export function applyEntropy(this: PlayerObject, stacks = 1): void {
   // Save the current HP ratio.
@@ -17,6 +18,7 @@ export function applyEntropy(this: PlayerObject, stacks = 1): void {
   this.mults = entropyMults;
   staneksGift.updateMults();
   updateGoMults();
+  updateWormMults();
 
   /**
    * The ratio of (hp.current / hp.max) may be wrong after multiple function calls above. We need to recalculate

@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
+import { Multipliers, defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multipliers";
 import { getMultiplier } from "./BonusType";
 import { Worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
@@ -11,7 +11,13 @@ export const WORM_UI_NAME = "worm-ui";
 
 export const getGuessTime = (threads: number) => (60 * 1000 / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) * (1 - wormSourceFilePower(Player.sourceFileLvl(16)));
 
-export function calculateWormMults(worm: Worm | null): Multipliers {
+export function updateWormMults(): void {
+	const mults = calculateWormMults(Player.worm);
+	Player.mults = mergeMultipliers(Player.mults, mults);
+	Player.updateSkillLevels();
+}
+
+function calculateWormMults(worm: Worm | null): Multipliers {
 	if (worm === null) return defaultMultipliers();
 
 	const effect = getMultiplier(worm.bonus, worm.completions);
