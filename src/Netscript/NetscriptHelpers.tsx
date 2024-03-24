@@ -95,21 +95,6 @@ export interface CompleteHGWOptions {
   additionalMsec: number;
 }
 
-const userFriendlyString = (v: unknown): string => {
-  const clip = (s: string): string => {
-    if (s.length > 15) return s.slice(0, 12) + "...";
-    return s;
-  };
-  if (typeof v === "number") return String(v);
-  if (typeof v === "string") {
-    if (v === "") return "empty string";
-    return `'${clip(v)}'`;
-  }
-  const json = JSON.stringify(v);
-  if (!json) return "???";
-  return `'${clip(json)}'`;
-};
-
 function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
 	if (typeof v === "string") {
 		if (v.toLowerCase() === "true") return true;
@@ -118,7 +103,7 @@ function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
 		if (v === 1) return true;
 		if (v === 0) return false;
 	} else if (typeof v === "boolean") return v;
-	throw makeRuntimeErrorMsg(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+	throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -146,7 +131,7 @@ function array<T>(ctx: NetscriptContext, argName: string, v: unknown, converter:
 		for (let i = 0; i < v.length; i++) arr.push(converter(ctx, `${argName}[${i}]`, v[i]));
 		return arr;
 	}
-	throw makeRuntimeErrorMsg(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
+	throw errorMessage(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
 }
 
 

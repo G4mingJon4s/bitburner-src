@@ -13,7 +13,6 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { calculateWormMults } from "../Worm/helpers/calculations";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;
@@ -211,7 +210,6 @@ export class StaneksGift extends BaseGift {
   }
 
   updateMults(): void {
-    Player.reapplyMultipliers();
     const mults = this.calculateMults();
     Player.mults = mergeMultipliers(Player.mults, mults);
     Player.updateSkillLevels();    

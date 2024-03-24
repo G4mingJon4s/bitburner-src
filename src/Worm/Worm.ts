@@ -3,6 +3,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
 import { removeIdleWormSessions } from "./WormSession";
+import { updateWormMults } from "./calculations";
 
 export class Worm {
 	bonus: BonusType;
@@ -21,7 +22,7 @@ export class Worm {
 	}
 
 	updateMults(numCycles: number) {
-		Player.reapplyMultipliers();
+		updateWormMults();
 		applySpecialBonus(this, numCycles);
 	}
 
