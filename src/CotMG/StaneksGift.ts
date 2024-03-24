@@ -212,7 +212,7 @@ export class StaneksGift extends BaseGift {
   updateMults(): void {
     const mults = this.calculateMults();
     Player.mults = mergeMultipliers(Player.mults, mults);
-    Player.updateSkillLevels();    
+    Player.updateSkillLevels();
     const zoeAmt = Player.sleeves.reduce((n, sleeve) => n + (sleeve.hasAugmentation(AugmentationName.ZOE) ? 1 : 0), 0);
     if (zoeAmt === 0) return;
     // Less powerful for each copy.

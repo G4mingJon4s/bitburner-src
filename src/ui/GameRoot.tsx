@@ -239,10 +239,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <StaneksGiftRoot staneksGift={staneksGift} />;
       break;
     }
-		case Page.Worm: {
-			mainPage = <WormRoot worm={Player.worm}/>;
-			break;
-		}
+    case Page.Worm: {
+      mainPage = <WormRoot worm={Player.worm} />;
+      break;
+    }
     case Page.Stats: {
       mainPage = <CharacterStats />;
       break;

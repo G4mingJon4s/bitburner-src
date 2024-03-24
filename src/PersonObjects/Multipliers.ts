@@ -20,20 +20,20 @@ export interface Multipliers {
   hacknet_node_ram_cost: number;
   hacknet_node_core_cost: number;
   hacknet_node_level_cost: number;
-	server_cost: number;
-	home_ram_cost: number;
-	home_core_cost: number;
+  server_cost: number;
+  home_ram_cost: number;
+  home_core_cost: number;
   company_rep: number;
   faction_rep: number;
   work_money: number;
   crime_success: number;
   crime_money: number;
-	crime_karma_impact: number;
+  crime_karma_impact: number;
   bladeburner_max_stamina: number;
   bladeburner_stamina_gain: number;
   bladeburner_analysis: number;
   bladeburner_success_chance: number;
-	game_tick_speed: number;
+  game_tick_speed: number;
 }
 
 export const defaultMultipliers = (): Multipliers => {
@@ -59,20 +59,20 @@ export const defaultMultipliers = (): Multipliers => {
     hacknet_node_ram_cost: 1,
     hacknet_node_core_cost: 1,
     hacknet_node_level_cost: 1,
-		server_cost: 1,
-		home_ram_cost: 1,
-		home_core_cost: 1,
+    server_cost: 1,
+    home_ram_cost: 1,
+    home_core_cost: 1,
     company_rep: 1,
     faction_rep: 1,
     work_money: 1,
     crime_success: 1,
     crime_money: 1,
-		crime_karma_impact: 1,
+    crime_karma_impact: 1,
     bladeburner_max_stamina: 1,
     bladeburner_stamina_gain: 1,
     bladeburner_analysis: 1,
     bladeburner_success_chance: 1,
-		game_tick_speed: 1,
+    game_tick_speed: 1,
   };
 };
 
@@ -99,20 +99,20 @@ export const mergeMultipliers = (m0: Multipliers, m1: Multipliers): Multipliers 
     hacknet_node_ram_cost: m0.hacknet_node_ram_cost * m1.hacknet_node_ram_cost,
     hacknet_node_core_cost: m0.hacknet_node_core_cost * m1.hacknet_node_core_cost,
     hacknet_node_level_cost: m0.hacknet_node_level_cost * m1.hacknet_node_level_cost,
-		server_cost: m0.server_cost * m1.server_cost,
-		home_ram_cost: m0.home_ram_cost * m1.home_ram_cost,
-		home_core_cost: m0.home_core_cost * m1.home_core_cost,
+    server_cost: m0.server_cost * m1.server_cost,
+    home_ram_cost: m0.home_ram_cost * m1.home_ram_cost,
+    home_core_cost: m0.home_core_cost * m1.home_core_cost,
     company_rep: m0.company_rep * m1.company_rep,
     faction_rep: m0.faction_rep * m1.faction_rep,
     work_money: m0.work_money * m1.work_money,
     crime_success: m0.crime_success * m1.crime_success,
     crime_money: m0.crime_money * m1.crime_money,
-		crime_karma_impact: m0.crime_karma_impact * m1.crime_karma_impact,
+    crime_karma_impact: m0.crime_karma_impact * m1.crime_karma_impact,
     bladeburner_max_stamina: m0.bladeburner_max_stamina * m1.bladeburner_max_stamina,
     bladeburner_stamina_gain: m0.bladeburner_stamina_gain * m1.bladeburner_stamina_gain,
     bladeburner_analysis: m0.bladeburner_analysis * m1.bladeburner_analysis,
     bladeburner_success_chance: m0.bladeburner_success_chance * m1.bladeburner_success_chance,
-		game_tick_speed: m0.game_tick_speed * m1.game_tick_speed
+    game_tick_speed: m0.game_tick_speed * m1.game_tick_speed,
   };
 };
 
@@ -139,19 +139,19 @@ export const scaleMultipliers = (m0: Multipliers, v: number): Multipliers => {
     hacknet_node_ram_cost: (m0.hacknet_node_ram_cost - 1) * v + 1,
     hacknet_node_core_cost: (m0.hacknet_node_core_cost - 1) * v + 1,
     hacknet_node_level_cost: (m0.hacknet_node_level_cost - 1) * v + 1,
-		server_cost: (m0.server_cost - 1) * v + 1,
-		home_ram_cost: (m0.home_ram_cost - 1) * v + 1,
-		home_core_cost: (m0.home_core_cost - 1) * v + 1,
+    server_cost: (m0.server_cost - 1) * v + 1,
+    home_ram_cost: (m0.home_ram_cost - 1) * v + 1,
+    home_core_cost: (m0.home_core_cost - 1) * v + 1,
     company_rep: (m0.company_rep - 1) * v + 1,
     faction_rep: (m0.faction_rep - 1) * v + 1,
     work_money: (m0.work_money - 1) * v + 1,
     crime_success: (m0.crime_success - 1) * v + 1,
     crime_money: (m0.crime_money - 1) * v + 1,
-		crime_karma_impact: (m0.crime_karma_impact - 1) * v + 1,
+    crime_karma_impact: (m0.crime_karma_impact - 1) * v + 1,
     bladeburner_max_stamina: (m0.bladeburner_max_stamina - 1) * v + 1,
     bladeburner_stamina_gain: (m0.bladeburner_stamina_gain - 1) * v + 1,
     bladeburner_analysis: (m0.bladeburner_analysis - 1) * v + 1,
     bladeburner_success_chance: (m0.bladeburner_success_chance - 1) * v + 1,
-		game_tick_speed: (m0.game_tick_speed - 1) * v + 1
+    game_tick_speed: (m0.game_tick_speed - 1) * v + 1,
   };
 };

@@ -162,7 +162,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
-	const canWorm = Player.worm !== null;
+  const canWorm = Player.worm !== null;
 
   const clickPage = useCallback(
     (page: Page) => {
@@ -356,7 +356,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
-						canWorm && { key_: Page.Worm, icon: RouteIcon }
+            canWorm && { key_: Page.Worm, icon: RouteIcon },
           ]}
         />
         <Divider />

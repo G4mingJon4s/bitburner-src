@@ -36,7 +36,12 @@ export function getUpgradeHomeRamCost(this: PlayerObject): number {
   //Calculate cost
   //Have cost increase by some percentage each time RAM has been upgraded
   const mult = Math.pow(1.58, numUpgrades);
-  const cost = currentRam * ServerConstants.BaseCostFor1GBOfRamHome * mult * currentNodeMults.HomeComputerRamCost * Player.mults.home_ram_cost;
+  const cost =
+    currentRam *
+    ServerConstants.BaseCostFor1GBOfRamHome *
+    mult *
+    currentNodeMults.HomeComputerRamCost *
+    Player.mults.home_ram_cost;
   return cost;
 }
 

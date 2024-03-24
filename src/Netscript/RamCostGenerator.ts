@@ -369,19 +369,19 @@ const stanek = {
 
 // Worm API
 const worm = {
-	setBonus: 2,
-	getCompletions: 0.5,
-	testInput: 16,
-	attemptSolve: 64,
-	getGuessTime: 0.5,
-	getWormStates: 1,
-	getWormSymbols: 1,
-	getChosenValues: 1,
-	setShortestPath: 4,
-	setIsBipartite: 4,
-	setNodeValue: 4,
-	setNodeIndegree: 4,
-	setDepthFirstSearchState: 4,
+  setBonus: 2,
+  getCompletions: 0.5,
+  testInput: 16,
+  attemptSolve: 64,
+  getGuessTime: 0.5,
+  getWormStates: 1,
+  getWormSymbols: 1,
+  getChosenValues: 1,
+  setShortestPath: 4,
+  setIsBipartite: 4,
+  setNodeValue: 4,
+  setNodeIndegree: 4,
+  setDepthFirstSearchState: 4,
 } as const;
 
 // UI API
@@ -486,7 +486,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   codingcontract,
   sleeve,
   stanek,
-	worm,
+  worm,
   ui,
   grafting,
 
