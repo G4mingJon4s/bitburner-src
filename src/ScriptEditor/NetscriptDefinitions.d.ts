@@ -150,8 +150,8 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
-	/** Multiplier to crime karma impact */
-	crime_karma_impact: number;
+  /** Multiplier to crime karma impact */
+  crime_karma_impact: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -164,12 +164,12 @@ interface Multipliers {
   hacknet_node_core_cost: number;
   /** Multiplier to cost of leveling up a Hacknet Node */
   hacknet_node_level_cost: number;
-	/** Multiplier to cost of purchasable servers */
-	server_cost: number;
-	/** Multiplier to cost of ram upgrade for home */
-	home_ram_cost: number;
-	/** Multiplier to cost of core upgrade for home */
-	home_core_cost: number;
+  /** Multiplier to cost of purchasable servers */
+  server_cost: number;
+  /** Multiplier to cost of ram upgrade for home */
+  home_ram_cost: number;
+  /** Multiplier to cost of core upgrade for home */
+  home_core_cost: number;
   /** Multiplier to Bladeburner max stamina */
   bladeburner_max_stamina: number;
   /** Multiplier to Bladeburner stamina gain rate */
@@ -178,8 +178,8 @@ interface Multipliers {
   bladeburner_analysis: number;
   /** Multiplier to success chance in Bladeburner contracts/operations */
   bladeburner_success_chance: number;
-	/** Multiplier to the game tick speed */
-	game_tick_speed: number;
+  /** Multiplier to the game tick speed */
+  game_tick_speed: number;
 }
 
 /** @public */
@@ -5068,9 +5068,9 @@ interface Stanek {
  * @public
  */
 type WormChosenValues = {
-	indegree: string;
-	value: string;
-	dfsOrder: number;
+  indegree: string;
+  value: string;
+  dfsOrder: number;
 };
 
 /**
@@ -5078,109 +5078,109 @@ type WormChosenValues = {
  * @public
  */
 interface Worm {
-	/**
-	 * Set the bonus of the worm.
-	 * Note, this resets the worm.
-	 * @remarks
-	 * RAM cost: 2 GB
-	 */
-	setBonus(bonus: number): void;
+  /**
+   * Set the bonus of the worm.
+   * Note, this resets the worm.
+   * @remarks
+   * RAM cost: 2 GB
+   */
+  setBonus(bonus: number): void;
 
-	/**
-	 * Get the current completion count of the worm.
-	 * @remarks
-	 * RAM cost: 0.5 GB
-	 * 
-	 * @returns The number of completions.
-	 */
-	getCompletions(): number;
+  /**
+   * Get the current completion count of the worm.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * @returns The number of completions.
+   */
+  getCompletions(): number;
 
-	/**
-	 * Tests a given input against the current worm.
-	 * @remarks
-	 * RAM cost: 16 GB
-	 * 
-	 * @returns Returns the final state of the input.
-	 */
-	testInput(input: string): Promise<string>;
+  /**
+   * Tests a given input against the current worm.
+   * @remarks
+   * RAM cost: 16 GB
+   *
+   * @returns Returns the final state of the input.
+   */
+  testInput(input: string): Promise<string>;
 
-	/**
-	 * Attempts to solve the worm using the provided properties.
-	 * This does reset the worm, even if some properties are not correct.
-	 * @remarks
-	 * RAM cost: 64 GB
-	 * 
-	 * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
-	 */
-	attemptSolve(): number;
+  /**
+   * Attempts to solve the worm using the provided properties.
+   * This does reset the worm, even if some properties are not correct.
+   * @remarks
+   * RAM cost: 64 GB
+   *
+   * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
+   */
+  attemptSolve(): number;
 
-	/**
-	 * Sets the shortest path the current worm has.
-	 * @remarks
-	 * RAM cost: 4 GB
-	 * @param path The path to set. Can only include valid symbols of the worm.
-	 */
-	setShortestPath(path: string): void;
+  /**
+   * Sets the shortest path the current worm has.
+   * @remarks
+   * RAM cost: 4 GB
+   * @param path The path to set. Can only include valid symbols of the worm.
+   */
+  setShortestPath(path: string): void;
 
-	/**
-	 * Sets wether or not the current worm is bipartite.
-	 * @remarks
-	 * RAM cost: 4 GB
-	 * @param bipartite Wether or not the current worm is bipartite.
-	 */
-	setIsBipartite(bipartite: boolean): void;
+  /**
+   * Sets wether or not the current worm is bipartite.
+   * @remarks
+   * RAM cost: 4 GB
+   * @param bipartite Wether or not the current worm is bipartite.
+   */
+  setIsBipartite(bipartite: boolean): void;
 
-	/**
-	 * Sets the indegree of the node chosen by the worm. The chosen node can be gathered using the respective API function.
-	 * @param indegree The indegree of the chosen node.
-	 */
-	setNodeIndegree(indegree: number): void;
+  /**
+   * Sets the indegree of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+   * @param indegree The indegree of the chosen node.
+   */
+  setNodeIndegree(indegree: number): void;
 
-	/**
-	 * Sets the value of the node chosen by the worm. The chosen node can be gathered using the respective API function.
-	 * @param value The value of the chosen node.
-	 */
-	setNodeValue(value: number): void;
+  /**
+   * Sets the value of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+   * @param value The value of the chosen node.
+   */
+  setNodeValue(value: number): void;
 
-	/**
-	 * Sets the n-th state in the depth first search enumeration. The chosen n can be gathered using the respective API function.
-	 * @param state The n-th state of the depth first search enumeration.
-	 */
-	setDepthFirstSearchState(state: string): void;
+  /**
+   * Sets the n-th state in the depth first search enumeration. The chosen n can be gathered using the respective API function.
+   * @param state The n-th state of the depth first search enumeration.
+   */
+  setDepthFirstSearchState(state: string): void;
 
-	/**
-	 * Get the current guess time.
-	 * @remarks
-	 * RAM cost: 0.5 GB
-	 * 
-	 * @returns The current guess time in milliseconds for the specified threads.
-	 */
-	getGuessTime(threads: number): number;
+  /**
+   * Get the current guess time.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * @returns The current guess time in milliseconds for the specified threads.
+   */
+  getGuessTime(threads: number): number;
 
-	/**
-	 * Get the current states the worm has.
-	 * @remarks
-	 * RAM cost: 1 GB
-	 * 
-	 * @returns All possible states.
-	 */
-	getWormStates(): string[];
+  /**
+   * Get the current states the worm has.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns All possible states.
+   */
+  getWormStates(): string[];
 
-	/**
-	 * Get the current symbols of the worm.
-	 * @remarks
-	 * RAM cost: 1 GB
-	 * 
-	 * @returns All possible symbols.
-	 */
-	getWormSymbols(): string[];
+  /**
+   * Get the current symbols of the worm.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns All possible symbols.
+   */
+  getWormSymbols(): string[];
 
-	/**
-	 * Get the chosen nodes for the node specific properties.
-	 * @remarks
-	 * RAM cost: 1 GB
-	 */
-	getChosenValues(): WormChosenValues;
+  /**
+   * Get the chosen nodes for the node specific properties.
+   * @remarks
+   * RAM cost: 1 GB
+   */
+  getChosenValues(): WormChosenValues;
 }
 
 /** @public */
@@ -5386,10 +5386,10 @@ export interface NS {
    */
   readonly stanek: Stanek;
 
-	/**
-	 * Namespace for worm functions.
-	 */
-	readonly worm: Worm;
+  /**
+   * Namespace for worm functions.
+   */
+  readonly worm: Worm;
 
   /**
    * Namespace for infiltration functions.

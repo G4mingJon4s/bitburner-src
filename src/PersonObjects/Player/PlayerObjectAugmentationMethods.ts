@@ -18,5 +18,5 @@ export function applyEntropy(this: PlayerObject, stacks = 1): Multipliers {
   updateGoMults();
   updateWormMults();
 
-	return entropyMults;
+  return entropyMults;
 }

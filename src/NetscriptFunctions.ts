@@ -136,7 +136,7 @@ export const ns: InternalAPI<NSFull> = {
   sleeve: NetscriptSleeve(),
   corporation: NetscriptCorporation(),
   stanek: NetscriptStanek(),
-	worm: NetscriptWorm(),
+  worm: NetscriptWorm(),
   infiltration: NetscriptInfiltration(),
   ui: NetscriptUserInterface(),
   formulas: NetscriptFormulas(),

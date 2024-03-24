@@ -1,4 +1,3 @@
-import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
@@ -6,31 +5,31 @@ import { removeIdleWormSessions } from "./WormSession";
 import { updateWormMults } from "./calculations";
 
 export class Worm {
-	bonus: BonusType;
-	completions = 0;
+  bonus: BonusType;
+  completions = 0;
 
-	constructor() {
-		this.bonus = bonuses[0];
-	}
+  constructor() {
+    this.bonus = bonuses[0];
+  }
 
-	process(numCycles = 1) {
-		this.updateMults(numCycles);
+  process(numCycles = 1) {
+    this.updateMults(numCycles);
 
-		removeIdleWormSessions();
+    removeIdleWormSessions();
 
-		WormEvents.emit();
-	}
+    WormEvents.emit();
+  }
 
-	updateMults(numCycles: number) {
-		updateWormMults();
-		applySpecialBonus(this, numCycles);
-	}
+  updateMults(numCycles: number) {
+    updateWormMults();
+    applySpecialBonus(this, numCycles);
+  }
 
-	toJSON(): IReviverValue {
-		return Generic_toJSON("Worm", this);
-	}
+  toJSON(): IReviverValue {
+    return Generic_toJSON("Worm", this);
+  }
 
-	static fromJSON(value: IReviverValue): Worm {
+  static fromJSON(value: IReviverValue): Worm {
     return Generic_fromJSON(Worm, value.data);
   }
 }

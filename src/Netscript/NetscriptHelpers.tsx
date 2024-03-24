@@ -44,8 +44,8 @@ import { assertString, debugType } from "./TypeAssertion";
 export const helpers = {
   string,
   number,
-	boolean,
-	array,
+  boolean,
+  array,
   positiveInteger,
   scriptArgs,
   runOptions,
@@ -96,14 +96,14 @@ export interface CompleteHGWOptions {
 }
 
 function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
-	if (typeof v === "string") {
-		if (v.toLowerCase() === "true") return true;
-		if (v.toLowerCase() === "false") return false;
-	} else if (typeof v === "number") {
-		if (v === 1) return true;
-		if (v === 0) return false;
-	} else if (typeof v === "boolean") return v;
-	throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+  if (typeof v === "string") {
+    if (v.toLowerCase() === "true") return true;
+    if (v.toLowerCase() === "false") return false;
+  } else if (typeof v === "number") {
+    if (v === 1) return true;
+    if (v === 0) return false;
+  } else if (typeof v === "boolean") return v;
+  throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -125,15 +125,19 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
   throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
 }
 
-function array<T>(ctx: NetscriptContext, argName: string, v: unknown, converter: (ctx: NetscriptContext, argName: string, a: unknown) => T): T[] {
-	if (typeof v === "object" && Array.isArray(v)) {
-		const arr: T[] = [];
-		for (let i = 0; i < v.length; i++) arr.push(converter(ctx, `${argName}[${i}]`, v[i]));
-		return arr;
-	}
-	throw errorMessage(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
+function array<T>(
+  ctx: NetscriptContext,
+  argName: string,
+  v: unknown,
+  converter: (ctx: NetscriptContext, argName: string, a: unknown) => T,
+): T[] {
+  if (typeof v === "object" && Array.isArray(v)) {
+    const arr: T[] = [];
+    for (let i = 0; i < v.length; i++) arr.push(converter(ctx, `${argName}[${i}]`, v[i]));
+    return arr;
+  }
+  throw errorMessage(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
 }
-
 
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {

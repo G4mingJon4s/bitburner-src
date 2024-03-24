@@ -31,10 +31,10 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
       if (sfN === 9) {
         Player.hacknetNodes = [];
       }
-			if (sfN === 16) {
-				if (sfLvl === 0) Player.worm = null;
-				else Player.worm = new Worm();
-			}
+      if (sfN === 16) {
+        if (sfLvl === 0) Player.worm = null;
+        else Player.worm = new Worm();
+      }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
         if (sfN === 10) Sleeve.recalculateNumOwned();

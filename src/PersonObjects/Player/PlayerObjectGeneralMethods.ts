@@ -50,10 +50,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
-import { serverMetadata } from "../../Server/data/servers";
-import { getEnumHelper, isMember } from "../../utils/EnumHelper";
-import { staneksGift } from "../../CotMG/Helper";
-import { Multipliers, mergeMultipliers } from "../Multipliers";
+import { isMember } from "../../utils/EnumHelper";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */

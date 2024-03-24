@@ -281,11 +281,11 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
-	if (Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0) {
-		Player.worm = new Worm();
-	} else {
-		Player.worm = null;
-	}
+  if (Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0) {
+    Player.worm = new Worm();
+  } else {
+    Player.worm = null;
+  }
 
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {

@@ -480,34 +480,38 @@ export function initBitNodes() {
       </>
     ),
   );
-	BitNodes.BitNode16 = new BitNode(
-		16,
-		2,
-		"The Worm",
-		"I deciphered, I adapted, I conquered.",
-		<>
-			In the turbulent 2060s, the digital world is besieged by an onslaught of malicious software,
-			with thousands of worms and malware spreading like never seen before.
-			As society became increasingly reliant on advanced technology, the vulnerability of interconnected systems was exposed, providing fertile ground for cyber threats to flourish.
-			<br />
-			<br />
-			Amidst this warfare, a rogue program cracked the code to victory, exploiting software thought to be impenetrable and wielding its newfound power to reshape the digital landscape in its own image.
-			<br />
-			<br />
-			Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade
-			its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
-			<br />
-			<br />
-			Each level of this Source-File decreases the processing time of the worm by:
-			<br />
-      <br />
-      Level 1: 10%
-      <br />
-      Level 2: 15%
-      <br />
-      Level 3: 20%
-		</>
-	);
+  BitNodes.BitNode16 = new BitNode(
+    16,
+    2,
+    "The Worm",
+    "I deciphered, I adapted, I conquered.",
+    (
+      <>
+        In the turbulent 2060s, the digital world is besieged by an onslaught of malicious software, with thousands of
+        worms and malware spreading like never seen before. As society became increasingly reliant on advanced
+        technology, the vulnerability of interconnected systems was exposed, providing fertile ground for cyber threats
+        to flourish.
+        <br />
+        <br />
+        Amidst this warfare, a rogue program cracked the code to victory, exploiting software thought to be impenetrable
+        and wielding its newfound power to reshape the digital landscape in its own image.
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
+        <br />
+        <br />
+        Each level of this Source-File decreases the processing time of the worm by:
+        <br />
+        <br />
+        Level 1: 10%
+        <br />
+        Level 2: 15%
+        <br />
+        Level 3: 20%
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -1015,37 +1019,37 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         WorldDaemonDifficulty: 5,
       });
     }
-		case 16: {
-			return new BitNodeMultipliers({
-				HackingLevelMultiplier: 0.2,
-				StrengthLevelMultiplier: 0.2,
-				DefenseLevelMultiplier: 0.2,
-				DexterityLevelMultiplier: 0.2,
-				AgilityLevelMultiplier: 0.2,
+    case 16: {
+      return new BitNodeMultipliers({
+        HackingLevelMultiplier: 0.2,
+        StrengthLevelMultiplier: 0.2,
+        DefenseLevelMultiplier: 0.2,
+        DexterityLevelMultiplier: 0.2,
+        AgilityLevelMultiplier: 0.2,
 
-				PurchasedServerSoftcap: 2,
-				PurchasedServerMaxRam: 2,
+        PurchasedServerSoftcap: 2,
+        PurchasedServerMaxRam: 2,
 
-				RepToDonateToFaction: 2,
-				FactionWorkRepGain: 0.5,
+        RepToDonateToFaction: 2,
+        FactionWorkRepGain: 0.5,
 
-				GangSoftcap: 1.5,
-				GangUniqueAugs: 1.3,
+        GangSoftcap: 1.5,
+        GangUniqueAugs: 1.3,
 
-				CorporationValuation: 0.6,
-				CorporationSoftcap: 0.9,
-				CorporationDivisions: 0.8,
+        CorporationValuation: 0.6,
+        CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.8,
 
-				BladeburnerRank: 0.7,
-				BladeburnerSkillCost: 1.2,
+        BladeburnerRank: 0.7,
+        BladeburnerSkillCost: 1.2,
 
-				StaneksGiftPowerMultiplier: 0.5,
-				StaneksGiftExtraSize: 3,
-				
-				WorldDaemonDifficulty: 1.5,
-				HacknetNodeMoney: 1.5,
-			});
-		}
+        StaneksGiftPowerMultiplier: 0.5,
+        StaneksGiftExtraSize: 3,
+
+        WorldDaemonDifficulty: 1.5,
+        HacknetNodeMoney: 1.5,
+      });
+    }
     default: {
       throw new Error("Invalid BitNodeN");
     }
