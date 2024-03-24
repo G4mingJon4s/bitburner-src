@@ -2,9 +2,10 @@
 import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 import { staneksGift } from "../../CotMG/Helper";
 import { updateGoMults } from "../../Go/effects/effect";
+import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 
-import type { PlayerObject } from "./PlayerObject";
 import { updateWormMults } from "../../Worm/calculations";
+import type { PlayerObject } from "./PlayerObject";
 
 export function applyEntropy(this: PlayerObject, stacks = 1): void {
   // Save the current HP ratio.
