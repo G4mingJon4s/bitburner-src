@@ -1,13 +1,12 @@
 /** Augmentation-related methods for the Player class (PlayerObject) */
-import { Multipliers } from "@nsdefs";
-import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 import { staneksGift } from "../../CotMG/Helper";
 import { updateGoMults } from "../../Go/effects/effect";
+import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 
-import type { PlayerObject } from "./PlayerObject";
 import { updateWormMults } from "../../Worm/calculations";
+import type { PlayerObject } from "./PlayerObject";
 
-export function applyEntropy(this: PlayerObject, stacks = 1): Multipliers {
+export function applyEntropy(this: PlayerObject, stacks = 1): void {
   // Re-apply all multipliers
   this.reapplyAllAugmentations();
   this.reapplyAllSourceFiles();
@@ -17,6 +16,4 @@ export function applyEntropy(this: PlayerObject, stacks = 1): Multipliers {
   staneksGift.updateMults();
   updateGoMults();
   updateWormMults();
-
-  return entropyMults;
 }
