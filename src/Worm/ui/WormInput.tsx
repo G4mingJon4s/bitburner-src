@@ -6,8 +6,6 @@ import { Paper } from "@mui/material";
 import { finishedWormSessions, getWormSession, serverCanSolveWorm } from "../WormSession";
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
-import { BonusSelector } from "./BonusSelector";
-import { formatNumber } from "../../ui/formatNumber";
 import { WORM_UI_NAME } from "../calculations";
 
 interface IProps {
@@ -110,14 +108,6 @@ export function WormInput({ worm }: IProps) {
           {reward !== "" && <Typography>Reward: {reward}</Typography>}
         </Stack>
       </Paper>
-      <Divider sx={{ my: 1.5 }} />
-      <Typography sx={{ mb: 1 }}>
-        <Box sx={{ fontWeight: "bold" }}>Bonus</Box>
-      </Typography>
-      <Stack direction="row" sx={{ gap: 1, alignItems: "center" }}>
-        <BonusSelector completions={worm.completions} bonus={worm.bonus} setBonus={(bonus) => (worm.bonus = bonus)} />
-        <Typography>Total Completions: {formatNumber(worm.completions)}</Typography>
-      </Stack>
       <Divider sx={{ my: 1.5 }} />
       <Typography>
         <Box sx={{ fontWeight: "bold" }}>Previous sessions</Box>
