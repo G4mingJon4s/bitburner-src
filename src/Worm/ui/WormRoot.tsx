@@ -4,15 +4,16 @@ import { Worm } from "../Worm";
 import { useRerender } from "../../ui/React/hooks";
 import { WormEvents } from "../WormEvents";
 import { WormInput } from "./WormInput";
-import { WormDetails } from "./WormDetails";
 import { WormHistory } from "./WormHistory";
+import { WormHelp } from "./WormHelp";
+import { WormOverview } from "./WormOverview";
 
 interface IProps {
   worm: Worm | null;
 }
 
 export function WormRoot({ worm }: IProps): React.ReactElement {
-  const possiblePages = ["Details", "Input", "History"];
+  const possiblePages = ["Overview", "Input", "History", "Help"];
   const [currentPage, setCurrentPage] = useState(possiblePages[0]);
   const rerender = useRerender();
   useEffect(() => WormEvents.subscribe(rerender), [rerender]);
@@ -27,9 +28,10 @@ export function WormRoot({ worm }: IProps): React.ReactElement {
         ))}
       </Tabs>
       <Paper sx={{ p: 1 }}>
-        {currentPage === possiblePages[0] && <WormDetails />}
+        {currentPage === possiblePages[0] && <WormOverview worm={worm}/>}
         {currentPage === possiblePages[1] && <WormInput worm={worm} />}
         {currentPage === possiblePages[2] && <WormHistory />}
+				{currentPage === possiblePages[3] && <WormHelp />}
       </Paper>
     </Container>
   );

@@ -1,20 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-export function WormDetails() {
+export function WormHelp() {
   return (
     <>
       <Typography component="div">
-        The Worm is a highly complex program that infected the entire bitnode and created a giant network of resources.
-        <br />
-        Simulating the behaviour of the virus gives you access to a small portion of its wealth.
-        <br />
-        Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to
-        bypass most of its security measures.
-        <br />
-        It is your task to develop a program that can solve the networks properties as efficient as possible.
-        <br />
-        <br />
         <Box sx={{ fontWeight: "bold" }}>Network</Box>
         The network you have to calculate the properties for is not presented in a standard way.
         <br />
