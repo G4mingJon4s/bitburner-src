@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material";
-import React from "react"
+import React from "react";
 
-export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
+export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 	const theme = useTheme();
 
 	return (
@@ -34,8 +34,8 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 			</defs>
 			<ellipse
 				style={{
-					fill: "url('#color-1')",
 					stroke: "url('#color-2')",
+					fill: "url('#color-1')",
 				}}
 				cx={55}
 				cy={55}
@@ -44,8 +44,8 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 			/>
 			<ellipse
 				style={{
-					fill: "url(#color-1)",
 					stroke: "url(#color-2)",
+					fill: "url(#color-1)",
 				}}
 				cx={205}
 				cy={55}
@@ -54,8 +54,8 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 			/>
 			<ellipse
 				style={{
-					fill: "url(#color-1)",
 					stroke: "url(#color-2)",
+					fill: "url(#color-1)",
 				}}
 				cx={355}
 				cy={55}
@@ -74,12 +74,18 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 					stroke: "url('#color-2')",
 				}}
 			/>
+			<path
+				d="M 330 94 H 85 L 85 92 L 80 95 L 85 98 L 85 96 H 330 V 96 Z"
+				style={{
+					stroke: "url('#color-2')",
+				}}
+			/>
 			<text
 				style={{
+					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
-					whiteSpace: "pre",
 					textAnchor: "middle",
 				}}
 				x={130}
@@ -89,10 +95,10 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 			</text>
 			<text
 				style={{
+					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
-					whiteSpace: "pre",
 					textAnchor: "middle",
 				}}
 				x={280}
@@ -102,42 +108,55 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 			</text>
 			<text
 				style={{
+					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
-					whiteSpace: "pre",
-					textAnchor: "middle",
-				}}
-				x={55}
-				y={60}
-			>
-				{"s00"}
-			</text>
-			<text
-				style={{
-					fill: "url('#color-0')",
-					fontFamily: theme.typography.fontFamily,
-					fontSize: 18,
-					whiteSpace: "pre",
 					textAnchor: "middle",
 				}}
 				x={205}
+				y={85}
+			>
+				{"A"}
+			</text>
+			<text
+				style={{
+					whiteSpace: "pre",
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+				}}
+				x={55}
 				y={60}
 			>
 				{"s01"}
 			</text>
 			<text
 				style={{
+					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
+					textAnchor: "middle",
+				}}
+				x={205}
+				y={60}
+			>
+				{"s02"}
+			</text>
+			<text
+				style={{
 					whiteSpace: "pre",
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
 					textAnchor: "middle",
 				}}
 				x={355}
 				y={60}
 			>
-				{"s02"}
+				{"s03"}
 			</text>
 		</svg>
 	);
