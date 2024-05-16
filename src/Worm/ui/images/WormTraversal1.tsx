@@ -111,7 +111,7 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 				x={55}
 				y={60}
 			>
-				{"s00"}
+				{"s01"}
 			</text>
 			<text
 				style={{
@@ -124,7 +124,7 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 				x={205}
 				y={60}
 			>
-				{"s01"}
+				{"s02"}
 			</text>
 			<text
 				style={{
@@ -137,7 +137,7 @@ export function WormTraversal1(props: React.SVGProps<SVGSVGElement>) {
 				x={355}
 				y={60}
 			>
-				{"s02"}
+				{"s03"}
 			</text>
 		</svg>
 	);
