@@ -21,22 +21,39 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { WormSession, currentWormSessions, finishedWormSessions } from "../WormSession";
 
+const historyStyles = makeStyles({
+	list: {
+		height: "calc(40vh - 50px)",
+		overflowY: "scroll"
+	}
+});
+
 export function WormHistory() {
   const rerender = useRerender();
+	const classes = historyStyles();
 
   useEffect(() => WormSessionEvents.subscribe(() => rerender()));
 
   return (
     <>
-      <Typography>Current Sessions</Typography>
-      <List dense>
+			<Typography variant="h5">Worm history</Typography>
+			<Typography>
+				Here you can see all of the ongoing and finished worm sessions of your scripts.
+				Sessions don't persist while you are offline.
+			</Typography>
+			<br />
+			<br />
+      <Typography variant="h5">Current Sessions</Typography>
+      <List dense className={classes.list}>
+				{(currentWormSessions.size === Number(currentWormSessions.has(-1))) && <Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>}
         {Array.from(currentWormSessions.values()).map((session) => (
           <WormSessionDisplay key={session.pid + " " + session.startTime} session={session} />
         ))}
       </List>
       <Divider sx={{ my: 1.5 }} />
-      <Typography>Finished Sessions</Typography>
-      <List dense>
+      <Typography variant="h5">Finished Sessions</Typography>
+      <List dense className={classes.list}>
+				{finishedWormSessions.length === 0 && <Typography>No worm sessions have been completed yet...</Typography>}
         {finishedWormSessions.map((session) => (
           <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session} />
         ))}
