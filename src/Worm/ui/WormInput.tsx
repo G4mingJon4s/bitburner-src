@@ -7,12 +7,23 @@ import { finishedWormSessions, getWormSession, serverCanSolveWorm } from "../Wor
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
 import { WORM_UI_NAME } from "../calculations";
+import { makeStyles } from "@mui/styles";
 
 interface IProps {
   worm: Worm;
 }
 
+const inputStyles = makeStyles({
+	history: {
+		overflowY: "scroll",
+		height: "45vh",
+		width: "100%",
+	}
+});
+
 export function WormInput({ worm }: IProps) {
+	const classes = inputStyles();
+
   const [input, setInput] = useState("");
   const [state, setState] = useState("");
   const [reward, setReward] = useState("");
@@ -48,6 +59,11 @@ export function WormInput({ worm }: IProps) {
       <Typography>
         States: {getWormSession(-1).graph.states.at(0)} - {getWormSession(-1).graph.states.at(-1)}
       </Typography>
+			<Typography>Chosen state for "node value": {getWormSession(-1).params.value}</Typography>
+			<Typography>Chosen state for "node indegree": {getWormSession(-1).params.indegree}</Typography>
+			<Typography>Chosen index for "DFS-Enumeration": {getWormSession(-1).params.dfsOrder}</Typography>
+			<br />
+			<Typography>Symbol input</Typography>
       <Stack direction="row" component="div" sx={{ alignItems: "center" }}>
         <TextField
           value={input}
@@ -112,12 +128,11 @@ export function WormInput({ worm }: IProps) {
       <Typography>
         <Box sx={{ fontWeight: "bold" }}>Previous sessions</Box>
       </Typography>
-      <List dense>
-        {Array.from(finishedWormSessions.values())
-          .filter((session) => session.pid === -1)
-          .map((session) => (
-            <WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
-          ))}
+      <List dense className={classes.history}>
+				{finishedWormSessions.every(session => session.pid !== -1) && <Typography>You have not finished any Worm sessions manually...</Typography>}
+        {finishedWormSessions.filter((session) => session.pid === -1).map((session) => (
+					<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
+        ))}
       </List>
     </>
   );
