@@ -1,18 +1,21 @@
-import { Box, Divider, Typography } from "@mui/material"
-import React from "react"
-import { BonusSelector } from "./BonusSelector"
+import { Button, Divider, Typography } from "@mui/material"
+import React, { useState } from "react"
 import { Worm } from "../Worm"
-import { formatNumber } from "../../ui/formatNumber";
+import { formatNumber, formatPercent } from "../../ui/formatNumber";
+import { WormBonusModal } from "./WormBonusModal";
+import { formatBonusDescription, getBonusEffect } from "../BonusType";
 
 interface IProps {
 	worm: Worm;
 }
 
 export function WormOverview({ worm }: IProps) {
+	const [bonusModalOpen, setBonusModalOpen] = useState(false);
+
 	return (
 		<>
+			<Typography variant="h5">Overview</Typography>
 			<Typography>
-				<Box sx={{ fontWeight: "bold" }}>Overview</Box>
         The Worm is a highly complex program that infected the entire bitnode and created a giant network of resources.
         <br />
         Simulating the behaviour of the virus gives you access to a small portion of its wealth.
@@ -23,15 +26,17 @@ export function WormOverview({ worm }: IProps) {
         It is your task to develop a program that can solve the networks properties as efficient as possible.
 			</Typography>
 			<Divider sx={{ my: 1.5 }}/>
-			<Typography>
-				<Box sx={{ fontWeight: "bold" }}>Bonus</Box>
-			</Typography>
+			<Typography variant="h5">Bonus</Typography>
 			<Typography>Current Completions: {formatNumber(worm.completions)}</Typography>
-			<BonusSelector
-				completions={worm.completions}
-				bonus={worm.bonus}
-				setBonus={b => worm.bonus = b}
-			/>
+			<br />
+			<Typography>Current Bonus: {worm.bonus.name} (#{worm.bonus.id})</Typography>
+			<Typography>
+				Effect: {formatBonusDescription(getBonusEffect(worm.bonus, worm.completions), worm.bonus.description)}
+			</Typography>
+			<Typography>Maximum: {formatPercent(worm.bonus.g)}</Typography>
+			<br />
+			<WormBonusModal worm={worm} open={bonusModalOpen} onClose={() => setBonusModalOpen(false)}/>
+			<Button onClick={() => setBonusModalOpen(true)}>Change Bonus</Button>
 		</>
 	)
 }
