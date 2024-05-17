@@ -1,13 +1,17 @@
 import { useTheme } from "@mui/material";
 import React from "react";
 
-export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
+export function WormProperties3(props: React.SVGProps<SVGSVGElement>) {
 	const theme = useTheme();
 
 	return (
-		<svg viewBox="0 0 410 110" xmlns="http://www.w3.org/2000/svg" {...props}>
+		<svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" {...props}>
 			<defs>
-				<linearGradient id="color-1" gradientUnits="userSpaceOnUse">
+				<linearGradient
+					id="color-1"
+					gradientUnits="userSpaceOnUse"
+					gradientTransform="matrix(1, 0, 0, 1, 728.371552, 466.914902)"
+				>
 					<title>{"BACKGROUND"}</title>
 					<stop
 						style={{
@@ -15,7 +19,11 @@ export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 						}}
 					/>
 				</linearGradient>
-				<linearGradient id="color-2" gradientUnits="userSpaceOnUse">
+				<linearGradient
+					id="color-2"
+					gradientUnits="userSpaceOnUse"
+					gradientTransform="matrix(1, 0, 0, 1, 2449.520569, 1511.764923)"
+				>
 					<title>{"OUTLINE"}</title>
 					<stop
 						style={{
@@ -44,8 +52,8 @@ export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 			/>
 			<ellipse
 				style={{
-					stroke: "url(#color-2)",
-					fill: "url(#color-1)",
+					stroke: "url('#color-2')",
+					fill: "url('#color-1')",
 				}}
 				cx={205}
 				cy={55}
@@ -54,78 +62,49 @@ export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 			/>
 			<ellipse
 				style={{
-					stroke: "url(#color-2)",
-					fill: "url(#color-1)",
+					stroke: "url('#color-2')",
+					fill: "url('#color-1')",
 				}}
-				cx={355}
-				cy={55}
+				cx={55}
+				cy={205}
+				rx={50}
+				ry={50}
+			/>
+			<ellipse
+				style={{
+					stroke: "url('#color-2')",
+					fill: "url('#color-1')",
+				}}
+				cx={205}
+				cy={205}
 				rx={50}
 				ry={50}
 			/>
 			<path
-				d="M 105 54 H 150 L 150 52 L 155 55 L 150 58 L 150 56 H 105 V 56 Z"
+				d="M 105 54 h 45 v -2 l 5 3 l -5 3 v -2 h -45 Z"
 				style={{
 					stroke: "url('#color-2')",
 				}}
 			/>
 			<path
-				d="M 255 54 H 300 L 300 52 L 305 55 L 300 58 L 300 56 H 255 V 56 Z"
+				d="M 204 105 v 45 h -2 l 3 5 l 3 -5 h -2 v -45 Z"
 				style={{
 					stroke: "url('#color-2')",
 				}}
 			/>
 			<path
-				d="M 330 94 H 85 L 85 92 L 80 95 L 85 98 L 85 96 H 330 V 96 Z"
+				d="M 54 155 v -45 h -2 l 3 -5 l 3 5 h -2 v 45 Z"
 				style={{
 					stroke: "url('#color-2')",
 				}}
 			/>
 			<text
 				style={{
-					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
 					textAnchor: "middle",
-				}}
-				x={130}
-				y={45}
-			>
-				{"A"}
-			</text>
-			<text
-				style={{
 					whiteSpace: "pre",
-					fill: "url('#color-0')",
-					fontFamily: theme.typography.fontFamily,
-					fontSize: 18,
-					textAnchor: "middle",
-				}}
-				x={280}
-				y={45}
-			>
-				{"B"}
-			</text>
-			<text
-				style={{
-					whiteSpace: "pre",
-					fill: "url('#color-0')",
-					fontFamily: theme.typography.fontFamily,
-					fontSize: 18,
-					textAnchor: "middle",
-				}}
-				x={205}
-				y={85}
-			>
-				{"B"}
-			</text>
-			<text
-				style={{
-					whiteSpace: "pre",
-					fill: "url('#color-0')",
-					fontFamily: theme.typography.fontFamily,
-					fontSize: 18,
-					textAnchor: "middle",
 				}}
 				x={55}
 				y={60}
@@ -134,11 +113,11 @@ export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 			</text>
 			<text
 				style={{
-					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
 					textAnchor: "middle",
+					whiteSpace: "pre",
 				}}
 				x={205}
 				y={60}
@@ -147,16 +126,108 @@ export function WormTraversal2(props: React.SVGProps<SVGSVGElement>) {
 			</text>
 			<text
 				style={{
-					whiteSpace: "pre",
 					fill: "url('#color-0')",
 					fontFamily: theme.typography.fontFamily,
 					fontSize: 18,
 					textAnchor: "middle",
+					whiteSpace: "pre",
 				}}
-				x={355}
-				y={60}
+				x={55}
+				y={210}
+			>
+				{"s04"}
+			</text>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={205}
+				y={210}
 			>
 				{"s03"}
+			</text>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={130}
+				y={45}
+			>
+				{"A"}
+			</text>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={220}
+				y={135}
+			>
+				{"B"}
+			</text>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={70}
+				y={135}
+			>
+				{"D"}
+			</text>
+			<path
+				d="M 0 0 h 105 v -2 l 5 3 l -5 3 v -2 h -105 Z"
+				style={{
+					stroke: "url('#color-2')",
+				}}
+				transform="matrix(0.7071, 0.7071, -0.7071, 0.7071, 91, 91)"
+			/>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={165}
+				y={145}
+			>
+				{"E"}
+			</text>
+			<path
+				d="M 0 0 h 105 v -2 l 5 3 l -5 3 v -2 h -105 Z"
+				style={{
+					stroke: "url('#color-2')",
+				}}
+				transform="matrix(-0.7071, 0.7071, -0.7071, -0.7071, 169, 91)"
+			/>
+			<text
+				style={{
+					fill: "url('#color-0')",
+					fontFamily: theme.typography.fontFamily,
+					fontSize: 18,
+					textAnchor: "middle",
+					whiteSpace: "pre",
+				}}
+				x={95}
+				y={145}
+			>
+				{"F"}
 			</text>
 		</svg>
 	);
