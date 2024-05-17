@@ -1,97 +1,321 @@
-import { Box, Typography } from "@mui/material";
+import { createStyles, makeStyles } from "@mui/styles";
+import { Grid, Typography } from "@mui/material";
 import React from "react";
+import { WormQuiz } from "./WormQuiz";
+import { WormProperties1 } from "./images/WormProperties1";
+import { WormProperties2 } from "./images/WormProperties2";
+import { WormTraversal1 } from "./images/WormTraversal1";
+import { WormTraversal2 } from "./images/WormTraversal2";
+import { WormProperties3 } from "./images/WormProperties3";
+import { WormProperties4 } from "./images/WormProperties4";
+
+const styles = makeStyles(() => createStyles({
+	scroll: {
+		height: "calc(100vh - 100px)",
+		overflowY: "scroll",
+		marginTop: "10px"
+	},
+	text: {
+		width: "60%",
+		marginRight: "15px",
+	},
+	quizSmall: {
+		width: "calc(40% - 50px)",
+		marginRight: "15px",
+	},
+	quizLarge: {
+		width: "calc(40% - 50px)",
+		minHeight: "540px",
+		marginRight: "15px",
+	}
+}));
+
+const traversalQuiz = (
+	<WormQuiz questions={[
+		{
+			text: "What input will result in the output 's02'?",
+			answer: "A",
+			explanation: "The connection labeled 'A' points from the starting state 's01' to 's02'.",
+			type: "text",
+			visual: () => <WormTraversal1 />
+		},
+		{
+			text: "What input will result in 's03'?",
+			answer: "AB",
+			explanation: "Chaining 'A' and 'B' to 'AB' will first go to 's02' and then to 's03'.",
+			type: "text",
+			visual: () => <WormTraversal1 />
+		},
+		{
+			text: "What input will go through 's03' and end at 's02'?",
+			answer: "ABBA",
+			explanation: "'ABB' will go through 's03' and end back at 's01', so 'ABBA' will lead to 's02'.",
+			type: "text",
+			visual: () => <WormTraversal2 />
+		}
+	]}/>
+);
+
+const pathBipartiteQuiz = (
+	<WormQuiz questions={[
+		{
+			text: "What is the shortest path to 's04'?",
+			answer: "EC",
+			explanation: "The shortest path to 's04' goes from 's01' to 's03' and ends at 's04'.",
+			type: "text",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "Is this network bipartite?",
+			answer: "true",
+			explanation: "'s01' and 's03' are in the first group and 's02' and 's04' are in the second group.",
+			type: "truthy",
+			visual: () => <WormProperties1 />
+		},
+		{
+			text: "Is this network bipartite?",
+			answer: "false",
+			explanation: "'s01' and 's03' can no longer be in the same group, as 's01' has a connection to 's03'.",
+			type: "truthy",
+			visual: () => <WormProperties2 />
+		}
+	]}/>
+);
+
+const valueIndegreeQuiz = (
+	<WormQuiz questions={[
+		{
+			text: "What is the highest state in the network?",
+			answer: "s04",
+			explanation: "State 's04' is the highest state.",
+			type: "choice",
+			choices: ["s01", "s02", "s03", "s04"],
+			visual: () => <WormProperties1 />
+		},
+		{
+			text: "What is the node value of 's02'?",
+			answer: "1",
+			explanation: "The highest state it points to is 's03', 3 - 2 = 1.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the node value of 's01'?",
+			answer: "2",
+			explanation: "The highest state it points to is 's03', 3 - 1 = 2.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the node value of 's04'?",
+			answer: "-3",
+			explanation: "The highest state it points to is 's01', 1 - 4  = -3.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the indegree of 's01'?",
+			answer: "1",
+			explanation: "There is one connection to 's01'.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the indegree of 's03'?",
+			answer: "2",
+			explanation: "There are two connections to 's03'.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		}
+	]}/>
+);
+
+const dfsQuiz = (
+	<WormQuiz questions={[
+		{
+			text: "What state comes first in the DFS-Enumeration?",
+			answer: "s01",
+			explanation: "The DFS-Enumeration starts with the starting state.",
+			type: "choice",
+			choices: ["s04", "s03", "s02", "s01"],
+			visual: () => <WormProperties1 />
+		},
+		{
+			text: "What state comes second in the DFS-Enumeration?",
+			answer: "s02",
+			explanation: "Depth-First-Search goes through the connections alphabetically.",
+			type: "choice",
+			choices: ["s04", "s03", "s02", "s01"],
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What state comes third in the DFS-Enumeration?",
+			answer: "s03",
+			explanation: "Traversing further down 's02' leads to 's03'.",
+			type: "choice",
+			choices: ["s04", "s03", "s02", "s01"],
+			visual: () => <WormProperties3 />
+		},
+		{
+			text: "What state comes fourth in the DFS-Enumeration?",
+			answer: "s03",
+			explanation: "After traversing through 's02' to 's03', the next traversal is 'E' at 's01', going to 's03'.",
+			type: "choice",
+			choices: ["s04", "s03", "s02", "s01"],
+			visual: () => <WormProperties4 />
+		}
+	]}/>
+);
 
 export function WormHelp() {
-  return (
-    <>
-      <Typography component="div">
-        <Box sx={{ fontWeight: "bold" }}>Network</Box>
-        The network you have to calculate the properties for is not presented in a standard way.
-        <br />
-        You have a given alphabet, a set of symbols you can use. You always start at the network state 0.
-        <br />
-        From there, each state has random connections to other states.
-        <br />
-        You can traverse these connections by entering a sequence of symbols from the given alphabet.
-        <br />
-        The graph behind the network is a directed graph.
-        <br />
-        Inputting the same symbol twice is not guranteed to bring you back to the predecessor.
-        <br />
-        Each state is guranteed to have a connection to its successor.
-        <br />
-        In the case of the highest state, it will loop back to state 0.
-        <br />
-        After testing your sequence of symbols, you will recieve the state you landed on.
-        <br />
-        <br />
-        <Box sx={{ fontWeight: "bold" }}>Properties</Box>
-        Your task is to gather information from the network and compute some properties the underlying graph has.
-        <br />
-        The properties you have to compute are the following:
-        <br />
-        1. Wether or not the graph is bipartite.
-        <br />
-        In other terms, wether or not you can seperate the states of the graph in two groups,
-        <br />
-        such that each state in a graph has no connection to a state in the same group.
-        <br />
-        2. The shortest sequence, that leads to the highest state in the graph. There may be many possible shortest
-        sequences.
-        <br />
-        You only have to submit one of them.
-        <br />
-        3. The node values for a given state. The value of a node is the highest state it connects to, minus its own
-        value.
-        <br />
-        4. The node indegrees for a given state. The indegree of a state is the amount of connections that lead to that
-        state.
-        <br />
-        5. The n-th state in the depth-first-search enumeration. When traversing the graph using depth-first-search the
-        states are being traversed in a specific order. You have to return the state at the given index in this
-        enumeration.
-        <br />
-        If a property for a specific state is requested, you can gather the specified state through the worm API.
-        <br />
-        <br />
-        <Box sx={{ fontWeight: "bold" }}>Solving a network</Box>
-        Once you have gathered enough data about the network and you computed all of the neccessary properties,
-        <br />
-        you can solve the network by submitting you properties using the worm API.
-        <br />
-        Your attempt will only be successful, when your shortest path property is correct.
-        <br />
-        If you only get the shortest path correct, you will recieve the minimum reward amount.
-        <br />
-        If you do successfully solve a network, you will recieve the percentage of properties you got right as a reward.
-        <br />
-        If you submitted 3 out of 5 correct properties, you will recieve 0.6 completions.
-        <br />
-        If you got all properties correct, you will recieve the maximum reward amount of 1.
-        <br />
-        Be careful though, the network resets every time you attempt to solve it.
-        <br />
-        <br />
-        <Box sx={{ fontWeight: "bold" }}>Completions</Box>
-        The completions metric is a value that will increase with successful attempts.
-        <br />
-        It controls how hard the underlying graph is going to be.
-        <br />
-        It will change how many states the graph has.
-        <br />
-        The value also increase the bonus you will recieve.
-        <br />
-        Each time you enter a new bitnode, the completions metric will be reset.
-        <br />
-        <br />
-        <Box sx={{ fontWeight: "bold" }}>Bonus</Box>
-        The worm offers a lot of unique and powerful upgrades.
-        <br />
-        They start off rather weak but get increasingly stronger, the more completions you achieved.
-        <br />
-        There can only be one active bonus at a time.
-        <br />
-      </Typography>
-    </>
-  );
+	const classes = styles();
+
+	return (
+		<div className={classes.scroll}>
+			<Typography variant="h5">Solving the worm</Typography>
+			<Typography>
+				To gather bonuses from the worm, you will need to solve for certain values hidden in a network.
+				A network, or graph, is a set of nodes, called states, and connections from nodes to other nodes.
+				<br />
+				How such a network might look is depicted by some interactive elements on this page.
+				The circles and their corresponding label, 's01' for example, are the states of the network.
+				The arrows pointing from one state to another with their corresponding label, 'A' for example, are the connections.
+				<br />
+				<br />
+				You cannot access the structure of this network directly.
+				It is hidden at the beginning and you need figure out how it is structured.
+				Certain metadata, like the number of states and their label, as well as a set of possible symbols for the connections, is being provided through the Worm API or shown on the manual input UI.
+				<br />
+				<br />
+				One critical detail to solving a network is that the network you are solving for is unique to every script and the manual input UI.
+				Each script and the UI have their own instance of the worm, called a worm session. This means that there cannot be any script helping to solve a network other than the one from its own session.
+				<br />
+				If a script gets killed while solving a session, the session will be lost.
+			</Typography>
+			<br />
+			<br />
+			<Typography variant="h5">Traversing the network</Typography>
+			<Typography>
+				Whether you are solving the worm manually or via scripts, one essential step to solving a session is figuring out what the underlying network looks like.
+				To accomplish this, you will need to traverse it, starting from a constant starting state.
+			</Typography>
+			<br />
+			<Grid container>
+				<Grid item className={classes.text}>
+					<Typography>
+						Each state can have connections to other states, each labeled with a symbol from the list of possible symbols.
+						This means that a state can only have so many connections, as there are symbols in the given set.
+						You can choose which connection to take, by entering its label as your input.
+						You can also chain multiple symbols to traverse even further.
+						<br />
+						<br />
+						After submitting your input, you will recieve the final state your input lead to as an output.
+						Do note that any symbol submitted, that has no corresponding connection for the current state, will result in the output of the null state 'snull'.
+					</Typography>	
+				</Grid>	
+				<Grid item className={classes.quizSmall}>
+					{traversalQuiz}
+				</Grid>	
+			</Grid>
+			<br />
+			<Typography variant="h5">Network properties</Typography>
+			<Typography>
+				To solve a session, you will need to submit a set of values that describe the underlying network.
+				Each of the values you have to submit are about a certain property of the network.
+				Depending on the value, it can be a simple boolean value, a number or something more complicated, like a state.
+				<br />
+				Certain properties depend on the state in question or some other value.
+				These dependencies are shown in the manual input UI or can be gathered via the Worm API.
+			</Typography>
+			<br />
+			<br />
+			<Grid container>
+				<Grid item className={classes.quizLarge}>
+					{pathBipartiteQuiz}
+				</Grid>
+				<Grid item className={classes.text}>
+					<Typography variant="h5">Shortest path and bipartiteness</Typography>
+					<Typography>
+						The shortest path of a network goes from the starting state to the highest possible state.
+						It should have the fewest symbols used, going through as few states as possible.
+						<br />
+						<br />
+						There can be multiple shortest paths with the same number of symbols to the highest state.
+						It doesn't matter which of them you submit, as long as the input leads to the highest state and the length of the input is minimal.
+						<br />
+						<br />
+						The bipartiteness of a graph describes if the states of the graph can be divided into to groups, such that no state from one group has a connection to a state in its group.
+						<br />
+						Therefore, looking at any state in the network, all states connected to this state have to be in the same group.
+						If that is not the case, the graph is not bipartite.
+					</Typography>
+				</Grid>
+			</Grid>
+			<br />
+			<br />
+			<Grid container>
+				<Grid item className={classes.text}>
+					<Typography variant="h5">Node value and node indegree</Typography>
+					<Typography>
+						The node value and node indegree both depend on a state to be looked at.
+						For both of these properties, a state is provided, which can be retrieved using the Worm API and is shown in the manual input UI.
+						<br />
+						<br />
+						The value of a node is the number of the highest node it has a connection to, minus its own number.
+						It is basically the highest jump that can be done at the corresponding state.
+						The value of a node can also be negative, if the state in question only connects to states lower than itself.
+						<br />
+						<br />
+						The indegree of a node is the number of connections that point to the node.
+						This property doesn't depend directly on the given state, but all of the states and their connections that point to it.
+					</Typography>
+				</Grid>
+				<Grid item className={classes.quizLarge}>
+					{valueIndegreeQuiz}
+				</Grid>
+			</Grid>
+			<br />
+			<br />
+			<Grid container>
+				<Grid item className={classes.quizLarge}>
+					{dfsQuiz}
+				</Grid>
+				<Grid item className={classes.text}>
+					<Typography variant="h5">Depth-First-Search Enumeration</Typography>
+					<Typography>
+						The Depth-First-Search (DFS) traversal describes a particular way of going through the network.
+						Starting at some state, it traverses as far as possible into one direction, before stepping back and taking other routes.
+						<br />
+						<br />
+						Traversing this way means to recursively apply the traversal on adjacent states in a determined order.
+						To exclude any infinite loops or multiple visits to states, the traversal only continues to states that haven't been visited yet.
+						<br />
+						<br />
+						The Depth-First-Search Enumeration is the order in which the states have been visited using the Depth-First-Search traversal algorithm.
+						The starting state is the first state in the enumeration and all other visited states follow accordingly.
+						<br />
+						<br />
+						The property for the network asks for the state in some position of this enumeration.
+						The position to return is given through the Worm API or shown in the manual input UI.
+						Do note the enumeration is zero-based, meaning the first state, the starting state, is in position zero.
+					</Typography>
+				</Grid>
+			</Grid>
+			<br />
+			<br />
+			<Typography variant="h5">Completions and rewards</Typography>
+			<Typography>
+				The worm offers a lot of unique and powerful upgrades called bonuses.
+				To increase the strength of these bonuses, you have to do the work and solve the worm.
+				<br /> 
+				<br />
+				After computing the properties of a network, you can complete the session by submitting your guess.
+				Depending on how many are correct, you will recieve a currency specific to the Worm: completions.
+				The more completions you have, the bigger your worm bonus is.
+				<br />
+				The specific multiplier of the bonus depends on its individual scaling.
+				Each bonus approaches a certain maximum multiplier, again depending on its scaling.
+			</Typography>
+		</div>
+	);
 }
