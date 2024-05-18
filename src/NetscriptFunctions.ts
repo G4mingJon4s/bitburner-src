@@ -1688,6 +1688,7 @@ export const ns: InternalAPI<NSFull> = {
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
+			numContractsSolved: Player.numContractsSolved,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,

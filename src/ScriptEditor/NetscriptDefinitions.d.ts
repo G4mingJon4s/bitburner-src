@@ -43,6 +43,7 @@ interface Person {
 interface Player extends Person {
   money: number;
   numPeopleKilled: number;
+	numContractsSolved: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
