@@ -3,6 +3,7 @@ import { Modal } from '../../ui/React/Modal';
 import { WormBonusSelector } from './WormBonusSelector';
 import { Worm } from '../Worm';
 import { Button, Divider, Typography } from '@mui/material';
+import { Theme } from "@mui/material/styles";
 import { makeStyles } from '@mui/styles';
 import { bonuses, formatBonusDescription, getBonusEffect } from '../BonusType';
 import { formatPercent } from '../../ui/formatNumber';
@@ -13,7 +14,7 @@ interface IProps {
 	onClose: () => void;
 }
 
-const modalStyles = makeStyles({
+const modalStyles = makeStyles((theme: Theme) => ({
 	segment: {
 		width: "calc(50% - 25px)",
 		height: "100%"
@@ -39,7 +40,13 @@ const modalStyles = makeStyles({
 		justifyContent: "space-between",
 		alignItems: "end"
 	},
-});
+	effectText: {
+		color: theme.colors.int,
+	},
+	maximumText: {
+		color: theme.colors.cha,
+	},
+}));
 
 export function WormBonusModal({ worm, open, onClose }: IProps) {
 	const [currentBonus, setCurrentBonus] = useState(worm.bonus.name);
@@ -63,8 +70,8 @@ export function WormBonusModal({ worm, open, onClose }: IProps) {
 					<div className={classes.text}>
 						<Typography variant="h5">Chosen bonus</Typography>
 						<Typography>Name: {currentBonus} (#{bonusType.id})</Typography>
-						<Typography>Effect: {formatBonusDescription(getBonusEffect(bonusType, worm.completions), bonusType.description)}</Typography>
-						<Typography>Maximum: {formatPercent(bonusType.g)}</Typography>
+						<Typography className={classes.effectText}>Effect: {formatBonusDescription(getBonusEffect(bonusType, worm.completions), bonusType.description)}</Typography>
+						<Typography className={classes.maximumText}>Maximum: {formatPercent(bonusType.g)}</Typography>
 					</div>
 					<div className={classes.buttons}>
 						<div>

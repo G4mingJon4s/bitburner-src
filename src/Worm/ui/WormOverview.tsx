@@ -1,16 +1,32 @@
-import { Button, Divider, Typography } from "@mui/material"
-import React, { useState } from "react"
-import { Worm } from "../Worm"
+import { Button, Divider, Typography } from "@mui/material";
+import { Theme } from "@mui/material/styles";
+import React, { useState } from "react";
+import { Worm } from "../Worm";
 import { formatNumber, formatPercent } from "../../ui/formatNumber";
 import { WormBonusModal } from "./WormBonusModal";
 import { formatBonusDescription, getBonusEffect } from "../BonusType";
+import { makeStyles } from "@mui/styles";
 
 interface IProps {
 	worm: Worm;
 }
 
+const overviewStyles = makeStyles((theme: Theme) => ({
+	effectText: {
+		color: theme.colors.int,
+	},
+	maximumText: {
+		color: theme.colors.cha
+	},
+	completionsText: {
+		color: theme.colors.successlight
+	}
+}));
+
 export function WormOverview({ worm }: IProps) {
 	const [bonusModalOpen, setBonusModalOpen] = useState(false);
+
+	const classes = overviewStyles();
 
 	return (
 		<>
@@ -27,13 +43,13 @@ export function WormOverview({ worm }: IProps) {
 			</Typography>
 			<Divider sx={{ my: 1.5 }}/>
 			<Typography variant="h5">Bonus</Typography>
-			<Typography>Current Completions: {formatNumber(worm.completions)}</Typography>
+			<Typography className={classes.completionsText}>Current Completions: {formatNumber(worm.completions)}</Typography>
 			<br />
 			<Typography>Current Bonus: {worm.bonus.name} (#{worm.bonus.id})</Typography>
-			<Typography>
+			<Typography className={classes.effectText}>
 				Effect: {formatBonusDescription(getBonusEffect(worm.bonus, worm.completions), worm.bonus.description)}
 			</Typography>
-			<Typography>Maximum: {formatPercent(worm.bonus.g)}</Typography>
+			<Typography className={classes.maximumText}>Maximum: {formatPercent(worm.bonus.g)}</Typography>
 			<br />
 			<WormBonusModal worm={worm} open={bonusModalOpen} onClose={() => setBonusModalOpen(false)}/>
 			<Button onClick={() => setBonusModalOpen(true)}>Change Bonus</Button>

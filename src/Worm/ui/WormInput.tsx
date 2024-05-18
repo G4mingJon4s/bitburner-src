@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Worm } from "../Worm";
-import { Box, Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
 import { Paper } from "@mui/material";
 import { finishedWormSessions, getWormSession, serverCanSolveWorm } from "../WormSession";
@@ -13,13 +14,19 @@ interface IProps {
   worm: Worm;
 }
 
-const inputStyles = makeStyles({
+const inputStyles = makeStyles((theme: Theme) => ({
 	history: {
 		overflowY: "scroll",
 		height: "45vh",
 		width: "100%",
-	}
-});
+	},
+	paramsText: {
+		color: theme.palette.info.main,
+	},
+	cricticalInfoText: {
+		color: theme.palette.info.light,
+	},
+}));
 
 export function WormInput({ worm }: IProps) {
 	const classes = inputStyles();
@@ -52,16 +59,20 @@ export function WormInput({ worm }: IProps) {
 
   return (
     <>
-      <Typography>
-        <Box sx={{ fontWeight: "bold" }}>Session Information</Box>
-      </Typography>
-      <Typography>Valid Symbols: "{getWormSession(-1).graph.symbols.join("")}"</Typography>
-      <Typography>
+      <Typography variant="h5">Session Information</Typography>
+      <Typography className={classes.cricticalInfoText}>Valid Symbols: "{getWormSession(-1).graph.symbols.join("")}"</Typography>
+      <Typography className={classes.cricticalInfoText}>
         States: {getWormSession(-1).graph.states.at(0)} - {getWormSession(-1).graph.states.at(-1)}
       </Typography>
-			<Typography>Chosen state for "node value": {getWormSession(-1).params.value}</Typography>
-			<Typography>Chosen state for "node indegree": {getWormSession(-1).params.indegree}</Typography>
-			<Typography>Chosen index for "DFS-Enumeration": {getWormSession(-1).params.dfsOrder}</Typography>
+			<Typography className={classes.paramsText}>
+				Chosen state for "node value": {getWormSession(-1).params.value}
+			</Typography>
+			<Typography className={classes.paramsText}>
+				Chosen state for "node indegree": {getWormSession(-1).params.indegree}
+			</Typography>
+			<Typography className={classes.paramsText}>
+				Chosen index for "DFS-Enumeration": {getWormSession(-1).params.dfsOrder}
+			</Typography>
 			<br />
 			<Typography>Symbol input</Typography>
       <Stack direction="row" component="div" sx={{ alignItems: "center" }}>
@@ -77,9 +88,7 @@ export function WormInput({ worm }: IProps) {
         {state !== "" && <Typography>Result: {state}</Typography>}
       </Stack>
       <Divider sx={{ my: 1.5 }} />
-      <Typography>
-        <Box sx={{ fontWeight: "bold" }}>Manual Input</Box>
-      </Typography>
+      <Typography variant="h5">Propeties Input</Typography>
       <Paper sx={{ my: 1, p: 1, "& > *": { mb: 1, mr: 1, alignItems: "center" } }}>
         <Stack direction="row">
           <Switch onChange={(event) => (guess.current.bipartite = event.target.checked)} />
@@ -121,13 +130,11 @@ export function WormInput({ worm }: IProps) {
           <Button disabled={!canSolve} onClick={handleSolve}>
             Solve
           </Button>
-          {reward !== "" && <Typography>Reward: {reward}</Typography>}
+          {reward !== "" && <Typography sx={{ ml: 1.5 }}>Reward: {reward}</Typography>}
         </Stack>
       </Paper>
       <Divider sx={{ my: 1.5 }} />
-      <Typography>
-        <Box sx={{ fontWeight: "bold" }}>Previous sessions</Box>
-      </Typography>
+      <Typography variant="h5">Previous sessions</Typography>
       <List dense className={classes.history}>
 				{finishedWormSessions.every(session => session.pid !== -1) && <Typography>You have not finished any Worm sessions manually...</Typography>}
         {finishedWormSessions.filter((session) => session.pid === -1).map((session) => (
