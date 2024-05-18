@@ -33,23 +33,23 @@ const styles = makeStyles(() => createStyles({
 const traversalQuiz = (
 	<WormQuiz questions={[
 		{
-			text: "What input will result in the output 's02'?",
+			text: "What input will result in the output 's01'?",
 			answer: "A",
-			explanation: "The connection labeled 'A' points from the starting state 's01' to 's02'.",
+			explanation: "The connection labeled 'A' points from the starting state 's00' to 's01'.",
 			type: "text",
 			visual: () => <WormTraversal1 />
 		},
 		{
-			text: "What input will result in 's03'?",
+			text: "What input will result in 's02'?",
 			answer: "AB",
-			explanation: "Chaining 'A' and 'B' to 'AB' will first go to 's02' and then to 's03'.",
+			explanation: "Chaining 'A' and 'B' to 'AB' will first go to 's01' and then to 's02'.",
 			type: "text",
 			visual: () => <WormTraversal1 />
 		},
 		{
-			text: "What input will go through 's03' and end at 's02'?",
+			text: "What input will go through 's02' and end at 's00'?",
 			answer: "ABBA",
-			explanation: "'ABB' will go through 's03' and end back at 's01', so 'ABBA' will lead to 's02'.",
+			explanation: "'ABB' will go through 's02' and end back at 's00', so 'ABBA' will lead to 's01'.",
 			type: "text",
 			visual: () => <WormTraversal2 />
 		}
@@ -59,23 +59,23 @@ const traversalQuiz = (
 const pathBipartiteQuiz = (
 	<WormQuiz questions={[
 		{
-			text: "What is the shortest path to 's04'?",
+			text: "What is the shortest path to 's03'?",
 			answer: "EC",
-			explanation: "The shortest path to 's04' goes from 's01' to 's03' and ends at 's04'.",
+			explanation: "The shortest path to 's03' goes from 's00' to 's02' and ends at 's03'.",
 			type: "text",
 			visual: () => <WormProperties2 />
 		},
 		{
 			text: "Is this network bipartite?",
 			answer: "true",
-			explanation: "'s01' and 's03' are in the first group and 's02' and 's04' are in the second group.",
+			explanation: "'s00' and 's02' are in the first group and 's01' and 's03' are in the second group.",
 			type: "truthy",
 			visual: () => <WormProperties1 />
 		},
 		{
 			text: "Is this network bipartite?",
 			answer: "false",
-			explanation: "'s01' and 's03' can no longer be in the same group, as 's01' has a connection to 's03'.",
+			explanation: "'s00' and 's02' can no longer be in the same group, as 's00' has a connection to 's02'.",
 			type: "truthy",
 			visual: () => <WormProperties2 />
 		}
@@ -86,44 +86,44 @@ const valueIndegreeQuiz = (
 	<WormQuiz questions={[
 		{
 			text: "What is the highest state in the network?",
-			answer: "s04",
-			explanation: "State 's04' is the highest state.",
+			answer: "s03",
+			explanation: "State 's03' is the highest state.",
 			type: "choice",
-			choices: ["s01", "s02", "s03", "s04"],
+			choices: ["s00", "s01", "s02", "s03"],
 			visual: () => <WormProperties1 />
 		},
 		{
-			text: "What is the node value of 's02'?",
-			answer: "1",
-			explanation: "The highest state it points to is 's03', 3 - 2 = 1.",
-			type: "number",
-			visual: () => <WormProperties2 />
-		},
-		{
 			text: "What is the node value of 's01'?",
-			answer: "2",
-			explanation: "The highest state it points to is 's03', 3 - 1 = 2.",
-			type: "number",
-			visual: () => <WormProperties2 />
-		},
-		{
-			text: "What is the node value of 's04'?",
-			answer: "-3",
-			explanation: "The highest state it points to is 's01', 1 - 4  = -3.",
-			type: "number",
-			visual: () => <WormProperties2 />
-		},
-		{
-			text: "What is the indegree of 's01'?",
 			answer: "1",
-			explanation: "There is one connection to 's01'.",
+			explanation: "The highest state it points to is 's02', 2 - 1 = 1.",
 			type: "number",
 			visual: () => <WormProperties2 />
 		},
 		{
-			text: "What is the indegree of 's03'?",
+			text: "What is the node value of 's00'?",
 			answer: "2",
-			explanation: "There are two connections to 's03'.",
+			explanation: "The highest state it points to is 's02', 2 - 0 = 2.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the node value of 's03'?",
+			answer: "-3",
+			explanation: "The highest state it points to is 's00', 0 - 3  = -3.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the indegree of 's00'?",
+			answer: "1",
+			explanation: "There is one connection to 's00'.",
+			type: "number",
+			visual: () => <WormProperties2 />
+		},
+		{
+			text: "What is the indegree of 's02'?",
+			answer: "2",
+			explanation: "There are two connections to 's02'.",
 			type: "number",
 			visual: () => <WormProperties2 />
 		}
@@ -134,34 +134,34 @@ const dfsQuiz = (
 	<WormQuiz questions={[
 		{
 			text: "What state comes first in the DFS-Enumeration?",
-			answer: "s01",
+			answer: "s00",
 			explanation: "The DFS-Enumeration starts with the starting state.",
 			type: "choice",
-			choices: ["s04", "s03", "s02", "s01"],
+			choices: ["s03", "s02", "s01", "s00"],
 			visual: () => <WormProperties1 />
 		},
 		{
 			text: "What state comes second in the DFS-Enumeration?",
-			answer: "s02",
+			answer: "s01",
 			explanation: "Depth-First-Search goes through the connections alphabetically.",
 			type: "choice",
-			choices: ["s04", "s03", "s02", "s01"],
+			choices: ["s03", "s02", "s01", "s00"],
 			visual: () => <WormProperties2 />
 		},
 		{
 			text: "What state comes third in the DFS-Enumeration?",
-			answer: "s03",
+			answer: "s02",
 			explanation: "Traversing further down 's02' leads to 's03'.",
 			type: "choice",
-			choices: ["s04", "s03", "s02", "s01"],
+			choices: ["s03", "s02", "s01", "s00"],
 			visual: () => <WormProperties3 />
 		},
 		{
 			text: "What state comes fourth in the DFS-Enumeration?",
-			answer: "s03",
-			explanation: "After traversing through 's02' to 's03', the next traversal is 'E' at 's01', going to 's03'.",
+			answer: "s02",
+			explanation: "After traversing through 's01' to 's03', the next traversal is 'E' at 's00', going to 's02'.",
 			type: "choice",
-			choices: ["s04", "s03", "s02", "s01"],
+			choices: ["s03", "s02", "s01", "s00"],
 			visual: () => <WormProperties4 />
 		}
 	]}/>
@@ -215,8 +215,14 @@ export function WormHelp() {
 				</Grid>	
 				<Grid item className={classes.quizSmall}>
 					{traversalQuiz}
-				</Grid>	
+				</Grid> 
 			</Grid>
+			<br />
+			<Typography>
+				The starting state of every network is always the state with the lowest id, 's00'.
+				The id of every state is the number at the end of the label.
+				State 's143' would have the id 143.
+			</Typography>
 			<br />
 			<Typography variant="h5">Network properties</Typography>
 			<Typography>
@@ -261,9 +267,9 @@ export function WormHelp() {
 						For both of these properties, a state is provided, which can be retrieved using the Worm API and is shown in the manual input UI.
 						<br />
 						<br />
-						The value of a node is the number of the highest node it has a connection to, minus its own number.
+						The value of a node is the id of the highest node it has a connection to, minus its own id.
 						It is basically the highest jump that can be done at the corresponding state.
-						The value of a node can also be negative, if the state in question only connects to states lower than itself.
+						The value of a node can also be negative, if the state in question only connects to states that have a lower id.
 						<br />
 						<br />
 						The indegree of a node is the number of connections that point to the node.

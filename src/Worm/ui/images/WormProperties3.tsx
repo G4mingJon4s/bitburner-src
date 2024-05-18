@@ -109,7 +109,7 @@ export function WormProperties3(props: React.SVGProps<SVGSVGElement>) {
 				x={55}
 				y={60}
 			>
-				{"s01"}
+				{"s00"}
 			</text>
 			<text
 				style={{
@@ -122,7 +122,7 @@ export function WormProperties3(props: React.SVGProps<SVGSVGElement>) {
 				x={205}
 				y={60}
 			>
-				{"s02"}
+				{"s01"}
 			</text>
 			<text
 				style={{
@@ -135,7 +135,7 @@ export function WormProperties3(props: React.SVGProps<SVGSVGElement>) {
 				x={55}
 				y={210}
 			>
-				{"s04"}
+				{"s03"}
 			</text>
 			<text
 				style={{
@@ -148,7 +148,7 @@ export function WormProperties3(props: React.SVGProps<SVGSVGElement>) {
 				x={205}
 				y={210}
 			>
-				{"s03"}
+				{"s02"}
 			</text>
 			<text
 				style={{
