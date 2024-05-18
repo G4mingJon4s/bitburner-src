@@ -53,8 +53,8 @@ export function WormHistory() {
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Finished Sessions</Typography>
       <List dense className={classes.list}>
-				{finishedWormSessions.length === 0 && <Typography>No worm sessions have been completed yet...</Typography>}
-        {finishedWormSessions.map((session) => (
+				{finishedWormSessions.filter(session => session.pid !== -1).length === 0 && <Typography>No worm sessions have been completed yet...</Typography>}
+        {finishedWormSessions.filter(session => session.pid !== -1).map((session) => (
           <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session} />
         ))}
       </List>
