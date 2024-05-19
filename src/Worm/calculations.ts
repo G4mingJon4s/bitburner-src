@@ -6,6 +6,8 @@ import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligen
 
 export const wormContractEffect = (numContracts: number) => Math.exp(-1 * Math.log10((numContracts / 200) + 1));
 
+export const wormSourceFileEffect = (lvl: number) => [1, 0.88, 0.82, 0.79][lvl];
+
 export const WORM_SOLVE_COOLDOWN = 5000;
 export const WORM_UI_NAME = "worm-ui";
 
