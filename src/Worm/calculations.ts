@@ -4,14 +4,14 @@ import { getMultiplier } from "./BonusType";
 import { Worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 
-export const wormSourceFilePower = (lvl: number) => Math.pow(lvl, 3) / 120 - Math.pow(lvl, 2) / 20 + (17 * lvl) / 120; // 0 -> 0; 1 -> 0.1; 2 -> 0.15; 3 -> 0.2
+export const wormContractEffect = (numContracts: number) => Math.exp(-1 * Math.log10((numContracts / 200) + 1));
 
 export const WORM_SOLVE_COOLDOWN = 5000;
 export const WORM_UI_NAME = "worm-ui";
 
 export const getGuessTime = (threads: number) =>
   ((60 * 1000) / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) *
-  (1 - wormSourceFilePower(Player.sourceFileLvl(16)));
+	wormContractEffect(Player.numContractsSolved);
 
 export function updateWormMults(): void {
   const mults = calculateWormMults(Player.worm);
