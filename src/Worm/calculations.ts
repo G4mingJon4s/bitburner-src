@@ -11,7 +11,7 @@ export const wormSourceFileEffect = (lvl: number) => [1, 0.88, 0.82, 0.79][lvl];
 export const WORM_SOLVE_COOLDOWN = 5000;
 export const WORM_UI_NAME = "worm-ui";
 
-export const getGuessTime = (threads: number) =>
+export const getWormGuessTime = (threads: number) =>
   ((60 * 1000) / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) *
 	wormContractEffect(Player.numContractsSolved);
 

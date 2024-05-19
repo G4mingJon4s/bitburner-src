@@ -5,7 +5,7 @@ import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
-import { getGuessTime } from "../Worm/calculations";
+import { getWormGuessTime } from "../Worm/calculations";
 import { getWormSession, serverCanSolveWorm } from "../Worm/WormSession";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
@@ -53,15 +53,14 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
     getGuessTime: (ctx) => (_threads) => {
       checkWormAPIAccess(ctx);
       const threads = helpers.number(ctx, "threads", _threads);
-      return getGuessTime(threads);
+      return getWormGuessTime(threads);
     },
     testInput: (ctx) => (_input) => {
       checkWormAPIAccess(ctx);
       const session = getWormSession(ctx.workerScript.pid);
       const input = helpers.string(ctx, "input", _input);
-      return helpers.netscriptDelay(ctx, getGuessTime(ctx.workerScript.scriptRef.threads)).then(() => {
+      return helpers.netscriptDelay(ctx, getWormGuessTime(ctx.workerScript.scriptRef.threads)).then(() => {
         const finalState = session.evaluate(input);
-        if (finalState === null) throw new Error(`Error while computing input "${input}", got null.`);
         return Promise.resolve(finalState);
       });
     },
