@@ -1021,33 +1021,47 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
     case 16: {
       return new BitNodeMultipliers({
-        HackingLevelMultiplier: 0.2,
-        StrengthLevelMultiplier: 0.2,
-        DefenseLevelMultiplier: 0.2,
-        DexterityLevelMultiplier: 0.2,
-        AgilityLevelMultiplier: 0.2,
+				CodingContractMoney: 5,
 
-        PurchasedServerSoftcap: 2,
-        PurchasedServerMaxRam: 2,
+				PurchasedServerSoftcap: 1.3,
+				PurchasedServerLimit: 1.5,
+				PurchasedServerCost: 0.9,
+				PurchasedServerMaxRam: 1.3,
 
-        RepToDonateToFaction: 2,
-        FactionWorkRepGain: 0.5,
+				HomeComputerRamCost: 1.5,
+				
+				WorldDaemonDifficulty: 2.5,
 
-        GangSoftcap: 1.5,
-        GangUniqueAugs: 1.3,
+				FactionWorkRepGain: 0.5,
+				CompanyWorkMoney: 0.5,
+				
+				GangSoftcap: 0.8,
+				GangUniqueAugs: 0.6,
 
-        CorporationValuation: 0.6,
-        CorporationSoftcap: 0.9,
-        CorporationDivisions: 0.8,
+				StaneksGiftPowerMultiplier: 0.7,
 
-        BladeburnerRank: 0.7,
-        BladeburnerSkillCost: 1.2,
+				CorporationSoftcap: 0.8,
+				CorporationValuation: 0.5,
+				CorporationDivisions: 0.8,
 
-        StaneksGiftPowerMultiplier: 0.5,
-        StaneksGiftExtraSize: 3,
+				ScriptHackMoney: 0.5,
+				HacknetNodeMoney: 1.1,
+				CrimeMoney: 1.1,
+				CrimeSuccessRate: 0.8,
 
-        WorldDaemonDifficulty: 1.5,
-        HacknetNodeMoney: 1.5,
+				ServerMaxMoney: 0.8,
+				ServerStartingMoney: 0.7,
+				ServerStartingSecurity: 1.3,
+
+				HackingSpeedMultiplier: 0.8,
+				
+				HackingLevelMultiplier: 0.7,
+				StrengthLevelMultiplier: 0.7,
+				DefenseLevelMultiplier: 0.7,
+				AgilityLevelMultiplier: 0.7,
+				DexterityLevelMultiplier: 0.7,
+
+				BladeburnerRank: 0.7,
       });
     }
     default: {
