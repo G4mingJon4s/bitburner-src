@@ -501,14 +501,14 @@ export function initBitNodes() {
         its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
         <br />
         <br />
-        Each level of this Source-File decreases the processing time of the worm by:
+        Each level of this Source-File decreases the time it takes for a coding contract to appear:
         <br />
         <br />
-        Level 1: 10%
+        Level 1: 12%
         <br />
-        Level 2: 15%
+        Level 2: 18%
         <br />
-        Level 3: 20%
+        Level 3: 21%
       </>
     ),
   );

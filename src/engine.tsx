@@ -43,6 +43,7 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
+import { wormSourceFileEffect } from "./Worm/calculations";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -145,7 +146,7 @@ const Engine: {
     passiveFactionGrowth: 5,
     messages: 150,
     mechanicProcess: 5, // Processes certain mechanics (Corporation, Bladeburner)
-    contractGeneration: 3000, // Generate Coding Contracts
+    contractGeneration: CONSTANTS.CodingContractSpawnInterval, // Generate Coding Contracts
     achievementsCounter: 60, // Check if we have new achievements
   },
 
@@ -213,7 +214,7 @@ const Engine: {
       if (Math.random() <= 0.25) {
         generateRandomContract();
       }
-      Engine.Counters.contractGeneration = 3000;
+      Engine.Counters.contractGeneration = CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16));
     }
 
     if (Engine.Counters.achievementsCounter <= 0) {
@@ -247,7 +248,7 @@ const Engine: {
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
+      const contractChancesWhileOffline = Math.floor(timeOffline / (CONSTANTS.MilliPerCycle * CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16))));
 
       // Generate coding contracts
       let numContracts = 0;
