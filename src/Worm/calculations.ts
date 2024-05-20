@@ -12,7 +12,7 @@ export const WORM_SOLVE_COOLDOWN = 5000;
 export const WORM_UI_NAME = "worm-ui";
 
 export const getWormGuessTime = (threads: number) =>
-  ((60 * 1000) / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) *
+  ((10 * 1000) / (threads * calculateIntelligenceBonus(Player.skills.intelligence, 1))) *
 	wormContractEffect(Player.numContractsSolved);
 
 export function updateWormMults(): void {
