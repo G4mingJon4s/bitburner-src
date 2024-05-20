@@ -28,6 +28,15 @@ export interface GraphProperties {
   dfsOrder: string[];
 }
 
+export function getWormSize(completions: number) {
+	const size = Math.floor((Math.random() + 0.5) * completions) + getRandomInt(20, 40);
+
+	const states = Math.max(6, Math.floor((Math.random() + 1.5) * Math.sqrt(size)));
+	const symbols = Math.max(2, Math.floor((size / states) * (Math.random() * 0.25 + 0.5)));
+
+	return [states, symbols];
+}
+
 export const base64Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() * states.length)];
@@ -37,8 +46,7 @@ export function WormDataFactory(completions: number): {
   guess: WormGuess;
   params: WormChosenValues;
 } {
-  const numStates = getRandomInt(2, 5) * 3 + Math.floor(completions);
-  const numSymbols = 2 + Math.floor(Math.log10(numStates + 1));
+  const [numStates, numSymbols] = getWormSize(completions);
 
   const states = Array.from(
     { length: numStates },
