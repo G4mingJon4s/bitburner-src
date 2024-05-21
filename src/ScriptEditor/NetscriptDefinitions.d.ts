@@ -151,8 +151,6 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
-  /** Multiplier to crime karma impact */
-  crime_karma_impact: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -179,8 +177,6 @@ interface Multipliers {
   bladeburner_analysis: number;
   /** Multiplier to success chance in Bladeburner contracts/operations */
   bladeburner_success_chance: number;
-  /** Multiplier to the game tick speed */
-  game_tick_speed: number;
 }
 
 /** @public */

@@ -189,11 +189,6 @@ export function PlayerMultipliers(): React.ReactElement {
       augmented: Player.mults.charisma_exp * mults.charisma_exp,
       color: Settings.theme.cha,
     },
-    {
-      mult: "Game Tick Speed",
-      current: Player.mults.game_tick_speed,
-      augmented: Player.mults.game_tick_speed * mults.game_tick_speed,
-    },
   ];
   const rightColData: MultiplierListItemData[] = [
     {
@@ -272,12 +267,6 @@ export function PlayerMultipliers(): React.ReactElement {
       augmented: Player.mults.crime_money * mults.crime_money,
       bnMult: currentNodeMults.CrimeMoney,
       color: Settings.theme.money,
-    },
-    {
-      mult: "Crime Karma Impact",
-      current: Player.mults.crime_karma_impact,
-      augmented: Player.mults.crime_karma_impact,
-      color: Settings.theme.combat,
     },
   ];
 

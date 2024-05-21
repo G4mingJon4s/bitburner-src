@@ -2,8 +2,6 @@ import { Player } from "@player";
 import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { Worm } from "./Worm";
-import { Growths } from "../Bladeburner/data/Growths";
-import { BladeburnerConstants } from "../Bladeburner/data/Constants";
 import { formatPercent } from "../ui/formatNumber";
 
 export interface BonusType {
@@ -16,6 +14,11 @@ export interface BonusType {
   g: number;
   k: number;
   m: number;
+}
+
+export interface BonusSpecialMults {
+	gameTickSpeed: number;
+	stockMarketMult: number;
 }
 
 export const Bonus = {
@@ -88,11 +91,11 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.TEMPORAL_RESONATOR,
     name: "Temporal resonator",
-    description: "Transfers $MUL$ cycles of the worm to all sleeves",
-    a: 0,
-    g: 1.5,
-    k: 0.07,
-    m: 0.5,
+    description: "Reduces the time between stock market updates by $DEC$.",
+    a: 1,
+    g: 0.8,
+    k: 0.007,
+    m: 0.8,
   },
   {
     id: Bonus.RECORDLESS_CONTRACTING,
@@ -107,7 +110,7 @@ export const bonuses: BonusType[] = [
 
 export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bonus], Partial<Multipliers> | null> => ({
   [Bonus.NONE]: {},
-  [Bonus.CARDINAL_SIN]: { crime_karma_impact: effect },
+  [Bonus.CARDINAL_SIN]: null,
   [Bonus.FAVORABLE_APPEARANCE]: { faction_rep: effect, company_rep: effect },
   [Bonus.SYNTHETIC_BLACK_FRIDAY]: {
     hacknet_node_core_cost: effect,
@@ -119,46 +122,35 @@ export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bo
     home_ram_cost: effect,
     home_core_cost: effect,
   },
-  [Bonus.INCREASED_MAINFRAME_VOLTAGE]: { game_tick_speed: effect },
+  [Bonus.INCREASED_MAINFRAME_VOLTAGE]: null,
   [Bonus.RAPID_ASSIMILATION]: (() => {
     let mults = defaultMultipliers();
     for (const queued of Player.queuedAugmentations) mults = mergeMultipliers(mults, Augmentations[queued.name].mults);
     return scaleMultipliers(mults, effect);
   })(),
   [Bonus.TEMPORAL_RESONATOR]: null,
-  [Bonus.RECORDLESS_CONTRACTING]: null,
+  [Bonus.RECORDLESS_CONTRACTING]: {
+		bladeburner_success_chance: effect,
+	},
 });
 
-export function applySpecialBonus(worm: Worm, numCycles = 1) {
+export function applySpecialBonus(worm: Worm, __numCycles = 1) {
   const mult = bonusMult(0)[worm.bonus.id];
   if (mult !== null) return;
 
   const effect = getBonusEffect(worm.bonus, worm.completions);
 
   switch (worm.bonus.id) {
+		case Bonus.CARDINAL_SIN: {
+			// WIP
+			break;
+		}
+		case Bonus.INCREASED_MAINFRAME_VOLTAGE: {
+			worm.specialMults.gameTickSpeed = effect;
+			break;
+		}
     case Bonus.TEMPORAL_RESONATOR: {
-      for (const sleeve of Player.sleeves) sleeve.storedCycles += numCycles * effect;
-      break;
-    }
-    case Bonus.RECORDLESS_CONTRACTING: {
-      if (Player.bladeburner === null) return;
-
-      // Count increase for contracts/operations
-      for (const contract of Object.values(Player.bladeburner.contracts)) {
-        const growthF = Growths[contract.name];
-        if (growthF === undefined) throw new Error(`growth formula for action '${contract.name}' is undefined`);
-
-        contract.count +=
-          ((numCycles / BladeburnerConstants.CyclesPerSecond) * growthF() * effect) /
-          BladeburnerConstants.ActionCountGrowthPeriod;
-      }
-      for (const op of Object.values(Player.bladeburner.operations)) {
-        const growthF = Growths[op.name];
-        if (growthF === undefined) throw new Error(`growth formula for action '${op.name}' is undefined`);
-        op.count +=
-          ((numCycles / BladeburnerConstants.CyclesPerSecond) * growthF() * effect) /
-          BladeburnerConstants.ActionCountGrowthPeriod;
-      }
+			worm.specialMults.stockMarketMult = effect;	
       break;
     }
     default:

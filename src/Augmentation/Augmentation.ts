@@ -40,7 +40,6 @@ export interface AugmentationCtorParams {
   faction_rep?: number;
   crime_money?: number;
   crime_success?: number;
-  crime_karma_impact?: number;
   work_money?: number;
   hacknet_node_money?: number;
   hacknet_node_purchase_cost?: number;
@@ -54,7 +53,6 @@ export interface AugmentationCtorParams {
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;
   bladeburner_success_chance?: number;
-  game_tick_speed?: number;
 
   startingMoney?: number;
   programs?: CompletedProgramName[];

@@ -30,7 +30,6 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
 
     crime_money: Player.mults.crime_money * nerf,
     crime_success: Player.mults.crime_success * nerf,
-    crime_karma_impact: Player.mults.crime_karma_impact * nerf,
 
     hacknet_node_money: Player.mults.hacknet_node_money * nerf,
     hacknet_node_purchase_cost: Player.mults.hacknet_node_purchase_cost / nerf,
@@ -48,7 +47,5 @@ export const calculateEntropy = (stacks = 1): Multipliers => {
     bladeburner_stamina_gain: Player.mults.bladeburner_stamina_gain * nerf,
     bladeburner_analysis: Player.mults.bladeburner_analysis * nerf,
     bladeburner_success_chance: Player.mults.bladeburner_success_chance * nerf,
-
-    game_tick_speed: Player.mults.game_tick_speed * nerf,
   };
 };

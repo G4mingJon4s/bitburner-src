@@ -28,12 +28,10 @@ export interface Multipliers {
   work_money: number;
   crime_success: number;
   crime_money: number;
-  crime_karma_impact: number;
   bladeburner_max_stamina: number;
   bladeburner_stamina_gain: number;
   bladeburner_analysis: number;
   bladeburner_success_chance: number;
-  game_tick_speed: number;
 }
 
 export const defaultMultipliers = (): Multipliers => {
@@ -67,12 +65,10 @@ export const defaultMultipliers = (): Multipliers => {
     work_money: 1,
     crime_success: 1,
     crime_money: 1,
-    crime_karma_impact: 1,
     bladeburner_max_stamina: 1,
     bladeburner_stamina_gain: 1,
     bladeburner_analysis: 1,
     bladeburner_success_chance: 1,
-    game_tick_speed: 1,
   };
 };
 
@@ -107,12 +103,10 @@ export const mergeMultipliers = (m0: Multipliers, m1: Multipliers): Multipliers 
     work_money: m0.work_money * m1.work_money,
     crime_success: m0.crime_success * m1.crime_success,
     crime_money: m0.crime_money * m1.crime_money,
-    crime_karma_impact: m0.crime_karma_impact * m1.crime_karma_impact,
     bladeburner_max_stamina: m0.bladeburner_max_stamina * m1.bladeburner_max_stamina,
     bladeburner_stamina_gain: m0.bladeburner_stamina_gain * m1.bladeburner_stamina_gain,
     bladeburner_analysis: m0.bladeburner_analysis * m1.bladeburner_analysis,
     bladeburner_success_chance: m0.bladeburner_success_chance * m1.bladeburner_success_chance,
-    game_tick_speed: m0.game_tick_speed * m1.game_tick_speed,
   };
 };
 
@@ -147,11 +141,9 @@ export const scaleMultipliers = (m0: Multipliers, v: number): Multipliers => {
     work_money: (m0.work_money - 1) * v + 1,
     crime_success: (m0.crime_success - 1) * v + 1,
     crime_money: (m0.crime_money - 1) * v + 1,
-    crime_karma_impact: (m0.crime_karma_impact - 1) * v + 1,
     bladeburner_max_stamina: (m0.bladeburner_max_stamina - 1) * v + 1,
     bladeburner_stamina_gain: (m0.bladeburner_stamina_gain - 1) * v + 1,
     bladeburner_analysis: (m0.bladeburner_analysis - 1) * v + 1,
     bladeburner_success_chance: (m0.bladeburner_success_chance - 1) * v + 1,
-    game_tick_speed: (m0.game_tick_speed - 1) * v + 1,
   };
 };
