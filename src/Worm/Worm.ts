@@ -11,6 +11,8 @@ export class Worm {
 	specialMults: BonusSpecialMults = {
 		gameTickSpeed: 1,
 		stockMarketMult: 1,
+		bladeburnerMult: 1,
+		intelligenceMult: 1,
 	}
 
   constructor() {
@@ -20,20 +22,22 @@ export class Worm {
 	resetSpecialMults() {
 		this.specialMults.gameTickSpeed = 1;
 		this.specialMults.stockMarketMult = 1;
+		this.specialMults.bladeburnerMult = 1;
+		this.specialMults.intelligenceMult = 1;
 	}
 
-  process(numCycles = 1) {
-    this.updateMults(numCycles);
+  process() {
+    this.updateMults();
 
     removeIdleWormSessions();
 
     WormEvents.emit();
   }
 
-  updateMults(numCycles: number) {
+  updateMults() {
 		this.resetSpecialMults();
     updateWormMults();
-    applySpecialBonus(this, numCycles);
+    applySpecialBonus(this);
   }
 
   toJSON(): IReviverValue {

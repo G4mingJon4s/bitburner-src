@@ -1,6 +1,4 @@
-import { Player } from "@player";
-import { Multipliers, defaultMultipliers, mergeMultipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
-import { Augmentations } from "../Augmentation/Augmentations";
+import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 import { Worm } from "./Worm";
 import { formatPercent } from "../ui/formatNumber";
 
@@ -19,6 +17,8 @@ export interface BonusType {
 export interface BonusSpecialMults {
 	gameTickSpeed: number;
 	stockMarketMult: number;
+	bladeburnerMult: number;
+	intelligenceMult: number;
 }
 
 export const Bonus = {
@@ -46,11 +46,11 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.CARDINAL_SIN,
     name: "Cardinal sin",
-    description: "+$INC$ crime impact on karma",
+    description: "Increases crime money and success rate by +$INC$",
     a: 1,
-    g: 3,
-    k: 0.1,
-    m: 0.5,
+    g: 1.2,
+    k: 0.007,
+    m: 0.8,
   },
   {
     id: Bonus.FAVORABLE_APPEARANCE,
@@ -82,16 +82,16 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.RAPID_ASSIMILATION,
     name: "Rapid assimilation",
-    description: "Applies queued augmentations immediately. $MUL$ queued augmentation effect",
-    a: 0,
-    g: 1,
-    k: 0.1,
-    m: 0.45,
+    description: "Gain +$INC$ intelligence exp",
+    a: 1,
+    g: 1.1,
+    k: 0.007,
+    m: 0.8,
   },
   {
     id: Bonus.TEMPORAL_RESONATOR,
     name: "Temporal resonator",
-    description: "Reduces the time between stock market updates by $DEC$.",
+    description: "Reduces the time between stock market updates by $DEC$",
     a: 1,
     g: 0.8,
     k: 0.007,
@@ -100,17 +100,20 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.RECORDLESS_CONTRACTING,
     name: "Recordless contracting",
-    description: "Generates an additional $MUL$ bladeburner contracts and operations",
-    a: 0,
-    g: 1,
-    k: 0.06,
-    m: 0.5,
+    description: "Reduces the time needed to complete a bladeburner action by $DEC$",
+    a: 1,
+    g: 0.9,
+    k: 0.007,
+    m: 0.8,
   },
 ];
 
 export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bonus], Partial<Multipliers> | null> => ({
   [Bonus.NONE]: {},
-  [Bonus.CARDINAL_SIN]: null,
+  [Bonus.CARDINAL_SIN]: {
+		crime_money: effect,
+		crime_success: effect,
+	},
   [Bonus.FAVORABLE_APPEARANCE]: { faction_rep: effect, company_rep: effect },
   [Bonus.SYNTHETIC_BLACK_FRIDAY]: {
     hacknet_node_core_cost: effect,
@@ -123,36 +126,34 @@ export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bo
     home_core_cost: effect,
   },
   [Bonus.INCREASED_MAINFRAME_VOLTAGE]: null,
-  [Bonus.RAPID_ASSIMILATION]: (() => {
-    let mults = defaultMultipliers();
-    for (const queued of Player.queuedAugmentations) mults = mergeMultipliers(mults, Augmentations[queued.name].mults);
-    return scaleMultipliers(mults, effect);
-  })(),
+  [Bonus.RAPID_ASSIMILATION]: null,
   [Bonus.TEMPORAL_RESONATOR]: null,
-  [Bonus.RECORDLESS_CONTRACTING]: {
-		bladeburner_success_chance: effect,
-	},
+  [Bonus.RECORDLESS_CONTRACTING]: null,
 });
 
-export function applySpecialBonus(worm: Worm, __numCycles = 1) {
+export function applySpecialBonus(worm: Worm) {
   const mult = bonusMult(0)[worm.bonus.id];
   if (mult !== null) return;
 
   const effect = getBonusEffect(worm.bonus, worm.completions);
 
   switch (worm.bonus.id) {
-		case Bonus.CARDINAL_SIN: {
-			// WIP
-			break;
-		}
 		case Bonus.INCREASED_MAINFRAME_VOLTAGE: {
 			worm.specialMults.gameTickSpeed = effect;
+			break;
+		}
+		case Bonus.RAPID_ASSIMILATION: {
+			worm.specialMults.intelligenceMult = effect;
 			break;
 		}
     case Bonus.TEMPORAL_RESONATOR: {
 			worm.specialMults.stockMarketMult = effect;	
       break;
     }
+		case Bonus.RECORDLESS_CONTRACTING: {
+			worm.specialMults.bladeburnerMult = effect;
+			break;
+		}
     default:
       throw new Error(`Bonus #${worm.bonus.id} does not have a special implementation`);
   }
