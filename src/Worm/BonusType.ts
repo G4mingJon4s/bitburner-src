@@ -1,11 +1,14 @@
 import { Multipliers, defaultMultipliers } from "../PersonObjects/Multipliers";
 import { Worm } from "./Worm";
 import { formatPercent } from "../ui/formatNumber";
+import { StockMarketConstants } from "../StockMarket/data/Constants";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 
 export interface BonusType {
   id: (typeof Bonus)[keyof typeof Bonus];
   name: string;
   description: string;
+	infoText: string | null;
 
   // values describing effect increase
   a: number;
@@ -38,6 +41,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.NONE,
     name: "None",
     description: "no benefit",
+		infoText: "Default bonus. Can be used to disable all worm benefits.",
     a: 0,
     g: 0,
     k: 0,
@@ -47,6 +51,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.CARDINAL_SIN,
     name: "Cardinal sin",
     description: "Increases crime money and success rate by +$INC$",
+		infoText: null,
     a: 1,
     g: 1.2,
     k: 0.007,
@@ -56,6 +61,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.FAVORABLE_APPEARANCE,
     name: "Favorable appearance",
     description: "+$INC$ reputation from factions and companies",
+		infoText: null,
     a: 1,
     g: 1.7,
     k: 0.005,
@@ -65,6 +71,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.SYNTHETIC_BLACK_FRIDAY,
     name: "Synthetic black friday",
     description: "-$DEC$ hacknet costs, purchased server costs, home ram and home core costs",
+		infoText: null,
     a: 1,
     g: 0.6,
     k: 0.003,
@@ -74,6 +81,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.INCREASED_MAINFRAME_VOLTAGE,
     name: "Increased mainframe voltage",
     description: "+$INC$ game cycles per process",
+		infoText: "Increases the amount of cycles the game distributes to all mechanics.",
     a: 1,
     g: 1.05,
     k: 0.007,
@@ -83,6 +91,7 @@ export const bonuses: BonusType[] = [
     id: Bonus.RAPID_ASSIMILATION,
     name: "Rapid assimilation",
     description: "Gain +$INC$ intelligence exp",
+		infoText: "Increases the amount of exp gained from all sources.",
     a: 1,
     g: 1.1,
     k: 0.007,
@@ -91,7 +100,8 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.TEMPORAL_RESONATOR,
     name: "Temporal resonator",
-    description: "Reduces the time between stock market updates by $DEC$",
+    description: "Reduces the time between stock market updates by -$DEC$",
+		infoText: `Decreases the time between stock market updates. The minimum time between stock market updates is ${convertTimeMsToTimeElapsedString(StockMarketConstants.msPerStockUpdateMin)}.`,
     a: 1,
     g: 0.8,
     k: 0.007,
@@ -100,7 +110,8 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.RECORDLESS_CONTRACTING,
     name: "Recordless contracting",
-    description: "Reduces the time needed to complete a bladeburner action by $DEC$",
+    description: "Reduces the time needed to complete a bladeburner action by -$DEC$",
+		infoText: "Decreases the action time required for all bladeburner actions.",
     a: 1,
     g: 0.9,
     k: 0.007,
@@ -164,6 +175,12 @@ export function formatBonusDescription(effect: number, desc: string) {
     (desc = desc.replace("$DEC$", formatPercent(1 - effect))),
     (desc = desc.replace("$MUL$", formatPercent(effect)));
   return desc;
+}
+
+export function getBonusFormattingType(desc: string) {
+	const match = desc.match(/(\+|-)?\$...\$/);
+	if (match === null || match.length === 0) return "N/A";
+	return match[0];
 }
 
 export const numberIsBonusValue = (n: number): n is (typeof Bonus)[keyof typeof Bonus] =>

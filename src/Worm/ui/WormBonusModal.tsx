@@ -5,8 +5,7 @@ import { Worm } from '../Worm';
 import { Button, Divider, Typography } from '@mui/material';
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from '@mui/styles';
-import { bonuses, formatBonusDescription, getBonusEffect } from '../BonusType';
-import { formatPercent } from '../../ui/formatNumber';
+import { bonuses, formatBonusDescription, getBonusEffect, getBonusFormattingType } from '../BonusType';
 
 interface IProps {
 	worm: Worm;
@@ -71,7 +70,8 @@ export function WormBonusModal({ worm, open, onClose }: IProps) {
 						<Typography variant="h5">Chosen bonus</Typography>
 						<Typography>Name: {currentBonus} (#{bonusType.id})</Typography>
 						<Typography className={classes.effectText}>Effect: {formatBonusDescription(getBonusEffect(bonusType, worm.completions), bonusType.description)}</Typography>
-						<Typography className={classes.maximumText}>Maximum: {formatPercent(bonusType.g)}</Typography>
+						<Typography className={classes.maximumText}>Maximum: {formatBonusDescription(bonusType.g, getBonusFormattingType(bonusType.description))}</Typography>
+						{bonusType.infoText !== null && <Typography>{bonusType.infoText}</Typography>}
 					</div>
 					<div className={classes.buttons}>
 						<div>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Worm } from "../Worm";
 import { formatNumber, formatPercent } from "../../ui/formatNumber";
 import { WormBonusModal } from "./WormBonusModal";
-import { formatBonusDescription, getBonusEffect } from "../BonusType";
+import { formatBonusDescription, getBonusEffect, getBonusFormattingType } from "../BonusType";
 import { makeStyles } from "@mui/styles";
 import { MathJax } from "better-react-mathjax";
 import { wormContractEffect } from "../calculations";
@@ -63,7 +63,7 @@ export function WormOverview({ worm }: IProps) {
 					<Typography className={classes.effectText}>
 						Effect: {formatBonusDescription(getBonusEffect(worm.bonus, worm.completions), worm.bonus.description)}
 					</Typography>
-					<Typography className={classes.maximumText}>Maximum: {formatPercent(worm.bonus.g)}</Typography>
+					<Typography className={classes.maximumText}>Maximum: {formatBonusDescription(worm.bonus.g, getBonusFormattingType(worm.bonus.description))}</Typography>
 					<br />
 					<WormBonusModal worm={worm} open={bonusModalOpen} onClose={() => setBonusModalOpen(false)}/>
 					<Button onClick={() => setBonusModalOpen(true)}>Change Bonus</Button>
