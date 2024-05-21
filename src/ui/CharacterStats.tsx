@@ -466,15 +466,6 @@ export function CharacterStats(): React.ReactElement {
               color={Settings.theme.cha}
               noMargin
             />
-            <MultiplierTable
-              rows={[
-                {
-                  mult: "Game Tick Speed",
-                  value: Player.mults.game_tick_speed,
-                },
-              ]}
-              color={Settings.theme.primary}
-            />
           </Box>
 
           <Box>
@@ -538,26 +529,6 @@ export function CharacterStats(): React.ReactElement {
                 },
               ]}
               color={Settings.theme.money}
-            />
-            <MultiplierTable
-              rows={[
-                {
-                  mult: "Crime Success Chance",
-                  value: Player.mults.crime_success,
-                  effValue: Player.mults.crime_success * currentNodeMults.CrimeSuccessRate,
-                },
-                {
-                  mult: "Crime Money",
-                  value: Player.mults.crime_money,
-                  effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
-                  color: Settings.theme.money,
-                },
-                {
-                  mult: "Crime Karma Impact",
-                  value: Player.mults.crime_karma_impact,
-                },
-              ]}
-              color={Settings.theme.combat}
             />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable

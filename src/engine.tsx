@@ -88,7 +88,9 @@ const Engine: {
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
 
-    numCycles *= Player.mults.game_tick_speed;
+		if (Player.worm !== null) {
+			numCycles *= Player.worm.specialMults.gameTickSpeed;
+		}
 
     Terminal.process(numCycles);
 
