@@ -8,7 +8,7 @@ import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
-import { Worm } from "../../Worm/Worm";
+import { resetWorm } from "../../Worm/Worm";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
@@ -31,18 +31,17 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
       if (sfN === 9) {
         Player.hacknetNodes = [];
       }
-      if (sfN === 16) {
-        if (sfLvl === 0) Player.worm = null;
-        else Player.worm = new Worm();
-      }
       if (sfLvl === 0) {
-        Player.sourceFiles.delete(sfN);
+				Player.sourceFiles.delete(sfN);
         if (sfN === 10) Sleeve.recalculateNumOwned();
         parentRerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
       if (sfN === 10) Sleeve.recalculateNumOwned();
+			if (sfN === 16) {
+				resetWorm();
+			}
       parentRerender();
     },
     [parentRerender],

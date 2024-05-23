@@ -5,7 +5,7 @@ import { BladeburnerConstants } from "./data/Constants";
 import { Bladeburner } from "./Bladeburner";
 import { Person } from "../PersonObjects/Person";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
-import { Player } from "@player";
+import { worm } from "../Worm/Worm";
 
 interface ISuccessChanceParams {
   est: boolean;
@@ -182,7 +182,7 @@ export class Action {
 
     baseTime = Math.max(1, (baseTime * skillFac) / statFac);
 
-		const wormMult = Player.worm === null ? 1 : Player.worm.specialMults.bladeburnerMult;
+		const wormMult = worm === null ? 1 : worm.specialMults.bladeburnerMult;
 
     return Math.ceil(baseTime * wormMult * this.getActionTimePenalty());
   }

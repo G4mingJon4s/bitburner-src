@@ -1,23 +1,21 @@
-import { Player } from "@player";
-
 import { Worm as IWorm } from "@nsdefs";
 import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { Worm } from "../Worm/Worm";
+import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
 import { getWormGuessTime } from "../Worm/calculations";
 import { getWormSession, serverCanSolveWorm } from "../Worm/WormSession";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
-    if (Player.worm === null) {
+    if (!canAccessWorm()) {
       throw helpers.errorMessage(ctx, "You have no access to the Worm API", "API ACCESS");
     }
   }
 
   function getWorm(): Worm {
-    if (Player.worm === null) throw new Error("Cannot get worm. Player.worm is null");
-    return Player.worm;
+    if (worm === null) throw new Error("Cannot get worm. worm is null");
+    return worm;
   }
 
   return {

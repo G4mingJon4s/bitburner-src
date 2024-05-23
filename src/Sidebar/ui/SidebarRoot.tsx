@@ -58,6 +58,7 @@ import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
+import { canAccessWorm } from "../../Worm/Worm";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -162,7 +163,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
-  const canWorm = Player.worm !== null;
+  const canWorm = canAccessWorm();
 
   const clickPage = useCallback(
     (page: Page) => {

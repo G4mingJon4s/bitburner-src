@@ -28,7 +28,6 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
-import { Worm } from "../../Worm/Worm";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -36,7 +35,6 @@ export class PlayerObject extends Person implements IPlayer {
   corporation: Corporation | null = null;
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
-  worm: Worm | null = null;
   currentServer = "";
   factions: FactionName[] = [];
   factionInvitations: FactionName[] = [];

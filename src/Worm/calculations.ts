@@ -1,7 +1,7 @@
 import { Player } from "@player";
 import { Multipliers, defaultMultipliers, mergeMultipliers } from "../PersonObjects/Multipliers";
 import { getMultiplier } from "./BonusType";
-import { Worm } from "./Worm";
+import { worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 
 export const wormContractEffect = (numContracts: number) => Math.exp(-1 * Math.log10((numContracts / 200) + 1));
@@ -16,12 +16,12 @@ export const getWormGuessTime = (threads: number) =>
 	wormContractEffect(Player.numContractsSolved);
 
 export function updateWormMults(): void {
-  const mults = calculateWormMults(Player.worm);
+  const mults = calculateWormMults();
   Player.mults = mergeMultipliers(Player.mults, mults);
   Player.updateSkillLevels();
 }
 
-function calculateWormMults(worm: Worm | null): Multipliers {
+function calculateWormMults(): Multipliers {
   if (worm === null) return defaultMultipliers();
 
   const effect = getMultiplier(worm.bonus, worm.completions);

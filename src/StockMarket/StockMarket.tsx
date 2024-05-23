@@ -16,7 +16,7 @@ import { Reviver } from "../utils/JSONReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { Player } from "@player";
+import { worm } from "../Worm/Worm";
 
 export let StockMarket: IStockMarket = {
   lastUpdate: 0,
@@ -201,7 +201,6 @@ function stockMarketCycle(): void {
 }
 
 export function processStockPrices(numCycles = 1): void {
-	const worm = Player.worm;
 	const wormTimeMultiplier = worm === null ? 1 : worm.specialMults.stockMarketMult;
 	const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate * wormTimeMultiplier / CONSTANTS.MilliPerCycle;
   if (StockMarket.storedCycles == null || isNaN(StockMarket.storedCycles)) {
