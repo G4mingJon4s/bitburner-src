@@ -25,7 +25,7 @@ export function WormRoot(): React.ReactElement {
       </Tabs>
       <Paper sx={{ p: 1 }}>
         {currentPage === possiblePages[0] && <WormOverview worm={worm}/>}
-        {currentPage === possiblePages[1] && <WormInput worm={worm} />}
+        {currentPage === possiblePages[1] && <WormInput />}
         {currentPage === possiblePages[2] && <WormHistory />}
 				{currentPage === possiblePages[3] && <WormHelp />}
       </Paper>

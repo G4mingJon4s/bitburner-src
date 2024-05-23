@@ -2,7 +2,6 @@ import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusSpecialMults, BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
-import { removeIdleWormSessions } from "./WormSession";
 import { updateWormMults } from "./calculations";
 
 export class Worm {
@@ -29,8 +28,6 @@ export class Worm {
 
   process() {
     this.updateMults();
-
-    removeIdleWormSessions();
 
     WormEvents.emit();
   }

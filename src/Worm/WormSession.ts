@@ -1,23 +1,40 @@
-import { workerScripts } from "../Netscript/WorkerScripts";
 import { WormSessionEvents } from "./WormEvents";
 import { Settings } from "../Settings/Settings";
 import { GraphData, WormDataFactory, WormGuess, evaluateInput } from "./Graph";
 import { worm, type Worm } from "./Worm";
-import { type WorkerScript } from "src/Netscript/WorkerScript";
 import { WormChosenValues } from "@nsdefs";
-import { WORM_SOLVE_COOLDOWN, WORM_UI_NAME } from "./calculations";
+import { WORM_CREATE_COOLDOWN, WORM_SOLVE_COOLDOWN } from "./calculations";
 
 export const currentWormSessions = new Map<number, WormSession>();
 export const finishedWormSessions: WormSession[] = [];
-export const serverLastWormSession = new Map<string, number>();
 
-export function serverCanSolveWorm(hostname: string) {
-  const lastSolve = serverLastWormSession.get(hostname);
-  if (lastSolve === undefined) return true;
-  return Date.now() - lastSolve > WORM_SOLVE_COOLDOWN;
+export let wormUISession: WormSession | null = null;
+export const finishedWormUISessions: WormSession[] = [];
+
+export let lastWormSolve = 0;
+export let lastWormCreate = 0;
+
+export function isWormOnSolveCooldown() {
+	return lastWormSolve + WORM_SOLVE_COOLDOWN > Date.now();
+}
+
+export function isWormOnCreateCooldown() {
+	return lastWormCreate + WORM_CREATE_COOLDOWN > Date.now();
+}
+
+export function getWormUISession() {
+	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+	if (wormUISession === null) wormUISession = new WormSession(worm);
+	return wormUISession;
+}
+
+export function resetWormUISession() {
+	wormUISession = null;
 }
 
 export class WormSession {
+	identifier: number;
+
   graph: GraphData;
   guess: WormGuess;
   params: WormChosenValues;
@@ -25,25 +42,14 @@ export class WormSession {
   startTime: number;
   finishTime: number | null;
 
-  pid: number;
-  host: string | null;
-  script: string | null;
-
-  constructor(pid: number, worm: Worm, scriptRef: WorkerScript | undefined) {
-    this.pid = pid;
+  constructor(worm: Worm) {
+		lastWormCreate = Date.now();
+		this.identifier = performance.now();
 
     const data = WormDataFactory(worm.completions);
     this.graph = data.graph;
     this.guess = data.guess;
     this.params = data.params;
-
-    if (pid !== -1 && scriptRef !== undefined) {
-      this.host = scriptRef.hostname;
-      this.script = scriptRef.name;
-    } else {
-      this.host = null;
-      this.script = null;
-    }
 
     this.startTime = Date.now();
     this.finishTime = null;
@@ -76,8 +82,10 @@ export class WormSession {
     return this.guess.dfsState === this.graph.properties.dfsOrder[this.params.dfsOrder];
   }
 
-  solve(worm: Worm) {
-    this.end();
+  solve() {
+		if (this.finishTime !== null) throw new Error("Trying to solve Worm Session. Session has already ended.");
+		lastWormSolve = Date.now();
+		this.finishTime = lastWormSolve;
 
     const comparisons = [
       this.isPathCorrect(),
@@ -91,47 +99,42 @@ export class WormSession {
 
     const amountCorrect = comparisons.filter((b) => b).length;
     const rewardValue = amountCorrect / comparisons.length;
-    worm.completions += rewardValue;
 
     return rewardValue;
   }
-
-  end() {
-    this.finishTime = Date.now();
-    serverLastWormSession.set(this.host ?? WORM_UI_NAME, Date.now());
-
-    currentWormSessions.delete(this.pid);
-    pushToFinishedSessions(this);
-
-    WormSessionEvents.emit();
-  }
 }
 
-export function getWormSession(pid: number) {
-  const session = currentWormSessions.get(pid);
+export function applyWormSessionReward(reward: number) {
+	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+	worm.completions += reward;
+}
+
+export function getWormSession(identifier: number) {
+  const session = currentWormSessions.get(identifier);
   if (session !== undefined) return session;
-
-  if (worm === null) throw new Error("Tried to acces worm. Worm is null.");
-
-  const newSession = new WormSession(pid, worm, workerScripts.get(pid));
-
-  currentWormSessions.set(pid, newSession);
-  WormSessionEvents.emit();
-
-  return newSession;
+	return null;
 }
 
-export function pushToFinishedSessions(session: WormSession) {
-  finishedWormSessions.push(session);
+export function createNewWormSession() {
+	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+	const newSession = new WormSession(worm);
+
+	currentWormSessions.set(newSession.identifier, newSession);
+	WormSessionEvents.emit();
+
+	return newSession;
+}
+
+export function pushToFinishedSessions(session: WormSession, isUISession: boolean) {
+	if (isUISession) {
+		finishedWormUISessions.push(session);
+	} else {
+		finishedWormSessions.push(session);
+	}
   if (finishedWormSessions.length > Settings.MaxRecentScriptsCapacity) {
     finishedWormSessions.splice(0, finishedWormSessions.length - Settings.MaxRecentScriptsCapacity);
   }
-}
-
-export function removeIdleWormSessions() {
-  for (const session of currentWormSessions.values()) {
-    if (session.pid !== -1 && !workerScripts.has(session.pid)) {
-      session.end();
-    }
-  }
+	if (finishedWormUISessions.length > Settings.MaxRecentScriptsCapacity) {
+		finishedWormUISessions.splice(0, finishedWormUISessions.length - Settings.MaxRecentScriptsCapacity);
+	}
 }

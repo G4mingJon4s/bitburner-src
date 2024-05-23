@@ -5181,58 +5181,84 @@ interface Worm {
    */
   getCompletions(): number;
 
+
+	/**
+	 * Get all unsolved sessions.
+	 * @remarks
+	 * RAM cost: 16 GB
+	 * 
+	 * @returns An array of sessions.
+	 */
+	getUnsolvedSessions(): number[];
+
+	/**
+	 * Creates a new session.
+	 * @remarks
+	 * RAM cost: 16 GB
+	 * 
+	 * @returns An identifier for the newly created session. Returns null if you cannot create a new session.
+	 */
+	createNewSession(): number | null;
+
   /**
    * Tests a given input against the current worm.
    * @remarks
    * RAM cost: 16 GB
+	 * @param session The worm session to be targeted.
    *
    * @returns Returns the final state of the input.
    */
-  testInput(input: string): Promise<string>;
+  testInput(session: number, input: string): Promise<string>;
 
   /**
    * Attempts to solve the worm using the provided properties.
    * This does reset the worm, even if some properties are not correct.
    * @remarks
    * RAM cost: 64 GB
+	 * @param session The worm session to be targeted.
    *
    * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
    */
-  attemptSolve(): number;
+  attemptSolve(session: number): number;
 
   /**
    * Sets the shortest path the current worm has.
    * @remarks
    * RAM cost: 4 GB
+	 * @param session The worm session to be targeted.
    * @param path The path to set. Can only include valid symbols of the worm.
    */
-  setShortestPath(path: string): void;
+  setShortestPath(session: number, path: string): void;
 
   /**
    * Sets wether or not the current worm is bipartite.
    * @remarks
    * RAM cost: 4 GB
+	 * @param session The worm session to be targeted.
    * @param bipartite Wether or not the current worm is bipartite.
    */
-  setIsBipartite(bipartite: boolean): void;
+  setIsBipartite(session: number, bipartite: boolean): void;
 
   /**
    * Sets the indegree of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+	 * @param session The worm session to be targeted.
    * @param indegree The indegree of the chosen node.
    */
-  setNodeIndegree(indegree: number): void;
+  setNodeIndegree(session: number, indegree: number): void;
 
   /**
    * Sets the value of the node chosen by the worm. The chosen node can be gathered using the respective API function.
+	 * @param session The worm session to be targeted.
    * @param value The value of the chosen node.
    */
-  setNodeValue(value: number): void;
+  setNodeValue(session: number, value: number): void;
 
   /**
    * Sets the n-th state in the depth first search enumeration. The chosen n can be gathered using the respective API function.
+	 * @param session The worm session to be targeted.
    * @param state The n-th state of the depth first search enumeration.
    */
-  setDepthFirstSearchState(state: string): void;
+  setDepthFirstSearchState(session: number, state: string): void;
 
   /**
    * Get the current guess time.
@@ -5247,26 +5273,29 @@ interface Worm {
    * Get the current states the worm has.
    * @remarks
    * RAM cost: 1 GB
+	 * @param session The worm session to be targeted.
    *
    * @returns All possible states.
    */
-  getWormStates(): string[];
+  getWormStates(session: number): string[];
 
   /**
    * Get the current symbols of the worm.
    * @remarks
    * RAM cost: 1 GB
+	 * @param session The worm session to be targeted.
    *
    * @returns All possible symbols.
    */
-  getWormSymbols(): string[];
+  getWormSymbols(session: number): string[];
 
   /**
    * Get the chosen nodes for the node specific properties.
    * @remarks
    * RAM cost: 1 GB
+	 * @param session The worm session to be targeted.
    */
-  getChosenValues(): WormChosenValues;
+  getChosenValues(session: number): WormChosenValues;
 }
 
 /** @public */
