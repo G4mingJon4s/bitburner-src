@@ -1,18 +1,14 @@
 import { Container, Paper, Tab, Tabs, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Worm } from "../Worm";
 import { useRerender } from "../../ui/React/hooks";
 import { WormEvents } from "../WormEvents";
 import { WormInput } from "./WormInput";
 import { WormHistory } from "./WormHistory";
 import { WormHelp } from "./WormHelp";
 import { WormOverview } from "./WormOverview";
+import { worm } from "../Worm";
 
-interface IProps {
-  worm: Worm | null;
-}
-
-export function WormRoot({ worm }: IProps): React.ReactElement {
+export function WormRoot(): React.ReactElement {
   const possiblePages = ["Overview", "Input", "History", "Help"];
   const [currentPage, setCurrentPage] = useState(possiblePages[0]);
   const rerender = useRerender();

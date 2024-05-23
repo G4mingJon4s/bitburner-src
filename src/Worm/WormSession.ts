@@ -1,9 +1,8 @@
-import { Player } from "@player";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { WormSessionEvents } from "./WormEvents";
 import { Settings } from "../Settings/Settings";
 import { GraphData, WormDataFactory, WormGuess, evaluateInput } from "./Graph";
-import { type Worm } from "./Worm";
+import { worm, type Worm } from "./Worm";
 import { type WorkerScript } from "src/Netscript/WorkerScript";
 import { WormChosenValues } from "@nsdefs";
 import { WORM_SOLVE_COOLDOWN, WORM_UI_NAME } from "./calculations";
@@ -112,7 +111,6 @@ export function getWormSession(pid: number) {
   const session = currentWormSessions.get(pid);
   if (session !== undefined) return session;
 
-  const worm = Player.worm;
   if (worm === null) throw new Error("Tried to acces worm. Worm is null.");
 
   const newSession = new WormSession(pid, worm, workerScripts.get(pid));

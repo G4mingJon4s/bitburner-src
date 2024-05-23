@@ -1,4 +1,5 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Player } from "@player";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, Reviver, constructorsForReviver } from "../utils/JSONReviver";
 import { BonusSpecialMults, BonusType, applySpecialBonus, bonuses } from "./BonusType";
 import { WormEvents } from "./WormEvents";
 import { removeIdleWormSessions } from "./WormSession";
@@ -47,6 +48,25 @@ export class Worm {
   static fromJSON(value: IReviverValue): Worm {
     return Generic_fromJSON(Worm, value.data);
   }
+}
+
+export let worm: Worm | null = null;
+
+export function resetWorm() {
+	if (canAccessWorm()) worm = new Worm();
+	else worm = null;
+}
+
+export function loadWorm(saveString: string) {
+	if (saveString) {
+		worm = JSON.parse(saveString, Reviver);
+	} else {
+		worm = null;
+	}
+}
+
+export function canAccessWorm() {
+	return Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0;
 }
 
 constructorsForReviver.Worm = Worm;

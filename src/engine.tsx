@@ -45,6 +45,7 @@ import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
 import { wormSourceFileEffect } from "./Worm/calculations";
+import { worm } from "./Worm/Worm";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -88,8 +89,8 @@ const Engine: {
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
 
-		if (Player.worm !== null) {
-			numCycles *= Player.worm.specialMults.gameTickSpeed;
+		if (worm !== null) {
+			numCycles *= worm.specialMults.gameTickSpeed;
 		}
 
     Terminal.process(numCycles);
@@ -116,7 +117,7 @@ const Engine: {
     // Bladeburner
     if (Player.bladeburner) Player.bladeburner.storeCycles(numCycles);
 
-    if (Player.worm) Player.worm.process();
+    if (worm) worm.process();
 
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
@@ -337,7 +338,7 @@ const Engine: {
       // Bladeburner offline progress
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
 
-      if (Player.worm) Player.worm.process();
+      if (worm) worm.process();
 
       staneksGift.process(numCyclesOffline);
 

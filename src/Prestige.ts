@@ -28,7 +28,7 @@ import { initCircadianModulator } from "./Augmentation/Augmentations";
 import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
-import { Worm } from "./Worm/Worm";
+import { resetWorm } from "./Worm/Worm";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -291,11 +291,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
-  if (Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0) {
-    Player.worm = new Worm();
-  } else {
-    Player.worm = null;
-  }
+	resetWorm();
 
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {
