@@ -16,7 +16,6 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useRerender } from "../../ui/React/hooks";
 import { WormSessionEvents } from "../WormEvents";
-import { workerScripts } from "../../Netscript/WorkerScripts";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { WormSession, currentWormSessions, finishedWormSessions } from "../WormSession";
@@ -47,15 +46,15 @@ export function WormHistory() {
       <List dense className={classes.list}>
 				{(currentWormSessions.size === Number(currentWormSessions.has(-1))) && <Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>}
         {Array.from(currentWormSessions.values()).map((session) => (
-          <WormSessionDisplay key={session.pid + " " + session.startTime} session={session} />
+          <WormSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
         ))}
       </List>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Finished Sessions</Typography>
       <List dense className={classes.list}>
-				{finishedWormSessions.filter(session => session.pid !== -1).length === 0 && <Typography>No worm sessions have been completed yet...</Typography>}
-        {finishedWormSessions.filter(session => session.pid !== -1).map((session) => (
-          <WormPreviousSessionDisplay key={session.pid + " " + session.startTime} session={session} />
+				{finishedWormSessions.filter(session => session.identifier !== -1).length === 0 && <Typography>No worm sessions have been completed yet...</Typography>}
+        {finishedWormSessions.filter(session => session.identifier !== -1).map((session) => (
+          <WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
         ))}
       </List>
     </>
@@ -72,19 +71,12 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
-  if (session.pid === -1) return null;
-
-  const workerScript = workerScripts.get(session.pid);
-  if (workerScript === undefined) return null;
-
   return (
     <Box component={Paper}>
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText
           primary={
-            <Typography style={{ whiteSpace: "pre-wrap" }}>
-              Host: {workerScript.hostname} - Script: {workerScript.scriptRef.filename}
-            </Typography>
+            <Typography style={{ whiteSpace: "pre-wrap" }}>#{session.identifier} - {convertTimeMsToTimeElapsedString(Date.now() - session.startTime)} elapsed</Typography>
           }
         />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
@@ -175,9 +167,7 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText
           primary={
-            <Typography>
-              {convertTimeMsToTimeElapsedString(Date.now() - (session.finishTime || session.startTime))} ago
-            </Typography>
+            <Typography>#{session.identifier} - {convertTimeMsToTimeElapsedString(Date.now() - (session.finishTime || session.startTime))} ago</Typography>
           }
         />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}

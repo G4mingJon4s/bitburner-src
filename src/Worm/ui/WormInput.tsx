@@ -1,18 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Worm } from "../Worm";
 import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
 import { Paper } from "@mui/material";
-import { finishedWormSessions, getWormSession, serverCanSolveWorm } from "../WormSession";
+import { applyWormSessionReward, finishedWormSessions, finishedWormUISessions, getWormUISession, isWormOnSolveCooldown, pushToFinishedSessions, resetWormUISession } from "../WormSession";
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
-import { WORM_UI_NAME } from "../calculations";
 import { makeStyles } from "@mui/styles";
-
-interface IProps {
-  worm: Worm;
-}
 
 const inputStyles = makeStyles((theme: Theme) => ({
 	history: {
@@ -28,7 +22,7 @@ const inputStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
-export function WormInput({ worm }: IProps) {
+export function WormInput() {
 	const classes = inputStyles();
 
   const [input, setInput] = useState("");
@@ -39,39 +33,42 @@ export function WormInput({ worm }: IProps) {
     path: "",
     value: -1,
     indegree: -1,
-    dfsState: getWormSession(-1).graph.states[0],
+    dfsState: getWormUISession().graph.states[0],
   });
 
-  const canSolve = serverCanSolveWorm(WORM_UI_NAME);
-
   function handleTest() {
-    const session = getWormSession(-1);
+    const session = getWormUISession();
     const result = session.evaluate(input);
     setState(result);
   }
 
   function handleSolve() {
-    const session = getWormSession(-1);
+    const session = getWormUISession();
     session.guess = { ...session.guess, ...guess.current };
-    const sessionReward = session.solve(worm);
+
+    const sessionReward = session.solve();
+		applyWormSessionReward(sessionReward);
     setReward(sessionReward.toString());
+
+		pushToFinishedSessions(session, true);
+		resetWormUISession();
   }
 
   return (
     <>
       <Typography variant="h5">Session Information</Typography>
-      <Typography className={classes.cricticalInfoText}>Valid Symbols: "{getWormSession(-1).graph.symbols.join("")}"</Typography>
+      <Typography className={classes.cricticalInfoText}>Valid Symbols: "{getWormUISession().graph.symbols.join("")}"</Typography>
       <Typography className={classes.cricticalInfoText}>
-        States: {getWormSession(-1).graph.states.at(0)} - {getWormSession(-1).graph.states.at(-1)}
+        States: {getWormUISession().graph.states.at(0)} - {getWormUISession().graph.states.at(-1)}
       </Typography>
 			<Typography className={classes.paramsText}>
-				Chosen state for "node value": {getWormSession(-1).params.value}
+				Chosen state for "node value": {getWormUISession().params.value}
 			</Typography>
 			<Typography className={classes.paramsText}>
-				Chosen state for "node indegree": {getWormSession(-1).params.indegree}
+				Chosen state for "node indegree": {getWormUISession().params.indegree}
 			</Typography>
 			<Typography className={classes.paramsText}>
-				Chosen index for "DFS-Enumeration": {getWormSession(-1).params.dfsOrder}
+				Chosen index for "DFS-Enumeration": {getWormUISession().params.dfsOrder}
 			</Typography>
 			<br />
 			<Typography>Symbol input</Typography>
@@ -113,12 +110,12 @@ export function WormInput({ worm }: IProps) {
         <Stack direction="row">
           <Select<number>
             onChange={(event) =>
-              (guess.current.dfsState = getWormSession(-1).graph.states[event.target.value as number])
+              (guess.current.dfsState = getWormUISession().graph.states[event.target.value as number])
             }
             defaultValue={0}
             sx={{ mr: 1, minWidth: 200 }}
           >
-            {getWormSession(-1).graph.states.map((state, index) => (
+            {getWormUISession().graph.states.map((state, index) => (
               <MenuItem key={state} value={index}>
                 {state}
               </MenuItem>
@@ -127,7 +124,7 @@ export function WormInput({ worm }: IProps) {
           <Typography>Depth-First-Search State</Typography>
         </Stack>
         <Stack direction="row">
-          <Button disabled={!canSolve} onClick={handleSolve}>
+          <Button disabled={isWormOnSolveCooldown()} onClick={handleSolve}>
             Solve
           </Button>
           {reward !== "" && <Typography sx={{ ml: 1.5 }}>Reward: {reward}</Typography>}
@@ -136,8 +133,8 @@ export function WormInput({ worm }: IProps) {
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Previous sessions</Typography>
       <List dense className={classes.history}>
-				{finishedWormSessions.every(session => session.pid !== -1) && <Typography>You have not finished any Worm sessions manually...</Typography>}
-        {finishedWormSessions.filter((session) => session.pid === -1).map((session) => (
+				{finishedWormUISessions.length === 0 && <Typography>You have not finished any Worm sessions manually...</Typography>}
+        {finishedWormSessions.map((session) => (
 					<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
         ))}
       </List>
