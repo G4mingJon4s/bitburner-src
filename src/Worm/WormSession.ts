@@ -44,7 +44,7 @@ export class WormSession {
 
   constructor(worm: Worm) {
 		lastWormCreate = Date.now();
-		this.identifier = performance.now();
+		this.identifier = lastWormCreate;
 
     const data = WormDataFactory(worm.completions);
     this.graph = data.graph;
@@ -132,9 +132,11 @@ export function pushToFinishedSessions(session: WormSession, isUISession: boolea
 		finishedWormSessions.push(session);
 	}
   if (finishedWormSessions.length > Settings.MaxRecentScriptsCapacity) {
-    finishedWormSessions.splice(0, finishedWormSessions.length - Settings.MaxRecentScriptsCapacity);
+		finishedWormSessions.splice(0, finishedWormSessions.length - Settings.MaxRecentScriptsCapacity);
   }
 	if (finishedWormUISessions.length > Settings.MaxRecentScriptsCapacity) {
 		finishedWormUISessions.splice(0, finishedWormUISessions.length - Settings.MaxRecentScriptsCapacity);
 	}
+
+	WormSessionEvents.emit();
 }
