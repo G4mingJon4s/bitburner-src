@@ -63,9 +63,9 @@ export const bonuses: BonusType[] = [
     description: "+$INC$ reputation from factions and companies",
 		infoText: null,
     a: 1,
-    g: 1.7,
-    k: 0.005,
-    m: 0.85,
+    g: 1.5,
+    k: 0.022,
+    m: 0.6,
   },
   {
     id: Bonus.SYNTHETIC_BLACK_FRIDAY,
