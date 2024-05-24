@@ -4,7 +4,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
 import { getWormGuessTime, WORM_MAX_SESSIONS } from "../Worm/calculations";
-import { currentWormSessions, getWormSession, isWormOnCreateCooldown, isWormOnSolveCooldown, WormSession } from "../Worm/WormSession";
+import { applyWormSessionReward, createNewWormSession, currentWormSessions, getWormSession, isWormOnCreateCooldown, isWormOnSolveCooldown, pushToFinishedSessions, WormSession } from "../Worm/WormSession";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
@@ -48,7 +48,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			checkWormAPIAccess(ctx);
 			if (isWormOnCreateCooldown()) return null;
 			if (currentWormSessions.size >= WORM_MAX_SESSIONS) return null;
-			const session = new WormSession(getWorm());
+			const session = createNewWormSession();
 			return session.identifier;
 		},
     getWormStates: (ctx) => (_sessionIdentifier) => {
@@ -89,7 +89,13 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
       if (isWormOnSolveCooldown()) throw helpers.errorMessage(ctx, "Cannot solve worm. The server is on cooldown.");
-      return session.solve();
+			const reward = session.solve();
+
+			applyWormSessionReward(reward);
+			currentWormSessions.delete(session.identifier);
+			pushToFinishedSessions(session, false);
+
+      return reward;
     },
     setDepthFirstSearchState: (ctx) => (_sessionIdentifier, _state) => {
 			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
