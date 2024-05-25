@@ -21,6 +21,10 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { WormSession, currentWormSessions, finishedWormSessions } from "../WormSession";
 
 const historyStyles = makeStyles({
+	container: {
+		height: "calc(100vh - 100px)",
+		overflowY: "hidden",
+	},
 	list: {
 		height: "calc(40vh - 50px)",
 		overflowY: "scroll"
@@ -34,7 +38,7 @@ export function WormHistory() {
   useEffect(() => WormSessionEvents.subscribe(() => rerender()));
 
   return (
-    <>
+    <div className={classes.container}>
 			<Typography variant="h5">Worm history</Typography>
 			<Typography>
 				Here you can see all of the ongoing and finished worm sessions of your scripts.
@@ -57,7 +61,7 @@ export function WormHistory() {
           <WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
         ))}
       </List>
-    </>
+    </div>
   );
 }
 
