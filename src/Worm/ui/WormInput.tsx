@@ -9,9 +9,15 @@ import { WormPreviousSessionDisplay } from "./WormHistory";
 import { makeStyles } from "@mui/styles";
 
 const inputStyles = makeStyles((theme: Theme) => ({
+	container: {
+		height: "calc(100vh - 100px)",
+		display: "flex",
+		flexDirection: "column",
+	},
 	history: {
+		flex: "1 1 auto",
 		overflowY: "scroll",
-		height: "45vh",
+		height: "auto",
 		width: "100%",
 	},
 	paramsText: {
@@ -55,7 +61,7 @@ export function WormInput() {
   }
 
   return (
-    <>
+    <div className={classes.container}>
       <Typography variant="h5">Session Information</Typography>
       <Typography className={classes.cricticalInfoText}>Valid Symbols: "{getWormUISession().graph.symbols.join("")}"</Typography>
       <Typography className={classes.cricticalInfoText}>
@@ -138,6 +144,6 @@ export function WormInput() {
 					<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
         ))}
       </List>
-    </>
+    </div>
   );
 }
