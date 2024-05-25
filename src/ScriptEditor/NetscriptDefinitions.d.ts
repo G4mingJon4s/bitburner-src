@@ -5200,6 +5200,13 @@ interface Worm {
 	 */
 	createNewSession(): number | null;
 
+	/**
+	 * Get the maximum number of sessions that can be active at a time.
+	 * @remarks
+	 * RAM cost: 1 GB
+	 */
+	getSessionLimit(): number;
+
   /**
    * Tests a given input against the current worm.
    * @remarks
@@ -5267,7 +5274,7 @@ interface Worm {
    *
    * @returns The current guess time in milliseconds for the specified threads.
    */
-  getGuessTime(threads: number): number;
+  getGuessTime(threads: number, player?: Player): number;
 
   /**
    * Get the current states the worm has.

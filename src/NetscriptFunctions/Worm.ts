@@ -51,6 +51,10 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			const session = createNewWormSession();
 			return session.identifier;
 		},
+		getSessionLimit: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return WORM_MAX_SESSIONS;
+		},
     getWormStates: (ctx) => (_sessionIdentifier) => {
 			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
@@ -69,10 +73,12 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       const session = getSession(ctx, sessionIdentifier);
       return { ...session.params };
     },
-    getGuessTime: (ctx) => (_threads) => {
+    getGuessTime: (ctx) => (_threads, _player) => {
       checkWormAPIAccess(ctx);
       const threads = helpers.number(ctx, "threads", _threads);
-      return getWormGuessTime(threads);
+			if (_player === undefined) return getWormGuessTime(threads);
+			const person = helpers.person(ctx, _player);
+      return getWormGuessTime(threads, person);
     },
     testInput: (ctx) => (_sessionIdentifier, _input) => {
 			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);

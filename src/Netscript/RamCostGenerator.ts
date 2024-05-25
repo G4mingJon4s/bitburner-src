@@ -381,6 +381,7 @@ const worm = {
   setDepthFirstSearchState: 0,
 	getUnsolvedSessions: 16,
 	createNewSession: 16,
+	getSessionLimit: 1,
   getCompletions: 0.5,
   getGuessTime: 0.5,
   setBonus: 0.5,
