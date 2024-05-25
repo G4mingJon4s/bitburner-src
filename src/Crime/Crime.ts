@@ -6,6 +6,7 @@ import { CrimeType } from "@enums";
 import { CrimeWork } from "../Work/CrimeWork";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { worm } from "../Worm/Worm";
 
 interface IConstructorParams {
   hacking_success_weight?: number;
@@ -114,7 +115,7 @@ export class Crime {
       }),
     );
 
-    return this.time;
+    return this.getTime();
   }
 
   successRate(p: IPerson): number {
@@ -134,4 +135,8 @@ export class Crime {
 
     return Math.min(chance, 1);
   }
+
+	getTime(): number {
+		return this.time * (worm === null ? 1 : worm.specialMults.crimeMult);
+	}
 }

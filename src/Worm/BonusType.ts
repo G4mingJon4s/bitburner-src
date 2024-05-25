@@ -22,6 +22,7 @@ export interface BonusSpecialMults {
 	stockMarketMult: number;
 	bladeburnerMult: number;
 	intelligenceMult: number;
+	crimeMult: number;
 }
 
 export const Bonus = {
@@ -50,12 +51,12 @@ export const bonuses: BonusType[] = [
   {
     id: Bonus.CARDINAL_SIN,
     name: "Cardinal sin",
-    description: "Increases crime money and success rate by +$INC$",
+    description: "Decreases the time it takes to commit a crime by -$DEC$",
 		infoText: null,
     a: 1,
-    g: 1.2,
-    k: 0.007,
-    m: 0.8,
+    g: 0.7,
+    k: 0.026,
+    m: 0.6,
   },
   {
     id: Bonus.FAVORABLE_APPEARANCE,
@@ -121,10 +122,7 @@ export const bonuses: BonusType[] = [
 
 export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bonus], Partial<Multipliers> | null> => ({
   [Bonus.NONE]: {},
-  [Bonus.CARDINAL_SIN]: {
-		crime_money: effect,
-		crime_success: effect,
-	},
+  [Bonus.CARDINAL_SIN]: null,
   [Bonus.FAVORABLE_APPEARANCE]: { faction_rep: effect, company_rep: effect },
   [Bonus.SYNTHETIC_BLACK_FRIDAY]: {
     hacknet_node_core_cost: effect,
@@ -149,6 +147,10 @@ export function applySpecialBonus(worm: Worm) {
   const effect = getBonusEffect(worm.bonus, worm.completions);
 
   switch (worm.bonus.id) {
+		case Bonus.CARDINAL_SIN: {
+			worm.specialMults.crimeMult = effect;
+			break;
+		}
 		case Bonus.INCREASED_MAINFRAME_VOLTAGE: {
 			worm.specialMults.gameTickSpeed = effect;
 			break;

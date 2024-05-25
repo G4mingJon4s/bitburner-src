@@ -13,6 +13,7 @@ export class Worm {
 		stockMarketMult: 1,
 		bladeburnerMult: 1,
 		intelligenceMult: 1,
+		crimeMult: 1,
 	}
 
   constructor() {
@@ -24,6 +25,7 @@ export class Worm {
 		this.specialMults.stockMarketMult = 1;
 		this.specialMults.bladeburnerMult = 1;
 		this.specialMults.intelligenceMult = 1;
+		this.specialMults.crimeMult = 1;
 	}
 
   process() {
