@@ -3,7 +3,7 @@ import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typo
 import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
 import { Paper } from "@mui/material";
-import { applyWormSessionReward, finishedWormSessions, finishedWormUISessions, getWormUISession, isWormOnSolveCooldown, pushToFinishedSessions, resetWormUISession } from "../WormSession";
+import { applyWormSessionReward, finishedWormUISessions, getWormUISession, isWormOnSolveCooldown, pushToFinishedSessions, resetWormUISession } from "../WormSession";
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
 import { makeStyles } from "@mui/styles";
@@ -140,7 +140,7 @@ export function WormInput() {
       <Typography variant="h5">Previous sessions</Typography>
       <List dense className={classes.history}>
 				{finishedWormUISessions.length === 0 && <Typography>You have not finished any Worm sessions manually...</Typography>}
-        {finishedWormSessions.map((session) => (
+        {finishedWormUISessions.map((session) => (
 					<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
         ))}
       </List>
