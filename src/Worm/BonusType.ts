@@ -33,7 +33,7 @@ export const Bonus = {
   SYNTHETIC_BLACK_FRIDAY: 3,
   INCREASED_MAINFRAME_VOLTAGE: 4,
   RAPID_ASSIMILATION: 5,
-  TEMPORAL_RESONATOR: 6,
+  IS_LM_ACCELERATION: 6,
   RECORDLESS_CONTRACTING: 7,
 } as const;
 
@@ -99,8 +99,8 @@ export const bonuses: BonusType[] = [
     m: 0.8,
   },
   {
-    id: Bonus.TEMPORAL_RESONATOR,
-    name: "Temporal resonator",
+    id: Bonus.IS_LM_ACCELERATION,
+    name: "IS-LM acceleration",
     description: "Reduces the time between stock market updates by -$DEC$",
 		infoText: `Decreases the time between stock market updates. The minimum time between stock market updates is ${convertTimeMsToTimeElapsedString(StockMarketConstants.msPerStockUpdateMin)}.`,
     a: 1,
@@ -136,7 +136,7 @@ export const bonusMult = (effect: number): Record<(typeof Bonus)[keyof typeof Bo
   },
   [Bonus.INCREASED_MAINFRAME_VOLTAGE]: null,
   [Bonus.RAPID_ASSIMILATION]: null,
-  [Bonus.TEMPORAL_RESONATOR]: null,
+  [Bonus.IS_LM_ACCELERATION]: null,
   [Bonus.RECORDLESS_CONTRACTING]: null,
 });
 
@@ -159,7 +159,7 @@ export function applySpecialBonus(worm: Worm) {
 			worm.specialMults.intelligenceMult = effect;
 			break;
 		}
-    case Bonus.TEMPORAL_RESONATOR: {
+    case Bonus.IS_LM_ACCELERATION: {
 			worm.specialMults.stockMarketMult = effect;	
       break;
     }
