@@ -3,7 +3,7 @@ import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
-import { getWormGuessTime, WORM_MAX_SESSIONS } from "../Worm/calculations";
+import { getWormGuessTime, WORM_MAX_SESSIONS, wormTestingRewardPenalty } from "../Worm/calculations";
 import { applyWormSessionReward, createNewWormSession, currentWormSessions, getWormSession, isWormOnCreateCooldown, isWormOnSolveCooldown, pushToFinishedSessions, WormSession } from "../Worm/WormSession";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
@@ -80,6 +80,18 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 			const person = helpers.person(ctx, _player);
       return getWormGuessTime(threads, person);
     },
+		getSessionMaxReward: (ctx) => (_sessionIdentifier) => {
+			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
+			checkWormAPIAccess(ctx);
+			const session = getSession(ctx, sessionIdentifier);
+			return wormTestingRewardPenalty(session.testsDone, session.graph.states.length * session.graph.symbols.length);
+		},
+		getSessionTestsDone: (ctx) => (_sessionIdentifier) => {
+			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
+			checkWormAPIAccess(ctx);
+			const session = getSession(ctx, sessionIdentifier);
+			return session.testsDone;
+		},
     testInput: (ctx) => (_sessionIdentifier, _input) => {
 			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);

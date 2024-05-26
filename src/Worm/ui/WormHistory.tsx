@@ -19,6 +19,7 @@ import { WormSessionEvents } from "../WormEvents";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { WormSession, currentWormSessions, finishedWormSessions } from "../WormSession";
+import { formatNumber } from "../../ui/formatNumber";
 
 const historyStyles = makeStyles({
 	container: {
@@ -113,6 +114,14 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
                   <Typography>{session.graph.symbols.join(", ")}</Typography>
                 </TableCell>
               </TableRow>
+							<TableRow>
+								<TableCell className={classes.noBorder}>
+									<Typography>└ Tests done:</Typography>
+								</TableCell>
+								<TableCell className={classes.noBorder}>
+									<Typography>{session.testsDone}</Typography>
+								</TableCell>
+							</TableRow>
               <TableRow>
                 <TableCell className={classes.noBorder}>
                   <Typography>└ Current guess:</Typography>
@@ -206,6 +215,14 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
                   <Typography>{session.graph.symbols.join(", ")}</Typography>
                 </TableCell>
               </TableRow>
+							<TableRow>
+								<TableCell className={classes.noBorder}>
+									<Typography>└ Tests done:</Typography>
+								</TableCell>
+								<TableCell className={classes.noBorder}>
+									<Typography>{session.testsDone}</Typography>
+								</TableCell>
+							</TableRow>
               <TableRow>
                 <TableCell className={classes.noBorder}>
                   <Typography>└ Final guess:</Typography>
@@ -288,6 +305,14 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
                   <Typography>{session.graph.properties.dfsOrder[session.params.dfsOrder] || "None"}</Typography>
                 </TableCell>
               </TableRow>
+							<TableRow>
+								<TableCell className={classes.noBorder}>
+									<Typography>└ Reward:</Typography>
+								</TableCell>
+								<TableCell className={classes.noBorder}>
+									<Typography>{formatNumber(session.getReward())}</Typography>
+								</TableCell>
+							</TableRow>
             </TableBody>
           </Table>
         </Collapse>

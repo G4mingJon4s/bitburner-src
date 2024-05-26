@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
 import { Paper } from "@mui/material";
@@ -7,6 +7,8 @@ import { applyWormSessionReward, finishedWormUISessions, getWormUISession, isWor
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
 import { makeStyles } from "@mui/styles";
+import { formatNumber } from "../../ui/formatNumber";
+import { MathJax } from "better-react-mathjax";
 
 const inputStyles = makeStyles((theme: Theme) => ({
 	container: {
@@ -22,6 +24,9 @@ const inputStyles = makeStyles((theme: Theme) => ({
 	},
 	paramsText: {
 		color: theme.palette.info.main,
+	},
+	testsText: {
+		color: theme.palette.warning.main,
 	},
 	cricticalInfoText: {
 		color: theme.palette.info.light,
@@ -76,6 +81,22 @@ export function WormInput() {
 			<Typography className={classes.paramsText}>
 				Chosen index for "DFS-Enumeration": {getWormUISession().params.dfsOrder}
 			</Typography>
+			<Typography className={classes.testsText}>
+				Inputs tested: {getWormUISession().testsDone}
+			</Typography>
+			<Tooltip
+				title={
+					<>
+						<Typography>Formula:</Typography>
+						<MathJax>{"\\(\\huge{P = \\left(\\text{# of Symbols}\\right) * \\left(\\text{# of States}\\right)}\\)"}</MathJax>
+						<MathJax>{"\\(\\huge{R = \\max{\\left(0.2, 1.01 - 0.01e^{\\frac{4.4}{P}x}\\right)}}\\)"}</MathJax>
+					</>
+				}
+			>
+				<Typography className={classes.testsText}>
+					Maximum reward possible: {formatNumber(getWormUISession().getReward())}
+				</Typography>
+			</Tooltip>
 			<br />
 			<Typography>Symbol input</Typography>
       <Stack direction="row" component="div" sx={{ alignItems: "center" }}>

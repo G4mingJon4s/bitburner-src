@@ -5207,6 +5207,22 @@ interface Worm {
 	 */
 	getSessionLimit(): number;
 
+	/**
+	 * Get the number of tests that have already been done in the session.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 */
+	getSessionTestsDone(session: number): number;
+
+	/**
+	 * Get the maimum reward possible for a given session.
+	 * @remarks
+	 * RAM cost: 2 GB
+	 * 
+	 * @returns The maximum reward possible. Is scaled down depending on how many properties are wrong.
+	 */
+	getSessionMaxReward(session: number): number;
+
   /**
    * Tests a given input against the current worm.
    * @remarks
