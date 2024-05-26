@@ -3,7 +3,7 @@ import { Settings } from "../Settings/Settings";
 import { GraphData, WormDataFactory, WormGuess, evaluateInput } from "./Graph";
 import { worm, type Worm } from "./Worm";
 import { WormChosenValues } from "@nsdefs";
-import { WORM_CREATE_COOLDOWN, WORM_SOLVE_COOLDOWN } from "./calculations";
+import { WORM_CREATE_COOLDOWN, WORM_SOLVE_COOLDOWN, wormTestingRewardPenalty } from "./calculations";
 
 export const currentWormSessions = new Map<number, WormSession>();
 export const finishedWormSessions: WormSession[] = [];
@@ -42,6 +42,8 @@ export class WormSession {
   startTime: number;
   finishTime: number | null;
 
+	testsDone: number;
+
   constructor(worm: Worm) {
 		lastWormCreate = Date.now();
 		this.identifier = lastWormCreate;
@@ -53,9 +55,12 @@ export class WormSession {
 
     this.startTime = Date.now();
     this.finishTime = null;
+
+		this.testsDone = 0;
   }
 
   evaluate(input: string) {
+		this.testsDone += 1;
     return evaluateInput(this.graph, input);
   }
 
@@ -87,6 +92,10 @@ export class WormSession {
 		lastWormSolve = Date.now();
 		this.finishTime = lastWormSolve;
 
+		return this.getReward();
+  }
+
+	getReward() {
     const comparisons = [
       this.isPathCorrect(),
       this.isBipartiteCorrect(),
@@ -100,8 +109,8 @@ export class WormSession {
     const amountCorrect = comparisons.filter((b) => b).length;
     const rewardValue = amountCorrect / comparisons.length;
 
-    return rewardValue;
-  }
+    return rewardValue * wormTestingRewardPenalty(this.testsDone, this.graph.states.length * this.graph.symbols.length);
+	}
 }
 
 export function applyWormSessionReward(reward: number) {
