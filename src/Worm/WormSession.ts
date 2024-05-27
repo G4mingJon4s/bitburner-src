@@ -2,7 +2,7 @@ import { WormSessionEvents } from "./WormEvents";
 import { Settings } from "../Settings/Settings";
 import { GraphData, WormDataFactory, WormGuess, evaluateInput } from "./Graph";
 import { worm, type Worm } from "./Worm";
-import { WormChosenValues } from "@nsdefs";
+import { WormParams } from "@nsdefs";
 import { WORM_CREATE_COOLDOWN, WORM_SOLVE_COOLDOWN, wormTestingRewardPenalty } from "./calculations";
 
 export const currentWormSessions = new Map<number, WormSession>();
@@ -37,7 +37,7 @@ export class WormSession {
 
   graph: GraphData;
   guess: WormGuess;
-  params: WormChosenValues;
+  params: WormParams;
 
   startTime: number;
   finishTime: number | null;

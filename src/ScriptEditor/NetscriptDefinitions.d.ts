@@ -5064,7 +5064,7 @@ interface Stanek {
 /**
  * @public
  */
-type WormChosenValues = {
+type WormParams = {
   indegree: string;
   value: string;
   dfsOrder: number;
@@ -5076,22 +5076,21 @@ type WormChosenValues = {
  */
 interface Worm {
   /**
-   * Set the bonus of the worm.
-   * Note, this resets the worm.
+   * Set the bonus of the Worm.
    * @remarks
    * RAM cost: 2 GB
    */
   setBonus(bonus: number): void;
 
 	/**
-	 * Get the current multiplier the amount of coding contracts solved has on the worm processing time. 
+	 * Get the current multiplier the amount of coding contracts solved has on the Worm processing time. 
 	 * @remarks
 	 * RAM cost: 1 GB
 	 */
 	getContractInfluence(): number;
 
   /**
-   * Get the current completion count of the worm.
+   * Get the current completion count of the Worm.
    * @remarks
    * RAM cost: 0.5 GB
    *
@@ -5160,101 +5159,100 @@ interface Worm {
 	getSessionMaxReward(session: number): number;
 
   /**
-   * Tests a given input against the current worm.
+   * Tests a given input against the given session.
    * @remarks
-   * RAM cost: 16 GB
-	 * @param session The worm session to be targeted.
+   * RAM cost: 62.4 GB
+	 * @param session The Worm session to be targeted.
    *
    * @returns Returns the final state of the input.
    */
   testInput(session: number, input: string): Promise<string>;
 
   /**
-   * Attempts to solve the worm using the provided properties.
-   * This does reset the worm, even if some properties are not correct.
+   * Attempts to solve the given session with the specified properties.
    * @remarks
-   * RAM cost: 64 GB
-	 * @param session The worm session to be targeted.
+   * RAM cost: 30.4 GB
+	 * @param session The Worm session to be targeted.
    *
-   * @returns Returns the reward you recieved. Will return 0 if you failed this attempt.
+   * @returns Returns the reward you received. Will return -1 if solving is on cooldown.
    */
   attemptSolve(session: number): number;
 
   /**
-   * Sets the shortest path the current worm has.
-   * @remarks
-   * RAM cost: 4 GB
-	 * @param session The worm session to be targeted.
-   * @param path The path to set. Can only include valid symbols of the worm.
+	 * Sets the shortest path property of the given session.
+	 * @param session The Worm session to be targeted.
+   * @param path The path to set. Can only include valid symbols of the given session.
    */
   setShortestPath(session: number, path: string): void;
 
   /**
-   * Sets wether or not the current worm is bipartite.
-   * @remarks
-   * RAM cost: 4 GB
-	 * @param session The worm session to be targeted.
-   * @param bipartite Wether or not the current worm is bipartite.
+	 * Sets the bipartite property of the given session.
+	 * @param session The Worm session to be targeted.
+   * @param bipartite Wether or not the current Worm is bipartite.
    */
   setIsBipartite(session: number, bipartite: boolean): void;
 
   /**
-   * Sets the indegree of the node chosen by the worm. The chosen node can be gathered using the respective API function.
-	 * @param session The worm session to be targeted.
-   * @param indegree The indegree of the chosen node.
+	 * Sets the indegree property of the given session.
+	 * The chosen state can be gathered using the respective API function.
+	 * @param session The Worm session to be targeted.
+   * @param indegree The indegree of the chosen state.
    */
   setNodeIndegree(session: number, indegree: number): void;
 
   /**
-   * Sets the value of the node chosen by the worm. The chosen node can be gathered using the respective API function.
-	 * @param session The worm session to be targeted.
-   * @param value The value of the chosen node.
+	 * Sets the value property of the given session.
+	 * The chosen state can be gathered using the respective API function.
+	 * @param session The Worm session to be targeted.
+   * @param value The value of the chosen state.
    */
   setNodeValue(session: number, value: number): void;
 
   /**
-   * Sets the n-th state in the depth first search enumeration. The chosen n can be gathered using the respective API function.
-	 * @param session The worm session to be targeted.
+	 * Sets the depth first search order property of the given session.
+	 * The chosen index can be gathered using the respective API function.
+	 * @param session The Worm session to be targeted.
    * @param state The n-th state of the depth first search enumeration.
    */
   setDepthFirstSearchState(session: number, state: string): void;
 
   /**
-   * Get the current guess time.
+   * Get the current testing time.
    * @remarks
    * RAM cost: 0.5 GB
+	 * @param player The player to get the testing time for. If not specified, the current player is used.
    *
-   * @returns The current guess time in milliseconds for the specified threads.
+   * @returns The current testing time in milliseconds for the specified threads.
    */
-  getGuessTime(threads: number, player?: Player): number;
+  getTestingTime(threads: number, player?: Player): number;
 
   /**
-   * Get the current states the worm has.
+   * Get the current states the Worm has.
    * @remarks
    * RAM cost: 1 GB
-	 * @param session The worm session to be targeted.
+	 * @param session The Worm session to be targeted.
    *
    * @returns All possible states.
    */
-  getWormStates(session: number): string[];
+  getStates(session: number): string[];
 
   /**
-   * Get the current symbols of the worm.
+   * Get the current symbols of the Worm.
    * @remarks
    * RAM cost: 1 GB
-	 * @param session The worm session to be targeted.
+	 * @param session The Worm session to be targeted.
    *
    * @returns All possible symbols.
    */
-  getWormSymbols(session: number): string[];
+  getSymbols(session: number): string[];
 
   /**
    * Get the chosen nodes for the node specific properties.
    * @remarks
    * RAM cost: 1 GB
-	 * @param session The worm session to be targeted.
+	 * @param session The Worm session to be targeted.
    */
-  getChosenValues(session: number): WormChosenValues;
+  getParams(session: number): WormParams;
 }
 
 /** @public */
@@ -5270,7 +5268,7 @@ interface WormSession {
 	/** The time the session got completed */
 	finishTime: number | null;
 	/** The chosen values for this session */
-	params: WormChosenValues;
+	params: WormParams;
 	/** The final properties guessed */
 	guess: {
 		path: string;

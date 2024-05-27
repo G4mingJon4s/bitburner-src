@@ -367,11 +367,11 @@ const stanek = {
 
 // Worm API
 const worm = {
-  testInput: 31.2,
-  attemptSolve: 31.2,
-  getWormStates: 4,
-  getWormSymbols: 4,
-  getChosenValues: 0,
+  testInput: 62.4,
+  attemptSolve: 30.4,
+  getStates: 4,
+  getSymbols: 4,
+  getParams: 0,
   setShortestPath: 0,
   setIsBipartite: 0,
   setNodeValue: 0,
@@ -385,7 +385,7 @@ const worm = {
 	getFinishedSessions: 4,
 	getFinishedSession: 4,
   getCompletions: 0.5,
-  getGuessTime: 0.5,
+  getTestingTime: 0.5,
 	getContractInfluence: 1,
   setBonus: 0.5,
 } as const;

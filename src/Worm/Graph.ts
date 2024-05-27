@@ -1,4 +1,4 @@
-import { WormChosenValues } from "@nsdefs";
+import { WormParams } from "@nsdefs";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 import { generateGraph } from "./GraphGenerator";
@@ -44,7 +44,7 @@ const chooseRandomState = (states: string[]) => states[Math.floor(Math.random() 
 export function WormDataFactory(completions: number): {
   graph: GraphData;
   guess: WormGuess;
-  params: WormChosenValues;
+  params: WormParams;
 } {
   const [numStates, numSymbols] = getWormSize(completions);
 
