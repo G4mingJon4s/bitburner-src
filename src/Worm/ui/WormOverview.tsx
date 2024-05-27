@@ -46,10 +46,9 @@ export function WormOverview({ worm }: IProps) {
         <br />
         Simulating the behaviour of the virus gives you access to a small portion of its wealth.
         <br />
-        Though the program is not easily decieved, emulating the way it calculates the networks properties allows you to
-        bypass most of its security measures.
+        Though the program is not easily deceived, emulating the way it calculates the properties of one of its infected networks allows you to bypass most of its security measures.
         <br />
-        It is your task to develop a program that can solve the networks properties as efficient as possible.
+        It is your task to develop a program that can solve the network properties as efficient as possible.
 			</Typography>
 			<Divider sx={{ my: 1.5 }}/>
 			<div className={classes.stackContainer}>

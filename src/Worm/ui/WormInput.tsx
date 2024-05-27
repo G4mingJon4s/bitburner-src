@@ -98,7 +98,7 @@ export function WormInput() {
 				</Typography>
 			</Tooltip>
 			<br />
-			<Typography>Symbol input</Typography>
+			<Typography>Testing input</Typography>
       <Stack direction="row" component="div" sx={{ alignItems: "center" }}>
         <TextField
           value={input}
