@@ -8,25 +8,25 @@ export class Worm {
   bonus: BonusType;
   completions = 0;
 
-	specialMults: BonusSpecialMults = {
-		gameTickSpeed: 1,
-		stockMarketMult: 1,
-		bladeburnerMult: 1,
-		intelligenceMult: 1,
-		crimeMult: 1,
-	}
+  specialMults: BonusSpecialMults = {
+    gameTickSpeed: 1,
+    stockMarketMult: 1,
+    bladeburnerMult: 1,
+    intelligenceMult: 1,
+    crimeMult: 1,
+  };
 
   constructor() {
     this.bonus = bonuses[0];
   }
 
-	resetSpecialMults() {
-		this.specialMults.gameTickSpeed = 1;
-		this.specialMults.stockMarketMult = 1;
-		this.specialMults.bladeburnerMult = 1;
-		this.specialMults.intelligenceMult = 1;
-		this.specialMults.crimeMult = 1;
-	}
+  resetSpecialMults() {
+    this.specialMults.gameTickSpeed = 1;
+    this.specialMults.stockMarketMult = 1;
+    this.specialMults.bladeburnerMult = 1;
+    this.specialMults.intelligenceMult = 1;
+    this.specialMults.crimeMult = 1;
+  }
 
   process() {
     this.updateMults();
@@ -35,7 +35,7 @@ export class Worm {
   }
 
   updateMults() {
-		this.resetSpecialMults();
+    this.resetSpecialMults();
     updateWormMults();
     applySpecialBonus(this);
   }
@@ -52,20 +52,20 @@ export class Worm {
 export let worm: Worm | null = null;
 
 export function resetWorm() {
-	if (canAccessWorm()) worm = new Worm();
-	else worm = null;
+  if (canAccessWorm()) worm = new Worm();
+  else worm = null;
 }
 
 export function loadWorm(saveString: string) {
-	if (saveString) {
-		worm = JSON.parse(saveString, Reviver);
-	} else {
-		worm = null;
-	}
+  if (saveString) {
+    worm = JSON.parse(saveString, Reviver);
+  } else {
+    worm = null;
+  }
 }
 
 export function canAccessWorm() {
-	return Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0;
+  return Player.bitNodeN === 16 || Player.sourceFileLvl(16) > 0;
 }
 
 constructorsForReviver.Worm = Worm;

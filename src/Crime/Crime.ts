@@ -136,7 +136,7 @@ export class Crime {
     return Math.min(chance, 1);
   }
 
-	getTime(): number {
-		return this.time * (worm === null ? 1 : worm.specialMults.crimeMult);
-	}
+  getTime(): number {
+    return this.time * (worm === null ? 1 : worm.specialMults.crimeMult);
+  }
 }

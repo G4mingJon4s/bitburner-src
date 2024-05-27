@@ -89,9 +89,9 @@ const Engine: {
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
 
-		if (worm !== null) {
-			numCycles *= worm.specialMults.gameTickSpeed;
-		}
+    if (worm !== null) {
+      numCycles *= worm.specialMults.gameTickSpeed;
+    }
 
     Terminal.process(numCycles);
 
@@ -206,7 +206,8 @@ const Engine: {
       if (Math.random() <= 0.25) {
         generateRandomContract();
       }
-      Engine.Counters.contractGeneration = CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16));
+      Engine.Counters.contractGeneration =
+        CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16));
     }
 
     if (Engine.Counters.achievementsCounter <= 0) {
@@ -258,7 +259,12 @@ const Engine: {
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (CONSTANTS.MilliPerCycle * CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16))));
+      const contractChancesWhileOffline = Math.floor(
+        timeOffline /
+          (CONSTANTS.MilliPerCycle *
+            CONSTANTS.CodingContractSpawnInterval *
+            wormSourceFileEffect(Player.sourceFileLvl(16))),
+      );
 
       // Generate coding contracts
       let numContracts = 0;

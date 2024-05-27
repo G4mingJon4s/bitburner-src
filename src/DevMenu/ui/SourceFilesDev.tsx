@@ -32,16 +32,16 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
         Player.hacknetNodes = [];
       }
       if (sfLvl === 0) {
-				Player.sourceFiles.delete(sfN);
+        Player.sourceFiles.delete(sfN);
         if (sfN === 10) Sleeve.recalculateNumOwned();
         parentRerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
       if (sfN === 10) Sleeve.recalculateNumOwned();
-			if (sfN === 16) {
-				resetWorm();
-			}
+      if (sfN === 16) {
+        resetWorm();
+      }
       parentRerender();
     },
     [parentRerender],
