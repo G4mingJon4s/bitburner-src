@@ -8,6 +8,8 @@ import { WormTraversal1 } from "./images/WormTraversal1";
 import { WormTraversal2 } from "./images/WormTraversal2";
 import { WormProperties3 } from "./images/WormProperties3";
 import { WormProperties4 } from "./images/WormProperties4";
+import { WORM_CREATE_COOLDOWN, WORM_MAX_SESSIONS, WORM_SOLVE_COOLDOWN } from "../calculations";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
 const styles = makeStyles(() => createStyles({
 	scroll: {
@@ -187,10 +189,12 @@ export function WormHelp() {
 				Certain metadata, like the number of states and their label, as well as a set of possible symbols for the connections, is being provided through the Worm API or shown on the manual input UI.
 				<br />
 				<br />
-				One critical detail to solving a network is that the network you are solving for is unique to every script and the manual input UI.
-				Each script and the UI have their own instance of the worm, called a worm session. This means that there cannot be any script helping to solve a network other than the one from its own session.
-				<br />
-				If a script gets killed while solving a session, the session will be lost.
+				There can be multiple instances of the worm that your scripts can solve at the same time.
+				These "sessions" can be spawned in by any script and can be accessed using its specific identifier.
+				Do note, sessions don't persist once the game is closed.
+				There can only be {WORM_MAX_SESSIONS} sessions active at once.
+				Spawning in sessions has a {convertTimeMsToTimeElapsedString(WORM_CREATE_COOLDOWN)} cooldown.
+				Solving sessions has another {convertTimeMsToTimeElapsedString(WORM_SOLVE_COOLDOWN)} cooldown.
 			</Typography>
 			<br />
 			<br />
@@ -222,6 +226,13 @@ export function WormHelp() {
 				The starting state of every network is always the state with the lowest id, 's00'.
 				The id of every state is the number at the end of the label.
 				State 's143' would have the id 143.
+				<br />
+				<br />
+				Each network has a specific maximum size it could have.
+				Each state can have only so many connections, as there are symbols in the list of available symbols.
+				There cannot be any connections with the same symbol on one state.
+				Thus, the size of the network is the number of states of the network times the number of available symbols.
+				This is the maximum size of the network, the actual size can vary, since some connections could be missing.
 			</Typography>
 			<br />
 			<Typography variant="h5">Network properties</Typography>
@@ -317,6 +328,13 @@ export function WormHelp() {
 				<br />
 				After computing the properties of a network, you can complete the session by submitting your guess.
 				Depending on how many are correct, you will recieve a currency specific to the Worm: completions.
+				<br />
+				You can gain a maximum reward of 1 completion from solving one session when all properties are correct.
+				This maximum will decrease the more testing has been done in the session.
+				The effect will be slow at first and ramp up the closer the number of tests gets to the maximum size of the session.
+				If you test for the entire structure of the network, you will gain the minimum reward, while solving the session with parts of the network not tested will result in a bigger reward.
+				<br />
+				<br />
 				The more completions you have, the bigger your worm bonus is.
 				<br />
 				The specific multiplier of the bonus depends on its individual scaling.
