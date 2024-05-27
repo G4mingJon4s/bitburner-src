@@ -5083,6 +5083,13 @@ interface Worm {
    */
   setBonus(bonus: number): void;
 
+	/**
+	 * Get the current multiplier the amount of coding contracts solved has on the worm processing time. 
+	 * @remarks
+	 * RAM cost: 1 GB
+	 */
+	getContractInfluence(): number;
+
   /**
    * Get the current completion count of the worm.
    * @remarks
@@ -5117,6 +5124,24 @@ interface Worm {
 	 * RAM cost: 1 GB
 	 */
 	getSessionLimit(): number;
+
+	/**
+	 * Get a finished session object by its identifier.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 * 
+	 * @returns An object representing the session.
+	 */
+	getFinishedSession(session: number): WormSession;
+
+	/**
+	 * Get all finished sessions.
+	 * @remarks
+	 * RAM cost: 4 GB
+	 * 
+	 * @returns An array of sessions.
+	 */
+	getFinishedSessions(): number[];
 
 	/**
 	 * Get the number of tests that have already been done in the session.
@@ -5230,6 +5255,45 @@ interface Worm {
 	 * @param session The worm session to be targeted.
    */
   getChosenValues(session: number): WormChosenValues;
+}
+
+/** @public */
+interface WormSession {
+	/** The unique identifier of this session */
+	identifier: number;
+	/** The final reward that was issued */
+	reward: number;
+	/** The number of tests done in this session */
+	testsDone: number;
+	/** The time the session got created */
+	startTime: number;
+	/** The time the session got completed */
+	finishTime: number | null;
+	/** The chosen values for this session */
+	params: WormChosenValues;
+	/** The final properties guessed */
+	guess: {
+		path: string;
+		bipartite: boolean;
+		value: number;
+		indegree: number;
+		dfsState: string;
+	}
+	/** The underlying network and other details */
+	graph: {
+		states: string[];
+		symbols: string[];
+		targetState: string;
+		startState: string;
+		transitions: Record<string, Record<string, string>>;
+		properties: {
+			pathLength: number;
+			bipartite: boolean;
+			values: Record<string, number>;
+			indegrees: Record<string, number>;
+			dfsOrder: string[];
+		}
+	}
 }
 
 /** @public */
