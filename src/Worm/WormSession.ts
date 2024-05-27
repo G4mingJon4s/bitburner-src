@@ -95,6 +95,10 @@ export class WormSession {
     return this.getReward();
   }
 
+  getMaximumReward() {
+    return wormTestingRewardPenalty(this.testsDone, this.graph.states.length * this.graph.symbols.length);
+  }
+
   getReward() {
     const comparisons = [
       this.isPathCorrect(),
@@ -109,7 +113,7 @@ export class WormSession {
     const amountCorrect = comparisons.filter((b) => b).length;
     const rewardValue = amountCorrect / comparisons.length;
 
-    return rewardValue * wormTestingRewardPenalty(this.testsDone, this.graph.states.length * this.graph.symbols.length);
+    return rewardValue * this.getMaximumReward();
   }
 }
 

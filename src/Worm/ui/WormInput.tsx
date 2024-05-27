@@ -66,7 +66,7 @@ export function WormInput() {
 
     const sessionReward = session.solve();
     applyWormSessionReward(sessionReward);
-    setReward(sessionReward.toString());
+    setReward(formatNumber(sessionReward));
 
     pushToFinishedSessions(session, true);
     resetWormUISession();
@@ -103,7 +103,7 @@ export function WormInput() {
         }
       >
         <Typography className={classes.testsText}>
-          Maximum reward possible: {formatNumber(getWormUISession().getReward())}
+          Maximum reward possible: {formatNumber(getWormUISession().getMaximumReward())}
         </Typography>
       </Tooltip>
       <br />
