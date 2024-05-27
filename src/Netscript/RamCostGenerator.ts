@@ -384,8 +384,11 @@ const worm = {
 	getSessionLimit: 1,
 	getSessionTestsDone: 2,
 	getSessionMaxReward: 2,
+	getFinishedSessions: 4,
+	getFinishedSession: 4,
   getCompletions: 0.5,
   getGuessTime: 0.5,
+	getContractInfluence: 1,
   setBonus: 0.5,
 } as const;
 

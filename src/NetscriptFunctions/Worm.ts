@@ -3,8 +3,9 @@ import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
-import { getWormGuessTime, WORM_MAX_SESSIONS, wormTestingRewardPenalty } from "../Worm/calculations";
-import { applyWormSessionReward, createNewWormSession, currentWormSessions, getWormSession, isWormOnCreateCooldown, isWormOnSolveCooldown, pushToFinishedSessions, WormSession } from "../Worm/WormSession";
+import { getWormGuessTime, WORM_MAX_SESSIONS, wormContractEffect, wormTestingRewardPenalty } from "../Worm/calculations";
+import { applyWormSessionReward, createNewWormSession, currentWormSessions, finishedWormSessions, getWormSession, isWormOnCreateCooldown, isWormOnSolveCooldown, pushToFinishedSessions, WormSession } from "../Worm/WormSession";
+import { Player } from "@player";
 
 export function NetscriptWorm(): InternalAPI<IWorm> {
   function checkWormAPIAccess(ctx: NetscriptContext): void {
@@ -35,6 +36,10 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
         );
       getWorm().bonus = value;
     },
+		getContractInfluence: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return wormContractEffect(Player.numContractsSolved);
+		},
     getCompletions: (ctx) => () => {
       checkWormAPIAccess(ctx);
       return getWorm().completions;
@@ -54,6 +59,26 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
 		getSessionLimit: (ctx) => () => {
 			checkWormAPIAccess(ctx);
 			return WORM_MAX_SESSIONS;
+		},
+		getFinishedSession: (ctx) => (_sessionIdentifier) => {
+			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
+			checkWormAPIAccess(ctx);
+			const session = finishedWormSessions.find(s => s.identifier === sessionIdentifier);
+			if (session === undefined) throw helpers.errorMessage(ctx, `Cannot find finished session with identifier ${sessionIdentifier}.`);
+			return {
+				identifier: session.identifier,
+				reward: session.getReward(),
+				testsDone: session.testsDone,
+				startTime: session.startTime,
+				finishTime: session.finishTime,
+				params: { ...session.params },
+				guess: { ...session.guess },
+				graph: structuredClone(session.graph),
+			}
+		},
+		getFinishedSessions: (ctx) => () => {
+			checkWormAPIAccess(ctx);
+			return [...finishedWormSessions.map(s => s.identifier)];
 		},
     getWormStates: (ctx) => (_sessionIdentifier) => {
 			const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
