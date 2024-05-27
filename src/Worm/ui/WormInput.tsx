@@ -56,7 +56,7 @@ export function WormInput() {
 
   function handleTest() {
     const session = getWormUISession();
-    const result = session.evaluate(input);
+    const result = session.evaluate(input, true);
     setState(result);
   }
 

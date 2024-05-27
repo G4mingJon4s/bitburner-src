@@ -134,7 +134,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       const session = getSession(ctx, sessionIdentifier);
       const input = helpers.string(ctx, "input", _input);
       return helpers.netscriptDelay(ctx, wormTestingTime(ctx.workerScript.scriptRef.threads)).then(() => {
-        const finalState = session.evaluate(input);
+        const finalState = session.evaluate(input, true);
         return Promise.resolve(finalState);
       });
     },
