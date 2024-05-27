@@ -62,7 +62,7 @@ export const CONSTANTS: {
   ClassAlgorithmsBaseExp: number;
   ClassManagementBaseExp: number;
   ClassLeadershipBaseExp: number;
-	CodingContractSpawnInterval: number;
+  CodingContractSpawnInterval: number;
   CodingContractBaseFactionRepGain: number;
   CodingContractBaseCompanyRepGain: number;
   CodingContractBaseMoneyGain: number;
@@ -177,7 +177,7 @@ export const CONSTANTS: {
 
   // Coding Contract
   // TODO: Move this into Coding contract implementation?
-	CodingContractSpawnInterval: 3000,
+  CodingContractSpawnInterval: 3000,
   CodingContractBaseFactionRepGain: 2500,
   CodingContractBaseCompanyRepGain: 4000,
   CodingContractBaseMoneyGain: 75e6,

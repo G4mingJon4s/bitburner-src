@@ -5,15 +5,16 @@ import { worm } from "./Worm";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { Person } from "@nsdefs";
 
-export const wormContractEffect = (numContracts: number) => Math.exp(-1 * Math.log10((numContracts / 200) + 1));
+export const wormContractEffect = (numContracts: number) => Math.exp(-1 * Math.log10(numContracts / 200 + 1));
 
 export const wormSourceFileEffect = (lvl: number) => [1, 0.88, 0.82, 0.79][lvl];
 
-export const wormTestingRewardPenalty = (tests: number, size: number) => Math.max(0.2, 1.01 - 0.01 * Math.exp(4.4 * tests / size));
+export const wormTestingRewardPenalty = (tests: number, size: number) =>
+  Math.max(0.2, 1.01 - 0.01 * Math.exp((4.4 * tests) / size));
 
 export const wormTestingTime = (threads: number, player: Person = Player) =>
   ((10 * 1000) / (threads * calculateIntelligenceBonus(player.skills.intelligence, 1))) *
-	wormContractEffect(Player.numContractsSolved);
+  wormContractEffect(Player.numContractsSolved);
 
 export const WORM_SOLVE_COOLDOWN = 5000;
 export const WORM_CREATE_COOLDOWN = 10000;

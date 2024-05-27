@@ -22,34 +22,36 @@ import { WormSession, currentWormSessions, finishedWormSessions } from "../WormS
 import { formatNumber } from "../../ui/formatNumber";
 
 const historyStyles = makeStyles({
-	container: {
-		height: "calc(100vh - 100px)",
-		overflowY: "hidden",
-	},
-	list: {
-		height: "calc(40vh - 50px)",
-		overflowY: "scroll"
-	}
+  container: {
+    height: "calc(100vh - 100px)",
+    overflowY: "hidden",
+  },
+  list: {
+    height: "calc(40vh - 50px)",
+    overflowY: "scroll",
+  },
 });
 
 export function WormHistory() {
   const rerender = useRerender();
-	const classes = historyStyles();
+  const classes = historyStyles();
 
   useEffect(() => WormSessionEvents.subscribe(() => rerender()));
 
   return (
     <div className={classes.container}>
-			<Typography variant="h5">Worm history</Typography>
-			<Typography>
-				Here you can see all of the ongoing and finished worm sessions of your scripts.
-				Sessions don't persist while you are offline.
-			</Typography>
-			<br />
-			<br />
+      <Typography variant="h5">Worm history</Typography>
+      <Typography>
+        Here you can see all of the ongoing and finished worm sessions of your scripts. Sessions don't persist while you
+        are offline.
+      </Typography>
+      <br />
+      <br />
       <Typography variant="h5">Current Sessions</Typography>
       <List dense className={classes.list}>
-				{(currentWormSessions.size === Number(currentWormSessions.has(-1))) && <Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>}
+        {currentWormSessions.size === Number(currentWormSessions.has(-1)) && (
+          <Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>
+        )}
         {Array.from(currentWormSessions.values()).map((session) => (
           <WormSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
         ))}
@@ -57,10 +59,14 @@ export function WormHistory() {
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Finished Sessions</Typography>
       <List dense className={classes.list}>
-				{finishedWormSessions.filter(session => session.identifier !== -1).length === 0 && <Typography>No Worm sessions have been completed yet.</Typography>}
-        {finishedWormSessions.filter(session => session.identifier !== -1).map((session) => (
-          <WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
-        ))}
+        {finishedWormSessions.filter((session) => session.identifier !== -1).length === 0 && (
+          <Typography>No Worm sessions have been completed yet.</Typography>
+        )}
+        {finishedWormSessions
+          .filter((session) => session.identifier !== -1)
+          .map((session) => (
+            <WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
+          ))}
       </List>
     </div>
   );
@@ -81,7 +87,9 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText
           primary={
-            <Typography style={{ whiteSpace: "pre-wrap" }}>#{session.identifier} - {convertTimeMsToTimeElapsedString(Date.now() - session.startTime)} elapsed</Typography>
+            <Typography style={{ whiteSpace: "pre-wrap" }}>
+              #{session.identifier} - {convertTimeMsToTimeElapsedString(Date.now() - session.startTime)} elapsed
+            </Typography>
           }
         />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
@@ -114,14 +122,14 @@ export function WormSessionDisplay({ session }: { session: WormSession }) {
                   <Typography>{session.graph.symbols.join(", ")}</Typography>
                 </TableCell>
               </TableRow>
-							<TableRow>
-								<TableCell className={classes.noBorder}>
-									<Typography>└ Tests done:</Typography>
-								</TableCell>
-								<TableCell className={classes.noBorder}>
-									<Typography>{session.testsDone}</Typography>
-								</TableCell>
-							</TableRow>
+              <TableRow>
+                <TableCell className={classes.noBorder}>
+                  <Typography>└ Tests done:</Typography>
+                </TableCell>
+                <TableCell className={classes.noBorder}>
+                  <Typography>{session.testsDone}</Typography>
+                </TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell className={classes.noBorder}>
                   <Typography>└ Current guess:</Typography>
@@ -180,7 +188,10 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
       <ListItemButton onClick={() => setOpen((old) => !old)}>
         <ListItemText
           primary={
-            <Typography>#{session.identifier} - {convertTimeMsToTimeElapsedString(Date.now() - (session.finishTime || session.startTime))} ago</Typography>
+            <Typography>
+              #{session.identifier} -{" "}
+              {convertTimeMsToTimeElapsedString(Date.now() - (session.finishTime || session.startTime))} ago
+            </Typography>
           }
         />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
@@ -215,14 +226,14 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
                   <Typography>{session.graph.symbols.join(", ")}</Typography>
                 </TableCell>
               </TableRow>
-							<TableRow>
-								<TableCell className={classes.noBorder}>
-									<Typography>└ Tests done:</Typography>
-								</TableCell>
-								<TableCell className={classes.noBorder}>
-									<Typography>{session.testsDone}</Typography>
-								</TableCell>
-							</TableRow>
+              <TableRow>
+                <TableCell className={classes.noBorder}>
+                  <Typography>└ Tests done:</Typography>
+                </TableCell>
+                <TableCell className={classes.noBorder}>
+                  <Typography>{session.testsDone}</Typography>
+                </TableCell>
+              </TableRow>
               <TableRow>
                 <TableCell className={classes.noBorder}>
                   <Typography>└ Final guess:</Typography>
@@ -305,14 +316,14 @@ export function WormPreviousSessionDisplay({ session }: { session: WormSession }
                   <Typography>{session.graph.properties.dfsOrder[session.params.dfsOrder] || "None"}</Typography>
                 </TableCell>
               </TableRow>
-							<TableRow>
-								<TableCell className={classes.noBorder}>
-									<Typography>└ Reward:</Typography>
-								</TableCell>
-								<TableCell className={classes.noBorder}>
-									<Typography>{formatNumber(session.getReward())}</Typography>
-								</TableCell>
-							</TableRow>
+              <TableRow>
+                <TableCell className={classes.noBorder}>
+                  <Typography>└ Reward:</Typography>
+                </TableCell>
+                <TableCell className={classes.noBorder}>
+                  <Typography>{formatNumber(session.getReward())}</Typography>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </Collapse>

@@ -3,7 +3,14 @@ import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Tool
 import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
 import { Paper } from "@mui/material";
-import { applyWormSessionReward, finishedWormUISessions, getWormUISession, isWormOnSolveCooldown, pushToFinishedSessions, resetWormUISession } from "../WormSession";
+import {
+  applyWormSessionReward,
+  finishedWormUISessions,
+  getWormUISession,
+  isWormOnSolveCooldown,
+  pushToFinishedSessions,
+  resetWormUISession,
+} from "../WormSession";
 import { WormGuess } from "../Graph";
 import { WormPreviousSessionDisplay } from "./WormHistory";
 import { makeStyles } from "@mui/styles";
@@ -11,30 +18,30 @@ import { formatNumber } from "../../ui/formatNumber";
 import { MathJax } from "better-react-mathjax";
 
 const inputStyles = makeStyles((theme: Theme) => ({
-	container: {
-		height: "calc(100vh - 100px)",
-		display: "flex",
-		flexDirection: "column",
-	},
-	history: {
-		flex: "1 1 auto",
-		overflowY: "scroll",
-		height: "auto",
-		width: "100%",
-	},
-	paramsText: {
-		color: theme.palette.info.main,
-	},
-	testsText: {
-		color: theme.palette.warning.main,
-	},
-	cricticalInfoText: {
-		color: theme.palette.info.light,
-	},
+  container: {
+    height: "calc(100vh - 100px)",
+    display: "flex",
+    flexDirection: "column",
+  },
+  history: {
+    flex: "1 1 auto",
+    overflowY: "scroll",
+    height: "auto",
+    width: "100%",
+  },
+  paramsText: {
+    color: theme.palette.info.main,
+  },
+  testsText: {
+    color: theme.palette.warning.main,
+  },
+  cricticalInfoText: {
+    color: theme.palette.info.light,
+  },
 }));
 
 export function WormInput() {
-	const classes = inputStyles();
+  const classes = inputStyles();
 
   const [input, setInput] = useState("");
   const [state, setState] = useState("");
@@ -58,47 +65,49 @@ export function WormInput() {
     session.guess = { ...session.guess, ...guess.current };
 
     const sessionReward = session.solve();
-		applyWormSessionReward(sessionReward);
+    applyWormSessionReward(sessionReward);
     setReward(sessionReward.toString());
 
-		pushToFinishedSessions(session, true);
-		resetWormUISession();
+    pushToFinishedSessions(session, true);
+    resetWormUISession();
   }
 
   return (
     <div className={classes.container}>
       <Typography variant="h5">Session Information</Typography>
-      <Typography className={classes.cricticalInfoText}>Valid Symbols: "{getWormUISession().graph.symbols.join("")}"</Typography>
+      <Typography className={classes.cricticalInfoText}>
+        Valid Symbols: "{getWormUISession().graph.symbols.join("")}"
+      </Typography>
       <Typography className={classes.cricticalInfoText}>
         States: {getWormUISession().graph.states.at(0)} - {getWormUISession().graph.states.at(-1)}
       </Typography>
-			<Typography className={classes.paramsText}>
-				Chosen state for "node value": {getWormUISession().params.value}
-			</Typography>
-			<Typography className={classes.paramsText}>
-				Chosen state for "node indegree": {getWormUISession().params.indegree}
-			</Typography>
-			<Typography className={classes.paramsText}>
-				Chosen index for "DFS-Enumeration": {getWormUISession().params.dfsOrder}
-			</Typography>
-			<Typography className={classes.testsText}>
-				Inputs tested: {getWormUISession().testsDone}
-			</Typography>
-			<Tooltip
-				title={
-					<>
-						<Typography>Formula:</Typography>
-						<MathJax>{"\\(\\huge{P = \\left(\\text{# of Symbols}\\right) * \\left(\\text{# of States}\\right)}\\)"}</MathJax>
-						<MathJax>{"\\(\\huge{R = \\max{\\left(0.2, 1.01 - 0.01e^{\\frac{4.4}{P}x}\\right)}}\\)"}</MathJax>
-					</>
-				}
-			>
-				<Typography className={classes.testsText}>
-					Maximum reward possible: {formatNumber(getWormUISession().getReward())}
-				</Typography>
-			</Tooltip>
-			<br />
-			<Typography>Testing input</Typography>
+      <Typography className={classes.paramsText}>
+        Chosen state for "node value": {getWormUISession().params.value}
+      </Typography>
+      <Typography className={classes.paramsText}>
+        Chosen state for "node indegree": {getWormUISession().params.indegree}
+      </Typography>
+      <Typography className={classes.paramsText}>
+        Chosen index for "DFS-Enumeration": {getWormUISession().params.dfsOrder}
+      </Typography>
+      <Typography className={classes.testsText}>Inputs tested: {getWormUISession().testsDone}</Typography>
+      <Tooltip
+        title={
+          <>
+            <Typography>Formula:</Typography>
+            <MathJax>
+              {"\\(\\huge{P = \\left(\\text{# of Symbols}\\right) * \\left(\\text{# of States}\\right)}\\)"}
+            </MathJax>
+            <MathJax>{"\\(\\huge{R = \\max{\\left(0.2, 1.01 - 0.01e^{\\frac{4.4}{P}x}\\right)}}\\)"}</MathJax>
+          </>
+        }
+      >
+        <Typography className={classes.testsText}>
+          Maximum reward possible: {formatNumber(getWormUISession().getReward())}
+        </Typography>
+      </Tooltip>
+      <br />
+      <Typography>Testing input</Typography>
       <Stack direction="row" component="div" sx={{ alignItems: "center" }}>
         <TextField
           value={input}
@@ -160,9 +169,11 @@ export function WormInput() {
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Previous sessions</Typography>
       <List dense className={classes.history}>
-				{finishedWormUISessions.length === 0 && <Typography>You have not finished any Worm sessions manually...</Typography>}
+        {finishedWormUISessions.length === 0 && (
+          <Typography>You have not finished any Worm sessions manually...</Typography>
+        )}
         {finishedWormUISessions.map((session) => (
-					<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
+          <WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
         ))}
       </List>
     </div>

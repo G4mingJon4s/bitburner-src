@@ -281,7 +281,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
-	resetWorm();
+  resetWorm();
 
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {

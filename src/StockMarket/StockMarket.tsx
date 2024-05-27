@@ -201,8 +201,8 @@ function stockMarketCycle(): void {
 }
 
 export function processStockPrices(numCycles = 1): void {
-	const wormTimeMultiplier = worm === null ? 1 : worm.specialMults.stockMarketMult;
-	const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate * wormTimeMultiplier / CONSTANTS.MilliPerCycle;
+  const wormTimeMultiplier = worm === null ? 1 : worm.specialMults.stockMarketMult;
+  const cyclesPerStockUpdate = (StockMarketConstants.msPerStockUpdate * wormTimeMultiplier) / CONSTANTS.MilliPerCycle;
   if (StockMarket.storedCycles == null || isNaN(StockMarket.storedCycles)) {
     StockMarket.storedCycles = 0;
   }

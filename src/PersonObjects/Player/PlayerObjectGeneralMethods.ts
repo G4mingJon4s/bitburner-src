@@ -134,7 +134,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
   this.entropy = 0;
   this.prestigeAugmentation();
   this.karma = 0;
-	this.numContractsSolved = 0;
+  this.numContractsSolved = 0;
   // Duplicate sleeves are reset to level 1 every Bit Node (but the number of sleeves you have persists)
   this.sleeves.forEach((sleeve) => sleeve.prestige());
 
@@ -477,7 +477,7 @@ export function gainCodingContractReward(
   reward: ICodingContractReward | null,
   difficulty = 1,
 ): string {
-	this.numContractsSolved++;
+  this.numContractsSolved++;
 
   if (!reward) return `No reward for this contract`;
 

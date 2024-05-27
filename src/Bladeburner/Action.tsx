@@ -182,7 +182,7 @@ export class Action {
 
     baseTime = Math.max(1, (baseTime * skillFac) / statFac);
 
-		const wormMult = worm === null ? 1 : worm.specialMults.bladeburnerMult;
+    const wormMult = worm === null ? 1 : worm.specialMults.bladeburnerMult;
 
     return Math.ceil(baseTime * wormMult * this.getActionTimePenalty());
   }

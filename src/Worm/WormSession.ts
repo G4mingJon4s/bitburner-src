@@ -15,25 +15,25 @@ export let lastWormSolve = 0;
 export let lastWormCreate = 0;
 
 export function isWormOnSolveCooldown() {
-	return lastWormSolve + WORM_SOLVE_COOLDOWN > Date.now();
+  return lastWormSolve + WORM_SOLVE_COOLDOWN > Date.now();
 }
 
 export function isWormOnCreateCooldown() {
-	return lastWormCreate + WORM_CREATE_COOLDOWN > Date.now();
+  return lastWormCreate + WORM_CREATE_COOLDOWN > Date.now();
 }
 
 export function getWormUISession() {
-	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
-	if (wormUISession === null) wormUISession = new WormSession(worm);
-	return wormUISession;
+  if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+  if (wormUISession === null) wormUISession = new WormSession(worm);
+  return wormUISession;
 }
 
 export function resetWormUISession() {
-	wormUISession = null;
+  wormUISession = null;
 }
 
 export class WormSession {
-	identifier: number;
+  identifier: number;
 
   graph: GraphData;
   guess: WormGuess;
@@ -42,11 +42,11 @@ export class WormSession {
   startTime: number;
   finishTime: number | null;
 
-	testsDone: number;
+  testsDone: number;
 
   constructor(worm: Worm) {
-		lastWormCreate = Date.now();
-		this.identifier = lastWormCreate;
+    lastWormCreate = Date.now();
+    this.identifier = lastWormCreate;
 
     const data = WormDataFactory(worm.completions);
     this.graph = data.graph;
@@ -56,11 +56,11 @@ export class WormSession {
     this.startTime = Date.now();
     this.finishTime = null;
 
-		this.testsDone = 0;
+    this.testsDone = 0;
   }
 
   evaluate(input: string) {
-		this.testsDone += 1;
+    this.testsDone += 1;
     return evaluateInput(this.graph, input);
   }
 
@@ -88,14 +88,14 @@ export class WormSession {
   }
 
   solve() {
-		if (this.finishTime !== null) throw new Error("Trying to solve Worm Session. Session has already ended.");
-		lastWormSolve = Date.now();
-		this.finishTime = lastWormSolve;
+    if (this.finishTime !== null) throw new Error("Trying to solve Worm Session. Session has already ended.");
+    lastWormSolve = Date.now();
+    this.finishTime = lastWormSolve;
 
-		return this.getReward();
+    return this.getReward();
   }
 
-	getReward() {
+  getReward() {
     const comparisons = [
       this.isPathCorrect(),
       this.isBipartiteCorrect(),
@@ -110,42 +110,42 @@ export class WormSession {
     const rewardValue = amountCorrect / comparisons.length;
 
     return rewardValue * wormTestingRewardPenalty(this.testsDone, this.graph.states.length * this.graph.symbols.length);
-	}
+  }
 }
 
 export function applyWormSessionReward(reward: number) {
-	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
-	worm.completions += reward;
+  if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+  worm.completions += reward;
 }
 
 export function getWormSession(identifier: number) {
   const session = currentWormSessions.get(identifier);
   if (session !== undefined) return session;
-	return null;
+  return null;
 }
 
 export function createNewWormSession() {
-	if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
-	const newSession = new WormSession(worm);
+  if (worm === null) throw new Error("Cannot access Worm. Worm is null.");
+  const newSession = new WormSession(worm);
 
-	currentWormSessions.set(newSession.identifier, newSession);
-	WormSessionEvents.emit();
+  currentWormSessions.set(newSession.identifier, newSession);
+  WormSessionEvents.emit();
 
-	return newSession;
+  return newSession;
 }
 
 export function pushToFinishedSessions(session: WormSession, isUISession: boolean) {
-	if (isUISession) {
-		finishedWormUISessions.push(session);
-	} else {
-		finishedWormSessions.push(session);
-	}
-  if (finishedWormSessions.length > Settings.MaxRecentScriptsCapacity) {
-		finishedWormSessions.splice(0, finishedWormSessions.length - Settings.MaxRecentScriptsCapacity);
+  if (isUISession) {
+    finishedWormUISessions.push(session);
+  } else {
+    finishedWormSessions.push(session);
   }
-	if (finishedWormUISessions.length > Settings.MaxRecentScriptsCapacity) {
-		finishedWormUISessions.splice(0, finishedWormUISessions.length - Settings.MaxRecentScriptsCapacity);
-	}
+  if (finishedWormSessions.length > Settings.MaxRecentScriptsCapacity) {
+    finishedWormSessions.splice(0, finishedWormSessions.length - Settings.MaxRecentScriptsCapacity);
+  }
+  if (finishedWormUISessions.length > Settings.MaxRecentScriptsCapacity) {
+    finishedWormUISessions.splice(0, finishedWormUISessions.length - Settings.MaxRecentScriptsCapacity);
+  }
 
-	WormSessionEvents.emit();
+  WormSessionEvents.emit();
 }

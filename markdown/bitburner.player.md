@@ -22,6 +22,7 @@ interface Player extends Person
 |  [karma](./bitburner.player.karma.md) |  | number |  |
 |  [location](./bitburner.player.location.md) |  | string |  |
 |  [money](./bitburner.player.money.md) |  | number |  |
+|  [numContractsSolved](./bitburner.player.numcontractssolved.md) |  | number |  |
 |  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
 |  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |
 
