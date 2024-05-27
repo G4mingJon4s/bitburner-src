@@ -3,7 +3,7 @@ import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
-import { wormTestingTime, WORM_MAX_SESSIONS, wormContractEffect, wormTestingRewardPenalty } from "../Worm/calculations";
+import { wormTestingTime, WORM_MAX_SESSIONS, wormContractEffect } from "../Worm/calculations";
 import {
   applyWormSessionReward,
   createNewWormSession,
@@ -120,7 +120,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
-      return wormTestingRewardPenalty(session.testsDone, session.graph.states.length * session.graph.symbols.length);
+      return session.getMaximumReward();
     },
     getSessionTestsDone: (ctx) => (_sessionIdentifier) => {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
