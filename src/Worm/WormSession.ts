@@ -59,15 +59,15 @@ export class WormSession {
     this.testsDone = 0;
   }
 
-  evaluate(input: string) {
-    this.testsDone += 1;
+  evaluate(input: string, userInput: boolean) {
+    if (userInput) this.testsDone += 1;
     return evaluateInput(this.graph, input);
   }
 
   isPathCorrect() {
     return (
       this.guess.path.length === this.graph.properties.pathLength &&
-      this.evaluate(this.guess.path) === this.graph.targetState
+      this.evaluate(this.guess.path, false) === this.graph.targetState
     );
   }
 
