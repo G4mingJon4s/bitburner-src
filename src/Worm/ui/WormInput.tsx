@@ -29,6 +29,10 @@ const inputStyles = makeStyles((theme: Theme) => ({
     height: "auto",
     width: "100%",
   },
+	list: {
+		display: "flex",
+		flexDirection: "column-reverse",
+	},
   paramsText: {
     color: theme.palette.info.main,
   },
@@ -168,14 +172,16 @@ export function WormInput() {
       </Paper>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Previous sessions</Typography>
-      <List dense className={classes.history}>
-        {finishedWormUISessions.length === 0 && (
-          <Typography>You have not finished any Worm sessions manually...</Typography>
-        )}
-        {finishedWormUISessions.map((session) => (
-          <WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
-        ))}
-      </List>
+			<div className={classes.history}>
+				<List dense className={classes.list}>
+					{finishedWormUISessions.length === 0 && (
+						<Typography>You have not finished any Worm sessions manually...</Typography>
+					)}
+					{finishedWormUISessions.map((session) => (
+						<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
+					))}
+				</List>
+			</div>
     </div>
   );
 }
