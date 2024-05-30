@@ -371,9 +371,9 @@ const stanek = {
 const worm = {
   testInput: 62.4,
   attemptSolve: 30.4,
-  getStates: 4,
-  getSymbols: 4,
-  getParams: 0,
+  getSessionStates: 4,
+  getSessionSymbols: 4,
+  getSessionParams: 0,
   setShortestPath: 0,
   setIsBipartite: 0,
   setNodeValue: 0,

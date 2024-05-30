@@ -91,19 +91,19 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       checkWormAPIAccess(ctx);
       return [...finishedWormSessions.map((s) => s.identifier)];
     },
-    getStates: (ctx) => (_sessionIdentifier) => {
+    getSessionStates: (ctx) => (_sessionIdentifier) => {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
       return [...session.graph.states];
     },
-    getSymbols: (ctx) => (_sessionIdentifier) => {
+    getSessionSymbols: (ctx) => (_sessionIdentifier) => {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
       return [...session.graph.symbols];
     },
-    getParams: (ctx) => (_sessionIdentifier) => {
+    getSessionParams: (ctx) => (_sessionIdentifier) => {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);

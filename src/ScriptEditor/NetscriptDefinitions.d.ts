@@ -5322,7 +5322,7 @@ interface Worm {
    *
    * @returns All possible states.
    */
-  getStates(session: number): string[];
+  getSessionStates(session: number): string[];
 
   /**
    * Get the current symbols of the Worm.
@@ -5332,7 +5332,7 @@ interface Worm {
    *
    * @returns All possible symbols.
    */
-  getSymbols(session: number): string[];
+  getSessionSymbols(session: number): string[];
 
   /**
    * Get the chosen nodes for the node specific properties.
@@ -5340,7 +5340,7 @@ interface Worm {
    * RAM cost: 1 GB
    * @param session The Worm session to be targeted.
    */
-  getParams(session: number): WormParams;
+  getSessionParams(session: number): WormParams;
 }
 
 /** @public */
