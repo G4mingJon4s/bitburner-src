@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { Button, Divider, List, MenuItem, Select, Stack, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { NumberInput } from "../../ui/React/NumberInput";
-import { Paper } from "@mui/material";
 import {
   applyWormSessionReward,
   finishedWormUISessions,
@@ -23,6 +22,15 @@ const inputStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+	solving: {
+		marginTop: theme.spacing(1),
+		marginBottom: theme.spacing(1),
+		"& > :not(:last-of-type)": {
+			marginBottom: theme.spacing(1),
+			marginRight: theme.spacing(1),
+			alignItems: "center"
+		},
+	},
   history: {
     flex: "1 1 auto",
     overflowY: "scroll",
@@ -126,7 +134,7 @@ export function WormInput() {
       </Stack>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Propeties Input</Typography>
-      <Paper sx={{ my: 1, p: 1, "& > *": { mb: 1, mr: 1, alignItems: "center" } }}>
+      <div className={classes.solving}>
         <Stack direction="row">
           <Switch onChange={(event) => (guess.current.bipartite = event.target.checked)} />
           <Typography>Bipartite</Typography>
@@ -169,7 +177,7 @@ export function WormInput() {
           </Button>
           {reward !== "" && <Typography sx={{ ml: 1.5 }}>Reward: {reward}</Typography>}
         </Stack>
-      </Paper>
+      </div>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Previous sessions</Typography>
 			<div className={classes.history}>
