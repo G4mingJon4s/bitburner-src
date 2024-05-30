@@ -142,7 +142,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
-      if (isWormOnSolveCooldown()) throw helpers.errorMessage(ctx, "Cannot solve worm. The server is on cooldown.");
+      if (isWormOnSolveCooldown()) return null;
       const reward = session.solve();
 
       applyWormSessionReward(reward);
