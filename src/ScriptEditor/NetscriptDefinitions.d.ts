@@ -5262,9 +5262,9 @@ interface Worm {
    * RAM cost: 30.4 GB
    * @param session The Worm session to be targeted.
    *
-   * @returns Returns the reward you received. Will return -1 if solving is on cooldown.
+   * @returns Returns the reward you received. Will return null if solving is on cooldown.
    */
-  attemptSolve(session: number): number;
+  attemptSolve(session: number): number | null;
 
   /**
    * Sets the shortest path property of the given session.
