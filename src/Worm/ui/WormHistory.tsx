@@ -26,10 +26,14 @@ const historyStyles = makeStyles({
     height: "calc(100vh - 100px)",
     overflowY: "hidden",
   },
-  list: {
+  listContainer: {
     height: "calc(40vh - 50px)",
     overflowY: "scroll",
   },
+	list: {
+		display: "flex",
+		flexDirection: "column-reverse",
+	}
 });
 
 export function WormHistory() {
@@ -48,26 +52,30 @@ export function WormHistory() {
       <br />
       <br />
       <Typography variant="h5">Current Sessions</Typography>
-      <List dense className={classes.list}>
-        {currentWormSessions.size === Number(currentWormSessions.has(-1)) && (
-          <Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>
-        )}
-        {Array.from(currentWormSessions.values()).map((session) => (
-          <WormSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
-        ))}
-      </List>
+			<div className={classes.listContainer}>
+				<List dense className={classes.list}>
+					{currentWormSessions.size === Number(currentWormSessions.has(-1)) && (
+						<Typography>There are no ongoing Worm sessions at the moment. Start one using the Worm API!</Typography>
+					)}
+					{Array.from(currentWormSessions.values()).map((session) => (
+						<WormSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
+					))}
+				</List>
+			</div>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Finished Sessions</Typography>
-      <List dense className={classes.list}>
-        {finishedWormSessions.filter((session) => session.identifier !== -1).length === 0 && (
-          <Typography>No Worm sessions have been completed yet.</Typography>
-        )}
-        {finishedWormSessions
-          .filter((session) => session.identifier !== -1)
-          .map((session) => (
-            <WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
-          ))}
-      </List>
+			<div className={classes.listContainer}>
+				<List dense className={classes.list}>
+					{finishedWormSessions.filter((session) => session.identifier !== -1).length === 0 && (
+						<Typography>No Worm sessions have been completed yet.</Typography>
+					)}
+					{finishedWormSessions
+						.filter((session) => session.identifier !== -1)
+						.map((session) => (
+							<WormPreviousSessionDisplay key={session.identifier + " " + session.startTime} session={session} />
+						))}
+				</List>
+			</div>
     </div>
   );
 }
