@@ -45,6 +45,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
           `Value "${bonus}" is not a valid bonus. Valid: ${bonuses.map((d) => d.id.toString()).join(", ")}`,
         );
       getWorm().bonus = value;
+			helpers.log(ctx, () => `Set Worm bonus to ${value.name}`);
     },
     getContractInfluence: (ctx) => () => {
       checkWormAPIAccess(ctx);
@@ -64,6 +65,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       if (isWormOnCreateCooldown()) return null;
       if (currentWormSessions.size >= WORM_MAX_SESSIONS) return null;
       const session = createNewWormSession();
+			helpers.log(ctx, () => `Created new Worm Session with identifier ${session.identifier}`);
       return session.identifier;
     },
     getSessionLimit: (ctx) => () => {
@@ -133,8 +135,10 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       checkWormAPIAccess(ctx);
       const session = getSession(ctx, sessionIdentifier);
       const input = helpers.string(ctx, "input", _input);
+			helpers.log(ctx, () => `Testing input "${input}" on Worm Session with identifier ${sessionIdentifier}`);
       return helpers.netscriptDelay(ctx, wormTestingTime(ctx.workerScript.scriptRef.threads)).then(() => {
         const finalState = session.evaluate(input, true);
+				helpers.log(ctx, () => `Testing input "${input}" on Worm Session with identifier ${sessionIdentifier} returned ${finalState}`);
         return Promise.resolve(finalState);
       });
     },
@@ -144,6 +148,7 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
       const session = getSession(ctx, sessionIdentifier);
       if (isWormOnSolveCooldown()) return null;
       const reward = session.solve();
+			helpers.log(ctx, () => `Attempted to solve Worm Session with identifier ${sessionIdentifier}`);
 
       applyWormSessionReward(reward);
       currentWormSessions.delete(session.identifier);
