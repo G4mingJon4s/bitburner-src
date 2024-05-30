@@ -23,18 +23,25 @@ const bonusEffectStyles = makeStyles((theme: Theme) => ({
 export function WormBonusEffect({ worm, bonus }: IProps) {
   const classes = bonusEffectStyles();
 
+	if (bonus.g === 0) {
+		return (
+			<Typography className={classes.effectText}>
+				Effect: {bonus.description}
+			</Typography>
+		);
+	}
+
   return (
     <>
       <Tooltip
         title={
           <>
             <Typography>Multiplier formula:</Typography>
-            {bonus.g !== 0 && (
-              <MathJax>{`\\(\\huge{M = ${bonus.g} ${bonus.a - bonus.g < 0 ? "-" : "+"} ${
-                Math.round(Math.abs(bonus.a - bonus.g) * 100) / 100
-              } * e^{-${bonus.k} x^{${bonus.m}}}}\\)`}</MathJax>
-            )}
-            {bonus.g === 0 && <Typography>N/A</Typography>}
+						<MathJax>{
+							`\\(\\huge{M = ${bonus.g} ${bonus.a - bonus.g < 0 ? "-" : "+"} ${
+							Math.round(Math.abs(bonus.a - bonus.g) * 100) / 100
+							} * e^{-${bonus.k} x^{${bonus.m}}}}\\)`
+						}</MathJax>
           </>
         }
       >
