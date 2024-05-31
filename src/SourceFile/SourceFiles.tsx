@@ -1,6 +1,7 @@
 import React from "react";
 import { SourceFile } from "./SourceFile";
 import { initBitNodes } from "../BitNode/BitNode";
+import { wormMaxSessions } from "src/Worm/calculations";
 
 export const SourceFiles: Record<string, SourceFile> = {};
 /** Engine initializer for SourceFiles, BitNodes, and BitNodeMultipliers. Run once at engine load. */
@@ -258,6 +259,27 @@ export function initSourceFiles() {
   );
   SourceFiles.SourceFile16 = new SourceFile(
     16,
-    <>Each level of this Source-File increases the time between changes to the Worm.</>,
+    (
+      <>
+        This Source-File grants the following benefits:
+        <br />
+        <br />
+        Level 1: +{wormMaxSessions(1) - wormMaxSessions(0)} sessions
+        <br />
+        Level 2: +{wormMaxSessions(2) - wormMaxSessions(1)} sessions
+        <br />
+        Level 3: +{wormMaxSessions(3) - wormMaxSessions(2)} sessions
+        <br />
+        <br />
+        This Source-File also decreases the time it takes for a coding contract to appear by:
+        <br />
+        <br />
+        Level 1: 12%
+        <br />
+        Level 2: 18%
+        <br />
+        Level 3: 21%
+      </>
+    ),
   );
 }
