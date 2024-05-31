@@ -10,17 +10,17 @@ The underlying network and other details
 
 ```typescript
 graph: {
-		states: string[];
-		symbols: string[];
-		targetState: string;
-		startState: string;
-		transitions: Record<string, Record<string, string>>;
-		properties: {
-			pathLength: number;
-			bipartite: boolean;
-			values: Record<string, number>;
-			indegrees: Record<string, number>;
-			dfsOrder: string[];
-		}
-	}
+    states: string[];
+    symbols: string[];
+    targetState: string;
+    startState: string;
+    transitions: Record<string, Record<string, string>>;
+    properties: {
+      pathLength: number;
+      bipartite: boolean;
+      values: Record<string, number>;
+      indegrees: Record<string, number>;
+      dfsOrder: string[];
+    };
+  };
 ```

@@ -9,7 +9,7 @@ Attempts to solve the given session with the specified properties.
 **Signature:**
 
 ```typescript
-attemptSolve(session: number): number;
+attemptSolve(session: number): number | null;
 ```
 
 ## Parameters
@@ -20,9 +20,9 @@ attemptSolve(session: number): number;
 
 **Returns:**
 
-number
+number \| null
 
-Returns the reward you received. Will return -1 if solving is on cooldown.
+Returns the reward you received. Will return null if solving is on cooldown.
 
 ## Remarks
 

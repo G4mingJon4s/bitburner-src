@@ -22,25 +22,25 @@ const inputStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
   },
-	solving: {
-		marginTop: theme.spacing(1),
-		marginBottom: theme.spacing(1),
-		"& > :not(:last-of-type)": {
-			marginBottom: theme.spacing(1),
-			marginRight: theme.spacing(1),
-			alignItems: "center"
-		},
-	},
+  solving: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    "& > :not(:last-of-type)": {
+      marginBottom: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      alignItems: "center",
+    },
+  },
   history: {
     flex: "1 1 auto",
     overflowY: "scroll",
     height: "auto",
     width: "100%",
   },
-	list: {
-		display: "flex",
-		flexDirection: "column-reverse",
-	},
+  list: {
+    display: "flex",
+    flexDirection: "column-reverse",
+  },
   paramsText: {
     color: theme.palette.info.main,
   },
@@ -180,16 +180,16 @@ export function WormInput() {
       </div>
       <Divider sx={{ my: 1.5 }} />
       <Typography variant="h5">Previous sessions</Typography>
-			<div className={classes.history}>
-				<List dense className={classes.list}>
-					{finishedWormUISessions.length === 0 && (
-						<Typography>You have not finished any Worm sessions manually...</Typography>
-					)}
-					{finishedWormUISessions.map((session) => (
-						<WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
-					))}
-				</List>
-			</div>
+      <div className={classes.history}>
+        <List dense className={classes.list}>
+          {finishedWormUISessions.length === 0 && (
+            <Typography>You have not finished any Worm sessions manually...</Typography>
+          )}
+          {finishedWormUISessions.map((session) => (
+            <WormPreviousSessionDisplay key={session.startTime + "-" + session.finishTime ?? "DNF"} session={session} />
+          ))}
+        </List>
+      </div>
     </div>
   );
 }

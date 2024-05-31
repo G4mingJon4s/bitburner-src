@@ -10,10 +10,10 @@ The final properties guessed
 
 ```typescript
 guess: {
-		path: string;
-		bipartite: boolean;
-		value: number;
-		indegree: number;
-		dfsState: string;
-	}
+    path: string;
+    bipartite: boolean;
+    value: number;
+    indegree: number;
+    dfsState: string;
+  };
 ```

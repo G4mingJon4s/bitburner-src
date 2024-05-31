@@ -23,13 +23,9 @@ const bonusEffectStyles = makeStyles((theme: Theme) => ({
 export function WormBonusEffect({ worm, bonus }: IProps) {
   const classes = bonusEffectStyles();
 
-	if (bonus.g === 0) {
-		return (
-			<Typography className={classes.effectText}>
-				Effect: {bonus.description}
-			</Typography>
-		);
-	}
+  if (bonus.g === 0) {
+    return <Typography className={classes.effectText}>Effect: {bonus.description}</Typography>;
+  }
 
   return (
     <>
@@ -37,11 +33,9 @@ export function WormBonusEffect({ worm, bonus }: IProps) {
         title={
           <>
             <Typography>Multiplier formula:</Typography>
-						<MathJax>{
-							`\\(\\huge{M = ${bonus.g} ${bonus.a - bonus.g < 0 ? "-" : "+"} ${
-							Math.round(Math.abs(bonus.a - bonus.g) * 100) / 100
-							} * e^{-${bonus.k} x^{${bonus.m}}}}\\)`
-						}</MathJax>
+            <MathJax>{`\\(\\huge{M = ${bonus.g} ${bonus.a - bonus.g < 0 ? "-" : "+"} ${
+              Math.round(Math.abs(bonus.a - bonus.g) * 100) / 100
+            } * e^{-${bonus.k} x^{${bonus.m}}}}\\)`}</MathJax>
           </>
         }
       >

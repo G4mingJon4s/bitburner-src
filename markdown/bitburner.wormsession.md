@@ -16,7 +16,7 @@ interface WormSession
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [finishTime](./bitburner.wormsession.finishtime.md) |  | number \| null | The time the session got completed |
-|  [graph](./bitburner.wormsession.graph.md) |  | { states: string\[\]; symbols: string\[\]; targetState: string; startState: string; transitions: Record&lt;string, Record&lt;string, string&gt;&gt;; properties: { pathLength: number; bipartite: boolean; values: Record&lt;string, number&gt;; indegrees: Record&lt;string, number&gt;; dfsOrder: string\[\]; } } | The underlying network and other details |
+|  [graph](./bitburner.wormsession.graph.md) |  | { states: string\[\]; symbols: string\[\]; targetState: string; startState: string; transitions: Record&lt;string, Record&lt;string, string&gt;&gt;; properties: { pathLength: number; bipartite: boolean; values: Record&lt;string, number&gt;; indegrees: Record&lt;string, number&gt;; dfsOrder: string\[\]; }; } | The underlying network and other details |
 |  [guess](./bitburner.wormsession.guess.md) |  | { path: string; bipartite: boolean; value: number; indegree: number; dfsState: string; } | The final properties guessed |
 |  [identifier](./bitburner.wormsession.identifier.md) |  | number | The unique identifier of this session |
 |  [params](./bitburner.wormsession.params.md) |  | [WormParams](./bitburner.wormparams.md) | The chosen values for this session |

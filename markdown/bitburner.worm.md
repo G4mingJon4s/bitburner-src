@@ -22,12 +22,12 @@ interface Worm
 |  [getContractInfluence()](./bitburner.worm.getcontractinfluence.md) | Get the current multiplier the amount of coding contracts solved has on the Worm processing time. |
 |  [getFinishedSession(session)](./bitburner.worm.getfinishedsession.md) | Get a finished session object by its identifier. |
 |  [getFinishedSessions()](./bitburner.worm.getfinishedsessions.md) | Get all finished sessions. |
-|  [getParams(session)](./bitburner.worm.getparams.md) | Get the chosen nodes for the node specific properties. |
 |  [getSessionLimit()](./bitburner.worm.getsessionlimit.md) | Get the maximum number of sessions that can be active at a time. |
 |  [getSessionMaxReward(session)](./bitburner.worm.getsessionmaxreward.md) | Get the maimum reward possible for a given session. |
+|  [getSessionParams(session)](./bitburner.worm.getsessionparams.md) | Get the chosen nodes for the node specific properties. |
+|  [getSessionStates(session)](./bitburner.worm.getsessionstates.md) | Get the current states the Worm has. |
+|  [getSessionSymbols(session)](./bitburner.worm.getsessionsymbols.md) | Get the current symbols of the Worm. |
 |  [getSessionTestsDone(session)](./bitburner.worm.getsessiontestsdone.md) | Get the number of tests that have already been done in the session. |
-|  [getStates(session)](./bitburner.worm.getstates.md) | Get the current states the Worm has. |
-|  [getSymbols(session)](./bitburner.worm.getsymbols.md) | Get the current symbols of the Worm. |
 |  [getTestingTime(threads, player)](./bitburner.worm.gettestingtime.md) | Get the current testing time. |
 |  [getUnsolvedSessions()](./bitburner.worm.getunsolvedsessions.md) | Get all unsolved sessions. |
 |  [setBonus(bonus)](./bitburner.worm.setbonus.md) | Set the bonus of the Worm. |
