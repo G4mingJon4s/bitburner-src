@@ -2,7 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
-import { wormMaxSessions } from "src/Worm/calculations";
+import { wormMaxSessions } from "../Worm/calculations";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
