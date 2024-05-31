@@ -8,8 +8,9 @@ import { WormTraversal1 } from "./images/WormTraversal1";
 import { WormTraversal2 } from "./images/WormTraversal2";
 import { WormProperties3 } from "./images/WormProperties3";
 import { WormProperties4 } from "./images/WormProperties4";
-import { WORM_CREATE_COOLDOWN, WORM_MAX_SESSIONS, WORM_SOLVE_COOLDOWN } from "../calculations";
+import { WORM_CREATE_COOLDOWN, wormMaxSessions, WORM_SOLVE_COOLDOWN } from "../calculations";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { Player } from "@player";
 
 const styles = makeStyles(() =>
   createStyles({
@@ -201,9 +202,9 @@ export function WormHelp() {
         <br />
         There can be multiple instances of the worm that your scripts can solve at the same time. These "sessions" can
         be spawned in by any script and can be accessed using its specific identifier. Do note, sessions don't persist
-        once the game is closed. There can only be {WORM_MAX_SESSIONS} sessions active at once. Spawning in sessions has
-        a {convertTimeMsToTimeElapsedString(WORM_CREATE_COOLDOWN)} cooldown. Solving sessions has another{" "}
-        {convertTimeMsToTimeElapsedString(WORM_SOLVE_COOLDOWN)} cooldown.
+        once the game is closed. There can only be {wormMaxSessions(Player.sourceFileLvl(16))} sessions active at once.
+        Spawning in sessions has a {convertTimeMsToTimeElapsedString(WORM_CREATE_COOLDOWN)} cooldown. Solving sessions
+        has another {convertTimeMsToTimeElapsedString(WORM_SOLVE_COOLDOWN)} cooldown.
       </Typography>
       <br />
       <br />
