@@ -2,7 +2,6 @@
 import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 import { staneksGift } from "../../CotMG/Helper";
 import { updateGoMults } from "../../Go/effects/effect";
-import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 
 import { updateWormMults } from "../../Worm/calculations";
 import type { PlayerObject } from "./PlayerObject";

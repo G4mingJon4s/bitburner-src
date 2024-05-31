@@ -1,7 +1,7 @@
 import { WormParams } from "@nsdefs";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { depthFirstSearchEnumeration, isBipartite, nodeIndegree, nodeValue, shortestInput } from "./calculations";
 import { generateGraph } from "./GraphGenerator";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 export interface WormGuess {
   path: string;
@@ -29,7 +29,7 @@ export interface GraphProperties {
 }
 
 export function getWormSize(completions: number) {
-  const size = Math.floor((Math.random() + 0.5) * completions) + getRandomInt(20, 40);
+  const size = Math.floor((Math.random() + 0.5) * completions) + getRandomIntInclusive(20, 40);
 
   const states = Math.max(6, Math.floor((Math.random() + 1.5) * Math.sqrt(size)));
   const symbols = Math.max(2, Math.floor((size / states) * (Math.random() * 0.25 + 0.5)));
