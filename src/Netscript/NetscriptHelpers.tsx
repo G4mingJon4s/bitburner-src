@@ -52,7 +52,6 @@ export const helpers = {
   string,
   number,
   boolean,
-  array,
   positiveInteger,
   positiveSafeInteger,
   scriptArgs,
@@ -111,7 +110,7 @@ function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
     if (v === 1) return true;
     if (v === 0) return false;
   } else if (typeof v === "boolean") return v;
-  throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+  throw errorMessage(ctx, `'${argName}' should be a boolean. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -131,20 +130,6 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     return v;
   }
   throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
-}
-
-function array<T>(
-  ctx: NetscriptContext,
-  argName: string,
-  v: unknown,
-  converter: (ctx: NetscriptContext, argName: string, a: unknown) => T,
-): T[] {
-  if (typeof v === "object" && Array.isArray(v)) {
-    const arr: T[] = [];
-    for (let i = 0; i < v.length; i++) arr.push(converter(ctx, `${argName}[${i}]`, v[i]));
-    return arr;
-  }
-  throw errorMessage(ctx, `'${argName}' should be an array. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
