@@ -5209,8 +5209,10 @@ interface Worm {
    * Get the maximum number of sessions that can be active at a time.
    * @remarks
    * RAM cost: 1 GB
+   *
+   * @param level The Source-File level of the Worm Bitnode.
    */
-  getSessionLimit(): number;
+  getSessionLimit(level?: number): number;
 
   /**
    * Get a finished session object by its identifier.

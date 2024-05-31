@@ -9,8 +9,15 @@ Get the maximum number of sessions that can be active at a time.
 **Signature:**
 
 ```typescript
-getSessionLimit(): number;
+getSessionLimit(level?: number): number;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  level | number | _(Optional)_ The Source-File level of the Worm Bitnode. |
+
 **Returns:**
 
 number

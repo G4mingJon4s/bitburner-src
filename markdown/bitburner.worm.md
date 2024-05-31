@@ -22,7 +22,7 @@ interface Worm
 |  [getContractInfluence()](./bitburner.worm.getcontractinfluence.md) | Get the current multiplier the amount of coding contracts solved has on the Worm processing time. |
 |  [getFinishedSession(session)](./bitburner.worm.getfinishedsession.md) | Get a finished session object by its identifier. |
 |  [getFinishedSessions()](./bitburner.worm.getfinishedsessions.md) | Get all finished sessions. |
-|  [getSessionLimit()](./bitburner.worm.getsessionlimit.md) | Get the maximum number of sessions that can be active at a time. |
+|  [getSessionLimit(level)](./bitburner.worm.getsessionlimit.md) | Get the maximum number of sessions that can be active at a time. |
 |  [getSessionMaxReward(session)](./bitburner.worm.getsessionmaxreward.md) | Get the maimum reward possible for a given session. |
 |  [getSessionParams(session)](./bitburner.worm.getsessionparams.md) | Get the chosen nodes for the node specific properties. |
 |  [getSessionStates(session)](./bitburner.worm.getsessionstates.md) | Get the current states the Worm has. |

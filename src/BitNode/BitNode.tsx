@@ -2,6 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
+import { wormMaxSessions } from "src/Worm/calculations";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -498,10 +499,18 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade
-        its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes.
+        its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes. Each level of this
+        Source-File increases the maximum number of sessions you can have open at once from {wormMaxSessions(0)} to:
         <br />
         <br />
-        Each level of this Source-File decreases the time it takes for a coding contract to appear:
+        Level 1: {wormMaxSessions(1)}
+        <br />
+        Level 2: {wormMaxSessions(2)}
+        <br />
+        Level 3: {wormMaxSessions(3)}
+        <br />
+        <br />
+        This Source-File also decreases the time it takes for a coding contract to appear by:
         <br />
         <br />
         Level 1: 12%

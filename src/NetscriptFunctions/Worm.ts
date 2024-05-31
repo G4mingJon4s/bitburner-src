@@ -3,7 +3,7 @@ import { NetscriptContext, InternalAPI } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { canAccessWorm, worm, Worm } from "../Worm/Worm";
 import { bonuses } from "../Worm/BonusType";
-import { wormTestingTime, WORM_MAX_SESSIONS, wormContractEffect } from "../Worm/calculations";
+import { wormTestingTime, wormMaxSessions, wormContractEffect } from "../Worm/calculations";
 import {
   applyWormSessionReward,
   createNewWormSession,
@@ -63,14 +63,16 @@ export function NetscriptWorm(): InternalAPI<IWorm> {
     createNewSession: (ctx) => () => {
       checkWormAPIAccess(ctx);
       if (isWormOnCreateCooldown()) return null;
-      if (currentWormSessions.size >= WORM_MAX_SESSIONS) return null;
+      if (currentWormSessions.size >= wormMaxSessions(Player.sourceFileLvl(16))) return null;
       const session = createNewWormSession();
       helpers.log(ctx, () => `Created new Worm Session with identifier ${session.identifier}`);
       return session.identifier;
     },
-    getSessionLimit: (ctx) => () => {
+    getSessionLimit: (ctx) => (_level) => {
       checkWormAPIAccess(ctx);
-      return WORM_MAX_SESSIONS;
+      if (_level === undefined) return wormMaxSessions(Player.sourceFileLvl(16));
+      const level = helpers.number(ctx, "level", _level);
+      return wormMaxSessions(level);
     },
     getFinishedSession: (ctx) => (_sessionIdentifier) => {
       const sessionIdentifier = helpers.number(ctx, "session", _sessionIdentifier);
