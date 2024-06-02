@@ -32,6 +32,7 @@ import { Reviver } from "./utils/GenericReviver";
 import { giveExportBonus } from "./ExportBonus";
 import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 import { InfiltrationState } from "./Infiltration/formulas/game";
+import { myrian, loadMyrian } from "./Myrian/Myrian";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -173,6 +174,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  FactorySave = "";
   GoSave = "";
   InfiltrationsSave = "";
 
@@ -194,6 +196,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.FactorySave = JSON.stringify(myrian);
     this.GoSave = JSON.stringify(getGoSave());
     this.InfiltrationsSave = JSON.stringify(InfiltrationState);
 
@@ -455,6 +458,12 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
     loadStockMarket("");
   }
 
+  if (Object.hasOwn(saveObj, "FactorySave")) {
+    loadMyrian(saveObj.FactorySave);
+  } else {
+    console.warn(`Could not load Factory from save`);
+  }
+
   // "Optional 2"
   if (saveObj.SettingsSave) {
     try {
@@ -520,9 +529,9 @@ function createNewUpdateText() {
     () =>
       dialogBoxCreate(
         "New update!\n" +
-          "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
-          CONSTANTS.LatestUpdate,
+        "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+        "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+        CONSTANTS.LatestUpdate,
       ),
     1000,
   );
@@ -533,10 +542,10 @@ function createBetaUpdateText() {
     () =>
       dialogBoxCreate(
         "You are playing on the beta environment! This branch of the game " +
-          "features the latest developments in the game. This version may be unstable.\n" +
-          "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
-          CONSTANTS.LatestUpdate,
+        "features the latest developments in the game. This version may be unstable.\n" +
+        "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+        "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
+        CONSTANTS.LatestUpdate,
       ),
     1000,
   );

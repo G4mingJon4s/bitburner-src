@@ -31,6 +31,7 @@ import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
 import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
+import { resetMyrian } from "./Myrian/Myrian";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -273,8 +274,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
     homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
     delayedDialog(
       "You received a copy of the Corporation Management Handbook on your home computer. It's a short introduction for " +
-        "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
-        "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
+      "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
+      "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
       false,
     );
   }
@@ -336,10 +337,13 @@ export function prestigeSourceFile(isFlume: boolean): void {
     updateHashManagerCapacity();
   }
 
-  if (Player.bitNodeN === 13) {
+  if (Player.bitNodeN === 13 || Player.bitNodeN === 19) {
     Player.money = CONSTANTS.TravelCost;
   }
   staneksGift.prestigeSourceFile();
+
+  Player.myrianConnection = false;
+  resetMyrian();
 
   // Gain int exp
   if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {

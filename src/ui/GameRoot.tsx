@@ -80,6 +80,7 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
+import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
 
 const htmlLocation = location;
 
@@ -100,13 +101,13 @@ const MAX_PAGES_IN_HISTORY = 10;
 
 type RouterAction = (
   | {
-      type: "toPage";
-      page: Page;
-      context?: PageContext<ComplexPage>;
-    }
+    type: "toPage";
+    page: Page;
+    context?: PageContext<ComplexPage>;
+  }
   | {
-      type: "back";
-    }
+    type: "back";
+  }
 ) & { stackTrace: string | undefined };
 
 /**
@@ -169,6 +170,7 @@ function determineStartPage(): PageWithContext {
   if (Player.currentWork !== null) {
     return { page: Page.Work };
   }
+  return { page: Page.MyrianOS };
   return { page: Page.Terminal };
 }
 
@@ -459,6 +461,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.MyrianOS: {
+      mainPage = <MyrianRoot />;
       break;
     }
     case Page.Achievements: {

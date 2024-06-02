@@ -1,3 +1,4 @@
+import React from "react";
 import { SourceFile } from "./SourceFile";
 import { BitNodes, initBitNodes } from "../BitNode/BitNode";
 
@@ -19,4 +20,19 @@ export function initSourceFiles() {
   SourceFiles.SourceFile12 = new SourceFile(12, BitNodes.BitNode12.sfDescription);
   SourceFiles.SourceFile13 = new SourceFile(13, BitNodes.BitNode13.sfDescription);
   SourceFiles.SourceFile14 = new SourceFile(14, BitNodes.BitNode14.sfDescription);
+  SourceFiles.SourceFile19 = new SourceFile(
+    19,
+    (
+      <>
+        This Source-File grants the following benefits:
+        <br />
+        <br />
+        Level 1: Reduce the effect of the Rust Glitch
+        <br />
+        Level 2: Reduce the effect of the Magnetism Glitch
+        <br />
+        Level 3: Reduce the effect of the Friction, Isolation, Virtualization, and Jamming Glitch
+      </>
+    ),
+  );
 }
