@@ -76,6 +76,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { FactoryRoot } from "../Factory/ui/FactoryRoot";
 
 const htmlLocation = location;
 
@@ -376,6 +377,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.Factory: {
+      mainPage = <FactoryRoot />;
       break;
     }
     case Page.Achievements: {

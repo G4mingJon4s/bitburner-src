@@ -29,6 +29,7 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
+import { factory, loadFactory } from "./Factory/Helper";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -149,6 +150,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  FactorySave = "";
   GoSave = "";
 
   async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
@@ -169,6 +171,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.FactorySave = JSON.stringify(factory);
     this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
@@ -347,10 +350,29 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);
-  try {
-    loadAliases(saveObj.AliasesSave);
-  } catch (e) {
-    console.warn(`Could not load Aliases from save`);
+
+  if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
+    loadStaneksGift(saveObj.StaneksGiftSave);
+  } else {
+    console.warn(`Could not load Staneks Gift from save`);
+    loadStaneksGift("");
+  }
+
+  if (Object.hasOwn(saveObj, "FactorySave")) {
+    loadFactory(saveObj.FactorySave);
+  } else {
+    console.warn(`Could not load Factory from save`);
+  }
+  if (Object.hasOwn(saveObj, "AliasesSave")) {
+    try {
+      loadAliases(saveObj.AliasesSave);
+    } catch (e) {
+      console.warn(`Could not load Aliases from save`);
+      loadAliases("");
+    }
+  } else {
+    console.warn(`Save file did not contain an Aliases property`);
+    loadAliases("");
   }
   try {
     loadGlobalAliases(saveObj.GlobalAliasesSave);
@@ -441,17 +463,17 @@ function createNewUpdateText() {
 }
 
 function createBetaUpdateText() {
-  setTimeout(
-    () =>
-      dialogBoxCreate(
-        "You are playing on the beta environment! This branch of the game " +
-          "features the latest developments in the game. This version may be unstable.\n" +
-          "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
-          CONSTANTS.LatestUpdate,
-      ),
-    1000,
-  );
+  // setTimeout(
+  //   () =>
+  //     dialogBoxCreate(
+  //       "You are playing on the beta environment! This branch of the game " +
+  //         "features the latest developments in the game. This version may be unstable.\n" +
+  //         "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+  //         "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+  //         CONSTANTS.LatestUpdate,
+  //     ),
+  //   1000,
+  // );
 }
 
 constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;
