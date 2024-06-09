@@ -76,7 +76,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { FactoryRoot } from "../Factory/ui/FactoryRoot";
+import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
 
 const htmlLocation = location;
 
@@ -379,8 +379,8 @@ export function GameRoot(): React.ReactElement {
       mainPage = <GoRoot />;
       break;
     }
-    case Page.Factory: {
-      mainPage = <FactoryRoot />;
+    case Page.MyrianOS: {
+      mainPage = <MyrianRoot />;
       break;
     }
     case Page.Achievements: {

@@ -376,7 +376,7 @@ const stanek = {
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 
-const factory: any = new Proxy(
+const myrian: any = new Proxy(
   {},
   {
     get() {
@@ -491,7 +491,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   codingcontract,
   sleeve,
   stanek,
-  factory,
+  myrian,
   ui,
   grafting,
 

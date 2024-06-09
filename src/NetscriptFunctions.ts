@@ -113,7 +113,7 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
-import { NetscriptFactory } from "./NetscriptFunctions/Factory";
+import { NetscriptMyrian } from "./NetscriptFunctions/Myrian";
 
 export const enums: NSEnums = {
   CityName,
@@ -141,7 +141,7 @@ export const ns: InternalAPI<NSFull> = {
   sleeve: NetscriptSleeve(),
   corporation: NetscriptCorporation(),
   stanek: NetscriptStanek(),
-  factory: NetscriptFactory(),
+  myrian: NetscriptMyrian(),
   infiltration: NetscriptInfiltration(),
   ui: NetscriptUserInterface(),
   formulas: NetscriptFormulas(),
