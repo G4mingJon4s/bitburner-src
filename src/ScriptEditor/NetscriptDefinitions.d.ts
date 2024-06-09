@@ -5710,7 +5710,7 @@ interface Myrian {
    */
   DEBUG_GIVE_VULNS(n: number): void;
   /**
-   * Completely reset the myrian kernel, for debug purposes
+   * Completely reset the myrian os, for debug purposes
    * @remarks
    * RAM cost: 0 GB
    */
