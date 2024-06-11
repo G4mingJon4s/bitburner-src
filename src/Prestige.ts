@@ -29,6 +29,7 @@ import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
+import { resetMyrian } from "./Myrian/Myrian";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -320,6 +321,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
     Player.money = CONSTANTS.TravelCost;
   }
   staneksGift.prestigeSourceFile();
+
+  Player.myrianConnection = false;
+  resetMyrian();
 
   // Gain int exp
   if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {
