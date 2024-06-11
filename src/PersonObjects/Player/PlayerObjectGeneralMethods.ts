@@ -578,6 +578,10 @@ export function canAccessCotMG(this: PlayerObject): boolean {
   return canAccessBitNodeFeature(13);
 }
 
+export function canAccessMyrian(this: PlayerObject): boolean {
+  return this.bitNodeN === 19 || this.sourceFileLvl(19) > 0;
+}
+
 export function sourceFileLvl(this: PlayerObject, n: number): number {
   return this.sourceFiles.get(n) ?? 0;
 }
