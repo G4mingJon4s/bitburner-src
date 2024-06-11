@@ -29,7 +29,7 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
-import { myrian, loadMyrian } from "./Myrian/Helper";
+import { myrian, loadMyrian } from "./Myrian/Myrian";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
