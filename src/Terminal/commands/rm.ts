@@ -1,9 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { hasScriptExtension } from "../../Paths/ScriptFilePath";
-import { hasTextExtension } from "../../Paths/TextFilePath";
-import type { Directory } from "../../Paths/Directory";
+import { isDirectoryPath, type Directory } from "../../Paths/Directory";
 import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";
 
@@ -39,7 +37,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
   const files: FilePath[] = [];
 
   for (const target of targets) {
-    if (!hasTextExtension(target) && !hasScriptExtension(target)) {
+    if (isDirectoryPath(target) || !/\..+$/.test(target)) {
       const dirPath = Terminal.getDirectory(target);
       if (dirPath === null) return Terminal.error(errors["invalidDir"](target));
       if (!recursive) return Terminal.error(errors["dirsProvided"]());
@@ -56,6 +54,19 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
   for (const dir of directories) {
     for (const file of server.scripts.keys()) {
       if (file.startsWith(dir)) files.push(file);
+    }
+    for (const file of server.textFiles.keys()) {
+      if (file.startsWith(dir)) files.push(file);
+    }
+    for (const file of server.messages) {
+      if (file.endsWith(".msg")) continue;
+      if (file.startsWith(dir)) files.push(file as FilePath);
+    }
+    for (const file of server.contracts) {
+      if (file.fn.startsWith(dir)) files.push(file.fn);
+    }
+    for (const file of server.programs) {
+      if (file.startsWith(dir)) files.push(file as FilePath);
     }
   }
 
@@ -77,11 +88,18 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     }
   };
 
-  if (force || files.length === 1) {
+  if (
+    force ||
+    (files.length === 1 && !files[0].endsWith(".exe") && !files[0].endsWith(".lit") && !files[0].endsWith(".cct"))
+  ) {
     deleteSelectedTargets();
   } else {
+    const promptText = `Are you sure you want to delete ${
+      files.length === 1 ? files[0] : "these files"
+    }? This is irreversible.${files.length > 1 ? "\n\nDeleting:\n" + targetList : ""}`;
+
     PromptEvent.emit({
-      txt: "Are you sure you want to delete these files? This is irreversible.\n\nDeleting:\n" + targetList,
+      txt: promptText,
       resolve: (value: string | boolean) => {
         if (typeof value === "string") throw new Error("PromptEvent got a string, expected boolean");
         if (value) deleteSelectedTargets();
