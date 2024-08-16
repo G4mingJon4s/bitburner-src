@@ -60,7 +60,6 @@ import {
   formatRam,
   formatSecurity,
   formatThreads,
-  formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
@@ -97,7 +96,6 @@ import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
 import { escapeRegExp } from "lodash";
-import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
@@ -112,6 +110,7 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { NetscriptFormat } from "./NetscriptFunctions/Format";
 
 export const enums: NSEnums = {
   CityName,
@@ -132,6 +131,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
+  format: NetscriptFormat(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
   bladeburner: NetscriptBladeburner(),
@@ -1594,44 +1594,6 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  formatNumber:
-    (ctx) =>
-    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
-      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
-    },
-  formatRam:
-    (ctx) =>
-    (_n, _fractionalDigits = 2) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatRam(n, fractionalDigits);
-    },
-  formatPercent:
-    (ctx) =>
-    (_n, _fractionalDigits = 2, _multStart = 1e6) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const multStart = helpers.number(ctx, "multStart", _multStart);
-      return formatPercent(n, fractionalDigits, multStart);
-    },
-  // Todo: Remove function for real though in 2.4. Until then it just directly wraps numeral.
-  nFormat: (ctx) => (_n, _format) => {
-    deprecationWarning(
-      "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
-    );
-    const n = helpers.number(ctx, "n", _n);
-    const format = helpers.string(ctx, "format", _format);
-    return numeral(n).format(format);
-  },
-  tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
-    const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
-    const milliPrecision = !!_milliPrecision;
-    return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
-  },
   getTimeSinceLastAug: () => () => {
     deprecationWarning(
       "ns.getTimeSinceLastAug()",

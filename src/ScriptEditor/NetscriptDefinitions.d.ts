@@ -3682,6 +3682,74 @@ export interface CodingContract {
 }
 
 /**
+ * Format API
+ * @public
+ */
+export interface Format {
+  /**
+   * Format a number.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format ram or percentages, see {@link Format.ram | format.ram} and {@link Format.percent | format.percent}
+   *
+   * @param n - Number to format.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+   * @returns Formatted number.
+   */
+  number(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
+
+  /**
+   * Format a number as an amount of ram.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a ram string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
+   * settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or percentages, see {@link Format.number | format.number} and {@link Format.percent | format.percent}
+   *
+   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted ram amount.
+   */
+  ram(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number as a percentage.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a percentage string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or ram, see {@link Format.number | format.number} and {@link Format.ram | format.ram}
+   *
+   * @param n - Number to format as a percentage.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
+   * @returns Formatted percentage.
+   */
+  percent(n: number, fractionalDigits?: number, suffixStart?: number): string;
+
+  /**
+   * Format time to a readable string.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param milliseconds - Number of millisecond to format.
+   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
+   * @returns The formatted time.
+   */
+  time(milliseconds: number, milliPrecision?: boolean): string;
+}
+
+/**
  * Gang API
  * @remarks
  * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
@@ -5436,6 +5504,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
+
+  /**
+   * Namespace for formatting functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly format: Format;
 
   /**
    * Namespace for gang functions. Contains spoilers.
@@ -7289,85 +7363,6 @@ export interface NS {
    * @returns Formatted text.
    */
   vsprintf(format: string, args: any[]): string;
-
-  /**
-   * Format a number.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a numeric string with the specified format options.
-   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}
-   *
-   * @param n - Number to format.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
-   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
-   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
-   * @returns Formatted number.
-   */
-  formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
-
-  /**
-   * Format a number as an amount of ram.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a ram string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
-   * settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or percentages, see {@link NS.formatNumber | formatNumber} and {@link NS.formatPercent | formatPercent}
-   *
-   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @returns Formatted ram amount.
-   */
-  formatRam(n: number, fractionalDigits?: number): string;
-
-  /**
-   * Format a number as a percentage.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a percentage string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or ram, see {@link NS.formatNumber | formatNumber} and {@link NS.formatRam | formatRam}
-   *
-   * @param n - Number to format as a percentage.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
-   * @returns Formatted percentage.
-   */
-  formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
-
-  /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
-   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.4.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a string with the specified format options.
-   * See http://numeraljs.com/#format for documentation on format strings supported.
-   *
-   * This function is deprecated and will be removed in 2.3.
-   *
-   * @param n - Number to format.
-   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
-   * @returns Formatted number.
-   */
-  nFormat(n: number, format: string): string;
-
-  /**
-   * Format time to a readable string.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param milliseconds - Number of millisecond to format.
-   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
-   * @returns The formatted time.
-   */
-  tFormat(milliseconds: number, milliPrecision?: boolean): string;
 
   /**
    * Prompt the player with an input modal.
