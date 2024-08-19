@@ -45,6 +45,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { breakInfos300 } from "./utils/APIBreaks/3.0.0";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -739,6 +740,22 @@ Error: ${e}`);
   }
   if (ver < 39) {
     showAPIBreaks("2.6.1", ...breakInfos261);
+  }
+  if (ver < 41) {
+    const changes: [RegExp, string][] = [
+      [/formatNumber/g, "format.number"],
+      [/formatRam/g, "format.ram"],
+      [/formatPercent/g, "format.percent"],
+      [/tFormat/g, "format.time"],
+    ];
+
+    for (const server of GetAllServers()) {
+      for (const script of server.scripts.values()) {
+        script.content = convert(script.code, changes);
+      }
+    }
+
+    showAPIBreaks("3.0.0", ...breakInfos300);
   }
 }
 
