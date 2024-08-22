@@ -9498,6 +9498,137 @@ interface AutocompleteData {
 }
 
 /**
+ * Made available on CLI creation
+ * @public
+ */
+interface CLIData {
+  servers: string[];
+  scripts: string[];
+  txts: string[];
+  enums: NSEnums;
+}
+
+/**
+ * Used to create CLI programs
+ * @public
+ */
+interface CLIBuilder<
+  Options extends Record<string, string | number | boolean> = Record<string, never>,
+  Arguments extends (string | number | boolean)[] = [],
+> {
+  addCommand(callback: (builder: CLICommandBuilder) => CLICommand): CLIBuilder<Options, Arguments>;
+  addName(name: string): CLIBuilder<Options, Arguments>;
+  addDescription(description: string): CLIBuilder<Options, Arguments>;
+  addVersion(version: string): CLIBuilder<Options, Arguments>;
+  addOption<
+    Rep extends string,
+    Type extends "string" | "number" | "boolean",
+    Req extends boolean | undefined = undefined,
+    _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+  >(
+    rep: Rep,
+    type: Type,
+    description?: string,
+    required?: Req,
+  ): CLIBuilder<Options & { [K in Rep]: Req extends true ? _Type : _Type | undefined }, Arguments>;
+  addArgument<Type extends "string" | "number" | "boolean">(
+    name: string,
+    type: Type,
+    description?: string,
+  ): CLIBuilder<Options, [...Arguments, Type extends "string" ? string : Type extends "number" ? number : boolean]>;
+  addAction(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLIBuilder<Options, Arguments>;
+  build(): CLIProgram;
+}
+
+/**
+ * Used to create CLI commands
+ * @public
+ */
+interface CLICommandBuilder<
+  Options extends Record<string, string | number | boolean> = Record<string, never>,
+  Arguments extends (string | number | boolean)[] = [],
+> {
+  addName(name: string): CLICommandBuilder<Options, Arguments>;
+  addDescription(description: string): CLICommandBuilder<Options, Arguments>;
+  addOption<
+    Rep extends string,
+    Type extends "string" | "number" | "boolean",
+    Req extends boolean | undefined = undefined,
+    _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+  >(
+    rep: Rep,
+    type: Type,
+    description?: string,
+    required?: Req,
+  ): CLICommandBuilder<
+    Options & {
+      [K in Rep]: Req extends true ? _Type : _Type | undefined;
+    },
+    Arguments
+  >;
+  addArgument<Type extends "string" | "number" | "boolean">(
+    name: string,
+    type: Type,
+    description?: string,
+  ): CLICommandBuilder<
+    Options,
+    [...Arguments, Type extends "string" ? string : Type extends "number" ? number : boolean]
+  >;
+  addAction(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLICommandBuilder<Options, Arguments>;
+  build(): CLICommand;
+}
+
+/**
+ * Information about a script's CLI command
+ * @public
+ */
+interface CLICommand {
+  name: string;
+  description?: string;
+  options: CLIOptionData[];
+  arguments: CLIArgumentData[];
+  callback: (
+    ns: NS,
+    args: (string | number | boolean)[],
+    opts: Record<string, string | number | boolean>,
+  ) => Promise<void>;
+}
+
+/**
+ * Information about a script's CLI
+ * @public
+ */
+interface CLIProgram {
+  script: string;
+  name?: string;
+  description?: string;
+  version?: string;
+  commands: CLICommand[];
+  options: CLIOptionData[];
+  arguments: CLIArgumentData[];
+  callback?: (
+    ns: NS,
+    args: (string | number | boolean)[],
+    opts: Record<string, string | number | boolean>,
+  ) => Promise<void>;
+}
+
+/** @public */
+interface CLIOptionData {
+  rep: string;
+  type: "string" | "number" | "boolean";
+  description?: string;
+  required?: boolean;
+}
+
+/** @public */
+interface CLIArgumentData {
+  name: string;
+  type: "string" | "number" | "boolean";
+  description?: string;
+}
+
+/**
  * Player must have at least this much money.
  * @public
  */

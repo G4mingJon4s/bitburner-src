@@ -48,6 +48,13 @@
 |  [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
 |  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
 |  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
+|  [CLIArgumentData](./bitburner.cliargumentdata.md) |  |
+|  [CLIBuilder](./bitburner.clibuilder.md) | Used to create CLI programs |
+|  [CLICommand](./bitburner.clicommand.md) | Information about a script's CLI command |
+|  [CLICommandBuilder](./bitburner.clicommandbuilder.md) | Used to create CLI commands |
+|  [CLIData](./bitburner.clidata.md) | Made available on CLI creation |
+|  [CLIOptionData](./bitburner.clioptiondata.md) |  |
+|  [CLIProgram](./bitburner.cliprogram.md) | Information about a script's CLI |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
 |  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
 |  [CompanyReputationRequirement](./bitburner.companyreputationrequirement.md) | Player must have at least this much reputation with this company. |

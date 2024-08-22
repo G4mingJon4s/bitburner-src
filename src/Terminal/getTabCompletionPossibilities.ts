@@ -1,17 +1,19 @@
 import { Aliases, GlobalAliases } from "../Alias";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
 import { Player } from "@player";
-import { GetAllServers } from "../Server/AllServers";
+import { GetAllServers, GetServer } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
-import { AutocompleteData } from "@nsdefs";
+import { AutocompleteData, CLIData, CLIBuilder as NSCLICommandBuilder } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
+import { CLIBuilder } from "../CLI/CLIBuilder";
+import { cliCompletionPossibilities } from "../CLI/execution";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -273,40 +275,56 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //fail silently if the script fails to compile (e.g. syntax error)
       return;
     }
-    if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
+    if (!loadedModule || (!loadedModule.autocomplete && !loadedModule.cli)) return; // Doesn't have an autocomplete function or cli.
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     const flags = libarg(runArgs, {
       permissive: true,
       argv: command.slice(2),
     });
-    const flagFunc = Flags(flags._);
-    const autocompleteData: AutocompleteData = {
+
+    if (loadedModule.autocomplete) {
+      const flagFunc = Flags(flags._);
+      const autocompleteData: AutocompleteData = {
+        servers: GetAllServers()
+          .filter((server) => server.serversOnNetwork.length !== 0)
+          .map((server) => server.hostname),
+        scripts: [...currServ.scripts.keys()],
+        txts: [...currServ.textFiles.keys()],
+        enums: enums,
+        flags: (schema: unknown) => {
+          if (!Array.isArray(schema)) throw new Error("flags require an array of array");
+          pos2 = schema.map((f: unknown) => {
+            if (!Array.isArray(f)) throw new Error("flags require an array of array");
+            if (f[0].length === 1) return "-" + f[0];
+            return "--" + f[0];
+          });
+          try {
+            return flagFunc(schema);
+          } catch (err) {
+            return {};
+          }
+        },
+      };
+      let pos: string[] = [];
+      let pos2: string[] = [];
+      const options = loadedModule.autocomplete(autocompleteData, flags._);
+      if (!Array.isArray(options)) throw new Error("autocomplete did not return list of strings");
+      pos = pos.concat(options.map((x) => String(x)));
+      return pos.concat(pos2);
+    }
+    if (!loadedModule.cli) throw new Error("cli not found. This is a bug.");
+    const scriptServer = GetServer(script.server);
+    if (!scriptServer) throw new Error("Server not found. This is a bug.");
+    const data: CLIData = {
       servers: GetAllServers()
         .filter((server) => server.serversOnNetwork.length !== 0)
         .map((server) => server.hostname),
-      scripts: [...currServ.scripts.keys()],
-      txts: [...currServ.textFiles.keys()],
+      scripts: [...scriptServer.scripts.keys()],
+      txts: [...scriptServer.textFiles.keys()],
       enums: enums,
-      flags: (schema: unknown) => {
-        if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f: unknown) => {
-          if (!Array.isArray(f)) throw new Error("flags require an array of array");
-          if (f[0].length === 1) return "-" + f[0];
-          return "--" + f[0];
-        });
-        try {
-          return flagFunc(schema);
-        } catch (err) {
-          return {};
-        }
-      },
     };
-    let pos: string[] = [];
-    let pos2: string[] = [];
-    const options = loadedModule.autocomplete(autocompleteData, flags._);
-    if (!Array.isArray(options)) throw new Error("autocomplete did not return list of strings");
-    pos = pos.concat(options.map((x) => String(x)));
-    return pos.concat(pos2);
+    const cli = loadedModule.cli(new CLIBuilder(script.filename) as unknown as NSCLICommandBuilder, data);
+    return cliCompletionPossibilities(cli, command.slice(2));
   }
 }

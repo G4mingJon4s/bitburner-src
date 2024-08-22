@@ -10,7 +10,7 @@ import { generateNextPid } from "./Netscript/Pid";
 
 import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
-import { NetscriptFunctions } from "./NetscriptFunctions";
+import { enums, NetscriptFunctions } from "./NetscriptFunctions";
 import { compile, Node } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
@@ -31,11 +31,13 @@ import { parse } from "acorn";
 import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
-import { ScriptArg } from "@nsdefs";
+import { CLIData, ScriptArg } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
 import { handleUnknownError } from "./Netscript/ErrorMessages";
 import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
+import { CLIBuilder } from "./CLI/CLIBuilder";
+import { runCLIProgram } from "./CLI/execution";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -47,7 +49,7 @@ export function prestigeWorkerScripts(): void {
   NetscriptPorts.clear();
 }
 
-async function startNetscript2Script(workerScript: WorkerScript): Promise<void> {
+async function startNetscript2Script(workerScript: WorkerScript, manual: boolean): Promise<void> {
   const scripts = workerScript.getServer().scripts;
   const script = workerScript.getScript();
   if (!script) throw "workerScript had no associated script. This is a bug.";
@@ -57,12 +59,27 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   const loadedModule = await compile(script, scripts);
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
-  const mainFunc = loadedModule.main;
-  // TODO unplanned: Better error for "unexpected reserved word" when using await in non-async function?
-  if (typeof mainFunc !== "function")
-    throw `${script.filename} cannot be run because it does not have a main function.`;
-  // Explicitly called from a variable so that we don't bind "this".
-  await mainFunc(ns);
+
+  if (manual && loadedModule.cli) {
+    const data: CLIData = {
+      servers: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
+      scripts: [...workerScript.getServer().scripts.keys()],
+      txts: [...workerScript.getServer().textFiles.keys()],
+      enums: enums,
+    };
+    // @ts-ignore
+    const cliProgram = loadedModule.cli(new CLIBuilder(workerScript), data);
+    await runCLIProgram(cliProgram, workerScript.args, workerScript);
+  } else {
+    const mainFunc = loadedModule.main;
+    // TODO unplanned: Better error for "unexpected reserved word" when using await in non-async function?
+    if (typeof mainFunc !== "function")
+      throw `${script.filename} cannot be run because it does not have a main function.`;
+    // Explicitly called from a variable so that we don't bind "this".
+    await mainFunc(ns);
+  }
 }
 
 async function startNetscript1Script(workerScript: WorkerScript): Promise<void> {
@@ -326,7 +343,11 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   workerScripts.set(pid, workerScript);
 
   // Start the script's execution using the correct function for file type
-  (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
+  // A script is ran manually, if there is no parent
+  (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(
+    workerScript,
+    parent === undefined,
+  )
     // Once the code finishes (either resolved or rejected, doesnt matter), set its
     // running status to false
     .then(function () {
