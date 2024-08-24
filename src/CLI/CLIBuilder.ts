@@ -36,30 +36,62 @@ export class CLIBuilder<
     Rep extends string,
     Type extends "string" | "number" | "boolean",
     _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+		Default = _Type | ((data: CLIData) => _Type) | undefined,
   >(
     rep: Rep,
     type: Type,
     synonyms: string[] = [],
-    required?: boolean,
-    choices: _Type[] | undefined = [],
-    defaultValue?: _Type,
+    choices: _Type[] | ((data: CLIData) => _Type[]) | undefined = [],
+    defaultValue?: Default,
     description?: string | ((data: CLIData) => string),
   ): CLIBuilder<
-    Options & { [K in Rep[0]]: Type extends "string" ? string : Type extends "number" ? number : boolean },
+    Options & { [K in Rep[0]]: Default extends undefined ? _Type | undefined : _Type },
     Arguments
   > {
     this.cli.options = this.cli.options ?? [];
+		const choicesArray = (Array.isArray(choices) ? [...choices] : choices(this.data)) as (string | number | boolean)[];
+		const defaultChoice = defaultValue === undefined ? undefined : (defaultValue instanceof Function ? defaultValue(this.data) : defaultValue) as string | number | boolean | undefined;
+
+		if (defaultChoice !== undefined && choicesArray.length !== 0 && !choicesArray.includes(defaultChoice)) throw new Error(`CLIBuilder: Default value ${defaultChoice} is not a valid choice for option ${rep}`);
+
     this.cli.options.push({
       rep: rep,
       type: type,
-      choices: [...choices] as (string | number | boolean)[],
-      default: defaultValue as string | number | boolean | undefined,
+      choices: choicesArray,
+      default: defaultChoice,
       description: typeof description === "string" ? description : description?.(this.data),
-      required: required ?? false,
+      required: false,
       synonyms,
     });
     return this;
   }
+
+	requiredOption<
+		Rep extends string,
+		Type extends "string" | "number" | "boolean",
+		_Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+	>(
+		rep: Rep,
+		type: Type,
+		synonyms: string[] = [],
+		choices: _Type[] | ((data: CLIData) => _Type[]) | undefined = [],
+		description?: string | ((data: CLIData) => string),
+	): CLIBuilder<
+		Options & { [K in Rep]: _Type },
+		Arguments
+	> {
+		this.cli.options = this.cli.options ?? [];
+		this.cli.options.push({
+			rep: rep,
+			type: type,
+			choices: (Array.isArray(choices) ? [...choices] : choices(this.data)) as (string | number | boolean)[],
+			default: undefined,
+			description: typeof description === "string" ? description : description?.(this.data),
+			required: true,
+			synonyms,
+		});
+		return this;
+	}
 
   argument<
     Type extends "string" | "number" | "boolean",
@@ -67,15 +99,15 @@ export class CLIBuilder<
   >(
     name: string,
     type: Type,
-    choices: _Type[] | undefined = [],
-    description?: string,
+    choices: _Type[] | ((data: CLIData) => _Type[]) | undefined = [],
+    description?: string | ((data: CLIData) => string),
   ): CLIBuilder<Options, [...Arguments, Type extends "string" ? string : Type extends "number" ? number : boolean]> {
     this.cli.arguments = this.cli.arguments ?? [];
     this.cli.arguments.push({
       name: name,
       type: type,
-      choices: [...choices] as (string | number | boolean)[],
-      description: description,
+      choices: (Array.isArray(choices) ? [...choices] : choices(this.data)) as (string | number | boolean)[],
+      description: typeof description === "string" ? description : description?.(this.data),
     });
     return this;
   }

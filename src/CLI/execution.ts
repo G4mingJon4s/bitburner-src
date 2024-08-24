@@ -37,6 +37,7 @@ export async function runCLIProgram(program: CLI, rawArgs: ScriptArg[], workerSc
     }, {} as Record<string, string | number | boolean>);
 
     // Casting to NS, NS is NSFull
+		// The type of NS in the callback can't be NSFull, the type is defined to the player
     await callback(workerScript.env.vars as unknown as NS, parsedArgs, optionRecord);
   } catch (e) {
     if (e instanceof CLIError) return Terminal.error(e.message);
@@ -48,30 +49,32 @@ export function printCLIHelp(program: CLI): void {
   const general =
     (!program.version ? "" : `Version: v${program.version}\n\n`) + (program.description ?? "No description provided.");
 
+	const commands = "Commands:\n" + program.commands.map(command => "  " + getCLISubCommandDisplay(command)).join("\n");
+
   const args =
     "Arguments:\n" +
     program.arguments
-      .map((arg) => `\t${arg.name} (${arg.type})${arg.description ? `: ${arg.description}` : ""}`)
+      .map(arg => getCLIArgumentDisplay(arg).map(s => `  ${s}`).join("\n"))
       .join("\n");
 
   const options =
     "Options:\n" +
     program.options
-      .map(
-        (option) =>
-          `\t${option.required ? "" : "["}${"-".repeat(option.rep.length > 1 ? 2 : 1)}${option.rep} <${option.type}>${
-            option.required ? "" : "]"
-          }${option.description ? `: ${option.description}` : ""}`,
-      )
+      .map(option => getCLIOptionDisplay(option).map(s => `  ${s}`).join("\n"))
       .join("\n");
 
-  const message = general + "\n\n" + (program.options.length ? options + "\n\n" : "") + args;
+  const message = [
+		general,
+		program.commands.length ? commands : "",
+		program.arguments.length ? args : "",
+		program.options.length ? options : "",
+	].filter(s => s !== "").join("\n\n");
 
   Terminal.print(`Help for ${getCLIDisplayName(program)}:\n${message}`);
 }
 
 export function printCLIVersion(program: CLI): void {
-  Terminal.print(`${getCLIDisplayName(program)} v${program.version || "N/A"}`);
+  Terminal.print(program.version ? `${getCLIDisplayName(program)} v${program.version}` : `No version specified for ${getCLIDisplayName(program)}`);
 }
 
 export function getCLIParams(
@@ -119,7 +122,7 @@ export function getCLIParams(
       throw new CLIError(`Option '${current}' requires type '${option.type}', got '${typeof args[i + 1]}'`);
 
     if (option.choices && !option.choices.includes(args[i + 1]))
-      throw new CLIError(`'${args[i + 1]}' is not a valid choice for option '${option.rep}'`);
+      throw new CLIError(`'${args[i + 1]}' is not a valid choice for option '${convertOptionRep(option.rep)}' for '${getCLIDisplayName(cli)}'`);
 
     options.push({ option, value: args[i + 1] });
     i++;
@@ -130,7 +133,7 @@ export function getCLIParams(
 
   for (const option of cli.options) {
     if (options.findIndex((o) => o.option === option) !== -1) continue;
-    if (option.required && !option.default) throw new CLIError(`Option '${option.rep}' is required but not provided`);
+    if (option.required && !option.default) throw new CLIError(`Option '${convertOptionRep(option.rep)}' is required but not provided for '${getCLIDisplayName(cli)}'`);
     if (option.default) options.push({ option, value: option.default });
   }
 
@@ -141,6 +144,13 @@ export function getCLIParams(
     const missingArg = cli.arguments[parsedArgs.length];
     throw new CLIError(`Missing argument '${missingArg.name}' for '${getCLIDisplayName(cli)}'`);
   }
+
+	for (let i = 0; i < cli.arguments.length; i++) {
+		const arg = cli.arguments[i];
+		const parsedArg = parsedArgs[i];
+		if (typeof parsedArg !== arg.type) throw new CLIError(`Argument '${arg.name}' is not of type '${arg.type}', got '${typeof parsedArg}'`);
+		if (arg.choices && !arg.choices.includes(parsedArg)) throw new CLIError(`'${parsedArg}' is not a valid choice for argument '${arg.name}' of '${getCLIDisplayName(cli)}'`);
+	}
 
   return { cli, arguments: parsedArgs, options, specialArgs };
 }
@@ -154,6 +164,31 @@ export function getCLIDisplayName(cli: CLI): string {
   return name;
 }
 
+export function convertOptionRep(rep: string): string {
+	return "-".repeat(rep.length > 1 ? 2 : 1) + rep;
+}
+
+export function getCLISubCommandDisplay(command: CLI): string {
+	return `${command.name}${command.description ? `: ${command.description}` : ""}`;
+}
+
+export function getCLIArgumentDisplay(arg: CLIArgumentData): string[] {
+	const general = `<${arg.name}> (${arg.type})`;
+	const choices = arg.choices.length ? `Choices: [${arg.choices.map(c => typeof c === "string" ? `'${c}'` : c).join(", ")}]` : "";
+
+	if (!arg.description && !choices) return [general];
+	return [general, ...[arg.description ?? "", choices].filter(s => s !== "").map(s => `: ${s}`)];
+}
+
+export function getCLIOptionDisplay(option: CLIOptionData): string[] {
+	const general = `${[option.rep, ...option.synonyms].map(s => convertOptionRep(s)).join(", ")} <${option.type}>${option.required ? " (required)" : ""}`;
+	const choices = option.choices.length ? `Choices: [${option.choices.map(c => typeof c === "string" ? `'${c}'` : c).join(", ")}]` : "";
+	const defaultValue = option.default ? `Default: ${option.default}` : "";
+
+	if (!option.description && !choices) return [general];
+	return [general, ...[option.description ?? "", choices, defaultValue].filter(s => s !== "").map(s => `: ${s}`)];
+}
+
 export function getOption(options: CLIOptionData[], arg: string | number | boolean): CLIOptionData | undefined {
   if (typeof arg !== "string" || !arg.startsWith("-")) return undefined;
   const rep = arg.replace(/^--?/, "");
@@ -165,7 +200,7 @@ export function cliCompletionPossibilities(program: CLI, args: ScriptArg[]): str
     const { cli, options, arguments: parsedArgs } = getCLIParams(args, program);
 
     const availableOptions = cli.options.filter((option) => !options.some((o) => o.option === option));
-    const optionSuggestions = availableOptions.map((option) => "-".repeat(option.rep.length > 1 ? 2 : 1) + option.rep);
+    const optionSuggestions = availableOptions.map((option) => convertOptionRep(option.rep));
     const nextArg: CLIArgumentData | undefined =
       parsedArgs.length >= cli.arguments.length ? undefined : cli.arguments[parsedArgs.length];
 

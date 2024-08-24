@@ -9523,29 +9523,41 @@ interface CLIBuilder<
   option<
     Rep extends string,
     Type extends "string" | "number" | "boolean",
-    Req extends boolean | undefined = undefined,
     _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
-    Default extends _Type | undefined = undefined,
+    Default = _Type | ((data: CLIData) => _Type) | undefined,
   >(
     rep: Rep,
     type: Type,
     synonyms?: string[],
-    required?: Req,
-    choices?: _Type[] | undefined,
+    choices?: _Type[] | ((data: CLIData) => _Type[]) | undefined,
     defaultValue?: Default,
     description?: string | ((data: CLIData) => string),
   ): CLIBuilder<
-    Options & { [K in Rep]: Req extends true ? _Type : Default extends _Type ? _Type : _Type | undefined },
+    Options & { [K in Rep]: Default extends undefined ? _Type | undefined : _Type },
     Arguments
   >;
+	requiredOption<
+		Rep extends string,
+		Type extends "string" | "number" | "boolean",
+		_Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+	>(
+		rep: Rep,
+		type: Type,
+		synonyms?: string[],
+		choices?: _Type[] | ((data: CLIData) => _Type[]) | undefined,
+		description?: string | ((data: CLIData) => string),
+	): CLIBuilder<
+		Options & { [K in Rep]: _Type },
+		Arguments
+	>;
   argument<
     Type extends "string" | "number" | "boolean",
     _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
   >(
     name: string,
     type: Type,
-    choices?: _Type[] | undefined,
-    description?: string,
+    choices?: _Type[] | ((data: CLIData) => _Type[]) | undefined,
+    description?: string | ((data: CLIData) => string),
   ): CLIBuilder<Options, [...Arguments, _Type]>;
   action(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLIBuilder<Options, Arguments>;
   build(): CLI;
