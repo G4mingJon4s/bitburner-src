@@ -7,9 +7,9 @@
 **Signature:**
 
 ```typescript
-build(): CLIProgram;
+build(): CLI;
 ```
 **Returns:**
 
-[CLIProgram](./bitburner.cliprogram.md)
+[CLI](./bitburner.cli.md)
 

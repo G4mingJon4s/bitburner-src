@@ -15,8 +15,11 @@ interface CLIOptionData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [choices](./bitburner.clioptiondata.choices.md) |  | (string \| number \| boolean)\[\] |  |
+|  [default?](./bitburner.clioptiondata.default.md) |  | string \| number \| boolean | _(Optional)_ |
 |  [description?](./bitburner.clioptiondata.description.md) |  | string | _(Optional)_ |
 |  [rep](./bitburner.clioptiondata.rep.md) |  | string |  |
-|  [required?](./bitburner.clioptiondata.required.md) |  | boolean | _(Optional)_ |
+|  [required](./bitburner.clioptiondata.required.md) |  | boolean |  |
+|  [synonyms](./bitburner.clioptiondata.synonyms.md) |  | string\[\] |  |
 |  [type](./bitburner.clioptiondata.type.md) |  | "string" \| "number" \| "boolean" |  |
 

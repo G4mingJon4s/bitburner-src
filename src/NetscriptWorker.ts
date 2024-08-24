@@ -69,8 +69,7 @@ async function startNetscript2Script(workerScript: WorkerScript, manual: boolean
       txts: [...workerScript.getServer().textFiles.keys()],
       enums: enums,
     };
-    // @ts-ignore
-    const cliProgram = loadedModule.cli(new CLIBuilder(workerScript), data);
+    const cliProgram = loadedModule.cli(new CLIBuilder(data));
     await runCLIProgram(cliProgram, workerScript.args, workerScript);
   } else {
     const mainFunc = loadedModule.main;

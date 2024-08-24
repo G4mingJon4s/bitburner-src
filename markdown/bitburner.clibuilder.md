@@ -4,7 +4,7 @@
 
 ## CLIBuilder interface
 
-Used to create CLI programs
+Used to create a CLI
 
 **Signature:**
 
@@ -19,12 +19,12 @@ interface CLIBuilder<
 
 |  Method | Description |
 |  --- | --- |
-|  [addAction(callback)](./bitburner.clibuilder.addaction.md) |  |
-|  [addArgument(name, type, description)](./bitburner.clibuilder.addargument.md) |  |
-|  [addCommand(callback)](./bitburner.clibuilder.addcommand.md) |  |
-|  [addDescription(description)](./bitburner.clibuilder.adddescription.md) |  |
-|  [addName(name)](./bitburner.clibuilder.addname.md) |  |
-|  [addOption(rep, type, description, required)](./bitburner.clibuilder.addoption.md) |  |
-|  [addVersion(version)](./bitburner.clibuilder.addversion.md) |  |
+|  [action(callback)](./bitburner.clibuilder.action.md) |  |
+|  [argument(name, type, choices, description)](./bitburner.clibuilder.argument.md) |  |
 |  [build()](./bitburner.clibuilder.build.md) |  |
+|  [command(callback)](./bitburner.clibuilder.command.md) |  |
+|  [description(description)](./bitburner.clibuilder.description.md) |  |
+|  [name(name)](./bitburner.clibuilder.name.md) |  |
+|  [option(rep, type, synonyms, required, choices, defaultValue, description)](./bitburner.clibuilder.option.md) |  |
+|  [version(version)](./bitburner.clibuilder.version.md) |  |
 

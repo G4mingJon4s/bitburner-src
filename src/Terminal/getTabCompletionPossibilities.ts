@@ -6,7 +6,7 @@ import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
-import { AutocompleteData, CLIData, CLIBuilder as NSCLICommandBuilder } from "@nsdefs";
+import { AutocompleteData, CLIData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
@@ -324,7 +324,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       txts: [...scriptServer.textFiles.keys()],
       enums: enums,
     };
-    const cli = loadedModule.cli(new CLIBuilder(script.filename) as unknown as NSCLICommandBuilder, data);
+    const cli = loadedModule.cli(new CLIBuilder(data));
     return cliCompletionPossibilities(cli, command.slice(2));
   }
 }

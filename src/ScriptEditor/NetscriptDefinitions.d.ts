@@ -9509,101 +9509,58 @@ interface CLIData {
 }
 
 /**
- * Used to create CLI programs
+ * Used to create a CLI
  * @public
  */
 interface CLIBuilder<
   Options extends Record<string, string | number | boolean> = Record<string, never>,
   Arguments extends (string | number | boolean)[] = [],
 > {
-  addCommand(callback: (builder: CLICommandBuilder) => CLICommand): CLIBuilder<Options, Arguments>;
-  addName(name: string): CLIBuilder<Options, Arguments>;
-  addDescription(description: string): CLIBuilder<Options, Arguments>;
-  addVersion(version: string): CLIBuilder<Options, Arguments>;
-  addOption<
+  command(callback: (builder: CLIBuilder) => CLI): CLIBuilder<Options, Arguments>;
+  name(name: string): CLIBuilder<Options, Arguments>;
+  description(description: string): CLIBuilder<Options, Arguments>;
+  version(version: string): CLIBuilder<Options, Arguments>;
+  option<
     Rep extends string,
     Type extends "string" | "number" | "boolean",
     Req extends boolean | undefined = undefined,
     _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+    Default extends _Type | undefined = undefined,
   >(
     rep: Rep,
     type: Type,
-    description?: string,
+    synonyms?: string[],
     required?: Req,
-  ): CLIBuilder<Options & { [K in Rep]: Req extends true ? _Type : _Type | undefined }, Arguments>;
-  addArgument<Type extends "string" | "number" | "boolean">(
-    name: string,
-    type: Type,
-    description?: string,
-  ): CLIBuilder<Options, [...Arguments, Type extends "string" ? string : Type extends "number" ? number : boolean]>;
-  addAction(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLIBuilder<Options, Arguments>;
-  build(): CLIProgram;
-}
-
-/**
- * Used to create CLI commands
- * @public
- */
-interface CLICommandBuilder<
-  Options extends Record<string, string | number | boolean> = Record<string, never>,
-  Arguments extends (string | number | boolean)[] = [],
-> {
-  addName(name: string): CLICommandBuilder<Options, Arguments>;
-  addDescription(description: string): CLICommandBuilder<Options, Arguments>;
-  addOption<
-    Rep extends string,
-    Type extends "string" | "number" | "boolean",
-    Req extends boolean | undefined = undefined,
-    _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
-  >(
-    rep: Rep,
-    type: Type,
-    description?: string,
-    required?: Req,
-  ): CLICommandBuilder<
-    Options & {
-      [K in Rep]: Req extends true ? _Type : _Type | undefined;
-    },
+    choices?: _Type[] | undefined,
+    defaultValue?: Default,
+    description?: string | ((data: CLIData) => string),
+  ): CLIBuilder<
+    Options & { [K in Rep]: Req extends true ? _Type : Default extends _Type ? _Type : _Type | undefined },
     Arguments
   >;
-  addArgument<Type extends "string" | "number" | "boolean">(
+  argument<
+    Type extends "string" | "number" | "boolean",
+    _Type = Type extends "string" ? string : Type extends "number" ? number : boolean,
+  >(
     name: string,
     type: Type,
+    choices?: _Type[] | undefined,
     description?: string,
-  ): CLICommandBuilder<
-    Options,
-    [...Arguments, Type extends "string" ? string : Type extends "number" ? number : boolean]
-  >;
-  addAction(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLICommandBuilder<Options, Arguments>;
-  build(): CLICommand;
-}
-
-/**
- * Information about a script's CLI command
- * @public
- */
-interface CLICommand {
-  name: string;
-  description?: string;
-  options: CLIOptionData[];
-  arguments: CLIArgumentData[];
-  callback: (
-    ns: NS,
-    args: (string | number | boolean)[],
-    opts: Record<string, string | number | boolean>,
-  ) => Promise<void>;
+  ): CLIBuilder<Options, [...Arguments, _Type]>;
+  action(callback: (ns: NS, args: Arguments, opts: Options) => Promise<void>): CLIBuilder<Options, Arguments>;
+  build(): CLI;
 }
 
 /**
  * Information about a script's CLI
  * @public
  */
-interface CLIProgram {
-  script: string;
-  name?: string;
+interface CLI {
+  name: string;
   description?: string;
   version?: string;
-  commands: CLICommand[];
+  commands: CLI[];
+  parent: CLI | null;
   options: CLIOptionData[];
   arguments: CLIArgumentData[];
   callback?: (
@@ -9616,9 +9573,12 @@ interface CLIProgram {
 /** @public */
 interface CLIOptionData {
   rep: string;
+  synonyms: string[];
   type: "string" | "number" | "boolean";
   description?: string;
-  required?: boolean;
+  required: boolean;
+  default?: string | number | boolean;
+  choices: (string | number | boolean)[];
 }
 
 /** @public */
@@ -9626,6 +9586,7 @@ interface CLIArgumentData {
   name: string;
   type: "string" | "number" | "boolean";
   description?: string;
+  choices: (string | number | boolean)[];
 }
 
 /**

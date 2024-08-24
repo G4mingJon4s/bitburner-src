@@ -15,6 +15,7 @@ interface CLIArgumentData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [choices](./bitburner.cliargumentdata.choices.md) |  | (string \| number \| boolean)\[\] |  |
 |  [description?](./bitburner.cliargumentdata.description.md) |  | string | _(Optional)_ |
 |  [name](./bitburner.cliargumentdata.name.md) |  | string |  |
 |  [type](./bitburner.cliargumentdata.type.md) |  | "string" \| "number" \| "boolean" |  |
