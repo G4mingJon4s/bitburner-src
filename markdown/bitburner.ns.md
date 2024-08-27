@@ -36,6 +36,7 @@ export async function main(ns) {
 |  [codingcontract](./bitburner.ns.codingcontract.md) | <code>readonly</code> | [CodingContract](./bitburner.codingcontract.md) | Namespace for codingcontract functions. |
 |  [corporation](./bitburner.ns.corporation.md) | <code>readonly</code> | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. Contains spoilers. |
 |  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
+|  [filename](./bitburner.ns.filename.md) | <code>readonly</code> | string | The current script's filename |
 |  [formulas](./bitburner.ns.formulas.md) | <code>readonly</code> | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
 |  [gang](./bitburner.ns.gang.md) | <code>readonly</code> | [Gang](./bitburner.gang.md) | Namespace for gang functions. Contains spoilers. |
 |  [go](./bitburner.ns.go.md) | <code>readonly</code> | [Go](./bitburner.go.md) | Namespace for Go functions. |
@@ -43,11 +44,13 @@ export async function main(ns) {
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. Some of this API contains spoilers. |
 |  [heart](./bitburner.ns.heart.md) | <code>readonly</code> | { break(): number; } |  |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. |
+|  [parent](./bitburner.ns.parent.md) | <code>readonly</code> | number | The pid of the script that launched this script. If this script was launched by another script, this will be the pid of the script that launched it. If this script was launched directly through the terminal, the value will be 0. |
 |  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
 |  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. Contains spoilers. |
 |  [sleeve](./bitburner.ns.sleeve.md) | <code>readonly</code> | [Sleeve](./bitburner.sleeve.md) | Namespace for sleeve functions. Contains spoilers. |
 |  [stanek](./bitburner.ns.stanek.md) | <code>readonly</code> | [Stanek](./bitburner.stanek.md) | Namespace for stanek functions. Contains spoilers. |
 |  [stock](./bitburner.ns.stock.md) | <code>readonly</code> | [TIX](./bitburner.tix.md) | Namespace for stock functions. |
+|  [threads](./bitburner.ns.threads.md) | <code>readonly</code> | number | The current script's threads |
 |  [ui](./bitburner.ns.ui.md) | <code>readonly</code> | [UserInterface](./bitburner.userinterface.md) | Namespace for user interface functions. |
 
 ## Methods

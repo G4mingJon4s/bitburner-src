@@ -312,6 +312,17 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
           return {};
         }
       },
+      hostname: currServ.hostname,
+      filename: script.filename,
+      processes: Array.from(currServ.runningScriptMap.values(), (m) =>
+        Array.from(m.values(), (r) => ({
+          pid: r.pid,
+          filename: r.filename,
+          threads: r.threads,
+          args: r.args.slice(),
+          temporary: r.temporary,
+        })),
+      ).flat(),
     };
     let pos: string[] = [];
     let pos2: string[] = [];

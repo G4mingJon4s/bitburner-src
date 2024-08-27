@@ -5738,6 +5738,19 @@ export interface NS {
   /** The current script's PID */
   readonly pid: number;
 
+  /** The current script's threads */
+  readonly threads: number;
+
+  /** The current script's filename */
+  readonly filename: string;
+
+  /**
+   * The pid of the script that launched this script.
+   * If this script was launched by another script, this will be the pid of the script that launched it.
+   * If this script was launched directly through the terminal, the value will be 0.
+   */
+  readonly parent: number;
+
   /**
    * Steal a server's money.
    * @remarks
@@ -9496,6 +9509,10 @@ interface AutocompleteData {
   txts: string[];
   enums: NSEnums;
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  hostname: string;
+  filename: string;
+  /** The processes running on the host */
+  processes: ProcessInfo[];
 }
 
 /**

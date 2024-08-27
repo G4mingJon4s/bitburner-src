@@ -128,7 +128,7 @@ export const enums: NSEnums = {
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "threads" | "filename" | "parent">>;
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
@@ -1841,8 +1841,15 @@ setRemovedFunctions(ns, {
   getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
 });
 
-export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
+export function NetscriptFunctions(ws: WorkerScript, parent?: WorkerScript): NSFull {
+  return NSProxy(ws, ns, [], {
+    args: ws.args.slice(),
+    pid: ws.pid,
+    enums,
+    threads: ws.scriptRef.threads,
+    filename: ws.scriptRef.filename,
+    parent: parent?.pid ?? 0,
+  });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));

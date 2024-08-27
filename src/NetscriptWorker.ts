@@ -320,7 +320,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
 
   // Create the WorkerScript. NOTE: WorkerScript ctor will set the underlying
   // RunningScript's PID as well
-  const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions);
+  const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions, parent);
 
   // Add the WorkerScript to the global pool
   workerScripts.set(pid, workerScript);

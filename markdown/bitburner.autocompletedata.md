@@ -17,6 +17,9 @@ interface AutocompleteData
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [enums](./bitburner.autocompletedata.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
+|  [filename](./bitburner.autocompletedata.filename.md) |  | string |  |
+|  [hostname](./bitburner.autocompletedata.hostname.md) |  | string |  |
+|  [processes](./bitburner.autocompletedata.processes.md) |  | [ProcessInfo](./bitburner.processinfo.md)<!-- -->\[\] | The processes running on the host |
 |  [scripts](./bitburner.autocompletedata.scripts.md) |  | string\[\] |  |
 |  [servers](./bitburner.autocompletedata.servers.md) |  | string\[\] |  |
 |  [txts](./bitburner.autocompletedata.txts.md) |  | string\[\] |  |
