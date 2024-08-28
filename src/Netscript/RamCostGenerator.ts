@@ -519,6 +519,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   run: RamCostConstants.Run,
   exec: RamCostConstants.Exec,
   spawn: RamCostConstants.Spawn,
+	self: 0,
   kill: RamCostConstants.Kill,
   killall: RamCostConstants.Kill,
   exit: 0,
