@@ -4,6 +4,8 @@
 
 ## AutocompleteData.hostname property
 
+The hostname of the server the script would be running on
+
 **Signature:**
 
 ```typescript

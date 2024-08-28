@@ -78,12 +78,7 @@ export class WorkerScript {
   /**Map of functions called when the script ends. */
   atExit: Map<string, () => void> = new Map();
 
-  constructor(
-    runningScriptObj: RunningScript,
-    pid: number,
-    nsFuncsGenerator?: (ws: WorkerScript, parent?: WorkerScript) => NSFull,
-    parent?: WorkerScript,
-  ) {
+  constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
     this.hostname = runningScriptObj.server;
 
@@ -108,7 +103,7 @@ export class WorkerScript {
     this.args = runningScriptObj.args.slice();
     this.env = new Environment();
     if (typeof nsFuncsGenerator === "function") {
-      this.env.vars = nsFuncsGenerator(this, parent);
+      this.env.vars = nsFuncsGenerator(this);
     }
   }
 

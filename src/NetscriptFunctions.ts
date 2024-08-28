@@ -128,7 +128,7 @@ export const enums: NSEnums = {
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
 
-export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums" | "threads" | "filename" | "parent">>;
+export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums">>;
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
@@ -776,6 +776,11 @@ export const ns: InternalAPI<NSFull> = {
         throw new ScriptDeath(ctx.workerScript);
       }
     },
+  self: (ctx) => () => {
+    const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);
+    if (runningScript == null) throw helpers.errorMessage(ctx, "Cannot find running script. This is a bug.");
+    return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+  },
   kill:
     (ctx) =>
     (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
@@ -1841,14 +1846,11 @@ setRemovedFunctions(ns, {
   getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
 });
 
-export function NetscriptFunctions(ws: WorkerScript, parent?: WorkerScript): NSFull {
+export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], {
     args: ws.args.slice(),
     pid: ws.pid,
     enums,
-    threads: ws.scriptRef.threads,
-    filename: ws.scriptRef.filename,
-    parent: parent?.pid ?? 0,
   });
 }
 

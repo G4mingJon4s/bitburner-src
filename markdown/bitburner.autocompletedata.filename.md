@@ -4,6 +4,8 @@
 
 ## AutocompleteData.filename property
 
+The filename of the script about to be run
+
 **Signature:**
 
 ```typescript

@@ -246,6 +246,13 @@ interface RunningScript {
   /** Process ID. Must be an integer */
   pid: number;
   /**
+   * Process ID of the parent process.
+   *
+   * If this script was started by another script, this will be the PID of that script.
+   * If this script was started directly through the terminal, the value will be 0.
+   */
+  parent: number;
+  /**
    * How much RAM this script uses for ONE thread.
    * Also known as "static RAM usage," this value does not change once the
    * script is started, unless you call ns.ramOverride().
@@ -5738,19 +5745,6 @@ export interface NS {
   /** The current script's PID */
   readonly pid: number;
 
-  /** The current script's threads */
-  readonly threads: number;
-
-  /** The current script's filename */
-  readonly filename: string;
-
-  /**
-   * The pid of the script that launched this script.
-   * If this script was launched by another script, this will be the pid of the script that launched it.
-   * If this script was launched directly through the terminal, the value will be 0.
-   */
-  readonly parent: number;
-
   /**
    * Steal a server's money.
    * @remarks
@@ -6594,6 +6588,14 @@ export interface NS {
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptArg[]): void;
+
+  /**
+   * Returns the currently running script.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  self(): RunningScript;
+
   /**
    * Terminate the script with the provided PID.
    * @remarks
@@ -9504,12 +9506,19 @@ interface GameInfo {
  * @public
  */
 interface AutocompleteData {
+  /** All server hostnames */
   servers: string[];
+  /** All scripts on the current server */
   scripts: string[];
+  /** All text files on the current server */
   txts: string[];
+  /** Netscript Enums */
   enums: NSEnums;
+  /** Parses the flags schema on the already inputted flags */
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  /** The hostname of the server the script would be running on */
   hostname: string;
+  /** The filename of the script about to be run */
   filename: string;
   /** The processes running on the host */
   processes: ProcessInfo[];

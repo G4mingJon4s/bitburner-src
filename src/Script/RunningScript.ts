@@ -58,6 +58,9 @@ export class RunningScript {
   // Process ID. Must be an integer and equals the PID of corresponding WorkerScript
   pid = -1;
 
+  // Process ID of the parent process. Defaults to 0.
+  parent = 0;
+
   // How much RAM this script uses for ONE thread
   ramUsage: number = RamCostConstants.Base;
 

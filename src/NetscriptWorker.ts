@@ -320,7 +320,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
 
   // Create the WorkerScript. NOTE: WorkerScript ctor will set the underlying
   // RunningScript's PID as well
-  const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions, parent);
+  const workerScript = new WorkerScript(runningScriptObj, pid, NetscriptFunctions);
 
   // Add the WorkerScript to the global pool
   workerScripts.set(pid, workerScript);
@@ -484,6 +484,7 @@ export function runScriptFromScript(
     () => `'${scriptname}' on '${host.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
   );
   const runningScriptObj = new RunningScript(script, singleRamUsage, args);
+  runningScriptObj.parent = workerScript.pid;
   runningScriptObj.threads = runOpts.threads;
   runningScriptObj.temporary = runOpts.temporary;
 

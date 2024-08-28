@@ -656,7 +656,7 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
     if (scripts === null) return null;
-    return scripts.values().next().value;
+    return scripts.values().next().value ?? null;
   }
 }
 
@@ -696,6 +696,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     onlineMoneyMade: runningScript.onlineMoneyMade,
     onlineRunningTime: runningScript.onlineRunningTime,
     pid: runningScript.pid,
+    parent: runningScript.parent,
     ramUsage: runningScript.ramUsage,
     server: runningScript.server,
     tailProperties:
