@@ -1847,11 +1847,7 @@ setRemovedFunctions(ns, {
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {
-  return NSProxy(ws, ns, [], {
-    args: ws.args.slice(),
-    pid: ws.pid,
-    enums,
-  });
+  return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
 const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));
