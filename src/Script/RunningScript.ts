@@ -58,7 +58,7 @@ export class RunningScript {
   // Process ID. Must be an integer and equals the PID of corresponding WorkerScript
   pid = -1;
 
-  // Process ID of the parent process. Defaults to 0.
+  // Process ID of the parent process. 0 indicates no parent (such as run from terminal).
   parent = 0;
 
   // How much RAM this script uses for ONE thread
