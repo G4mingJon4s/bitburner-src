@@ -171,7 +171,7 @@ export class RunningScript {
   }
 }
 const includedProperties = getKeyList(RunningScript, {
-  removedKeys: ["logs", "dependencies", "logUpd", "pid", "tailProps"],
+  removedKeys: ["logs", "dependencies", "logUpd", "pid", "parent", "tailProps"],
 });
 const includedPropsNoTitle = includedProperties.filter((x) => x !== "title");
 
