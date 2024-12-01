@@ -3,7 +3,7 @@ import { Glitch } from "@enums";
 import { myrian, myrianSize } from "../Myrian";
 import { pickOne } from "../utils";
 
-const applyRust = () => {
+export const processRust = () => {
   myrian.rust = {};
   const rust = myrian.glitches[Glitch.Rust];
   for (let i = 0; i < rust * 3; i++) {
@@ -26,5 +26,3 @@ export const rustBus = (bus: Bus, rust: number) => {
   // cap energy when maxEnergy is reduced
   bus.energy = Math.min(bus.energy, bus.maxEnergy);
 };
-
-export const startRust = () => setInterval(applyRust, 30000);

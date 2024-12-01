@@ -1,13 +1,13 @@
 import { Device, DeviceID } from "@nsdefs";
 import { DeviceType, Component, Glitch } from "@enums";
-import { glitchMult } from "./formulas/glitches";
+import { glitchMult, roamingTime } from "./formulas/glitches";
 import { isDeviceISocket, pickOne } from "./utils";
 import { componentTiers } from "./formulas/components";
 import { NewBus, NewISocket, NewOSocket } from "./NewDevices";
-import { startRoaming } from "./glitches/roaming";
-import { startRust } from "./glitches/rust";
-import { startSegmentation } from "./glitches/segmentation";
-import { startBattery } from "./glitches/battery";
+import { processRoaming } from "./glitches/roaming";
+import { processRust } from "./glitches/rust";
+import { processSegmentation } from "./glitches/segmentation";
+import { processBattery } from "./glitches/battery";
 
 export interface Myrian {
   vulns: number;
@@ -29,12 +29,28 @@ export const myrian: Myrian = {
   rust: {},
 };
 
+let processes: (() => void)[] = [];
+const processGlitch = (func: () => void, time: () => number): (() => void) => {
+  let timeout = -1;
+  const process = () => {
+    func();
+    timeout = Number(setTimeout(() => process(), time()));
+  }
+  setTimeout(() => process(), time());
+
+  return () => clearTimeout(timeout);
+};
+
 export const loadMyrian = (save: string) => {
   resetMyrian();
-  startRoaming();
-  startRust();
-  startSegmentation();
-  startBattery();
+
+  processes = [
+    processGlitch(processBattery, () => 1000),
+    processGlitch(processRoaming, () => roamingTime(myrian.glitches[Glitch.Roaming])),
+    processGlitch(processRust, () => 30000),
+    processGlitch(processSegmentation, () => 30000)
+  ];
+
   if (!save) return;
   const savedMyrian = JSON.parse(save);
   Object.assign(myrian, savedMyrian);
@@ -74,6 +90,10 @@ export const resetMyrian = () => {
   myrian.devices = [];
   myrian.glitches = { ...defaultGlitches };
   myrian.rust = {};
+
+  // clear all process timeouts
+  processes.forEach(f => f());
+  processes = [];
 
   NewBus("alice", Math.floor(myrianSize / 2), Math.floor(myrianSize / 2));
 

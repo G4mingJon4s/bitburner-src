@@ -3,7 +3,7 @@ import { myrian, myrianSize } from "../Myrian";
 import { findDevice } from "../Myrian";
 import { NewLock } from "../NewDevices";
 
-const applySegmentation = () => {
+export const processSegmentation = () => {
   const segmentation = myrian.glitches[Glitch.Segmentation];
   for (let i = 0; i < segmentation; i++) {
     const x = Math.floor(Math.random() * myrianSize);
@@ -12,5 +12,3 @@ const applySegmentation = () => {
     NewLock(`lock-${x}-${y}`, x, y);
   }
 };
-
-export const startSegmentation = () => setInterval(applySegmentation, 30000);
