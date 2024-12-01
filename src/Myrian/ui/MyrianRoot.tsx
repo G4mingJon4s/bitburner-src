@@ -4,17 +4,14 @@ import { Container, IconButton, Typography } from "@mui/material";
 import { myrian } from "../Myrian";
 import { useRerender } from "../../ui/React/hooks";
 import { Info } from "@mui/icons-material";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { MD } from "../../ui/MD/MD";
-import { tutorial } from "./tutorial";
 import { Grid } from "./Grid";
-
-const tut = <MD md={tutorial} />;
+import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 
 export const MyrianRoot = (): React.ReactElement => {
   useRerender(50);
 
-  const onHelp = () => dialogBoxCreate(tut);
+  const onHelp = () => Router.toPage(Page.Documentation, { docPage: "advanced/myrian.md" });
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">

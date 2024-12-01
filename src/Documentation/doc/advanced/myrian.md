@@ -1,4 +1,4 @@
-export const tutorial = `# Myrian
+# Myrian
 
 Myrian is the name of the OS that the BitNodes run on.
 
@@ -12,7 +12,6 @@ Devices can only interract when directly adjacent to each other. When one or mor
 performing an action it will become busy and no other actions can be taken until the current one finishes.
 
 Contrary to every other mechanic in the game. Async functions using myrian functions CAN run simultenaously.
-
 
 ### Bus
 
@@ -106,4 +105,3 @@ Encryption is the only glitch that's always active. The level of Encryption dete
 ## Destabilization
 
 As the number of total vulns increase the bitnode becomes unstable and it's multiplier become more favorable.
-`;

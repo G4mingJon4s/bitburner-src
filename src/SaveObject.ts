@@ -81,6 +81,7 @@ export type BitburnerSaveObjectType = {
   AllGangsSave?: string;
   LastExportBonus?: string;
   StaneksGiftSave: string;
+  FactorySave: string;
   GoSave: unknown; // "loadGo" function can process unknown data
 };
 
@@ -117,7 +118,7 @@ function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject 
     }
   }
 
-  const optional1KeysOfSaveObj = ["StaneksGiftSave", "StockMarketSave"];
+  const optional1KeysOfSaveObj = ["StaneksGiftSave", "StockMarketSave", "FactorySave"];
   for (const key of optional1KeysOfSaveObj) {
     if (Object.hasOwn(saveObject, key)) {
       if (typeof saveObject[key] !== "string") {
