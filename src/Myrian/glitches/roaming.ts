@@ -29,10 +29,10 @@ const dirs = [
   [-1, 0],
 ];
 
-const applyRoaming = () => {
+export const processRoaming = () => {
   const roaming = myrian.glitches[Glitch.Roaming];
-  setTimeout(applyRoaming, roamingTime(roaming));
   if (roaming === 0) return;
+
   myrian.devices.forEach((device) => {
     if (device.type !== DeviceType.OSocket && device.type !== DeviceType.ISocket) return;
     if (device.isBusy) return;
@@ -44,9 +44,13 @@ const applyRoaming = () => {
         break;
       }
     }
+
     let x = -1;
     let y = -1;
-    if (canMove) {
+    if (!canMove) {
+      x = Math.floor(Math.random() * myrianSize);
+      y = Math.floor(Math.random() * myrianSize);
+    } else {
       let dx = dirDiff(device.x);
       let dy = dirDiff(device.y);
 
@@ -59,9 +63,6 @@ const applyRoaming = () => {
       }
       x = device.x + dx;
       y = device.y + dy;
-    } else {
-      x = Math.floor(Math.random() * myrianSize);
-      y = Math.floor(Math.random() * myrianSize);
     }
 
     if (findDevice([x, y])) return;
@@ -70,5 +71,3 @@ const applyRoaming = () => {
     device.y = y;
   });
 };
-
-export const startRoaming = () => setTimeout(applyRoaming, 0);
