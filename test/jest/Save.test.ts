@@ -79,6 +79,7 @@ function loadStandardServers() {
             "server": "home",
             "scriptKey": "script.js*[]",
             "title": "Awesome Script",
+            "fontSize": 16,
             "dependencies": [
               {
                 "filename": "script.js",

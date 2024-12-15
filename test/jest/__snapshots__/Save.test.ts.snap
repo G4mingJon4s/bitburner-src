@@ -75,6 +75,7 @@ exports[`load/saveAllServers 1`] = `
             "server": "home",
             "scriptKey": "script.js*[]",
             "title": "Awesome Script",
+            "fontSize": 16,
             "threads": 1,
             "temporary": false
           }
