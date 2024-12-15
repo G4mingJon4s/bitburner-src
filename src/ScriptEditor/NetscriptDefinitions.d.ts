@@ -277,6 +277,8 @@ interface RunningScript {
    * load.
    */
   title: string | ReactElement;
+  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  fontSize: number;
   /** Number of threads that this script runs with */
   threads: number;
   /** Whether this RunningScript is excluded from saves */
@@ -6459,6 +6461,24 @@ export interface NS {
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   setTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
+   * Set the font size of the tail window of a script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * The font size is saved across restarts.
+   *
+   * If the pid is unspecified, it will modify the current script's logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTailFontSize(pixel?: number, pid?: number): void;
 
   /**
    * Get the list of servers connected to a server.

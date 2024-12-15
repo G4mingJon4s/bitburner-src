@@ -78,6 +78,9 @@ export class RunningScript {
   // that will not be persisted, and will be restored to default on load.
   title = "" as string | React.ReactElement;
 
+  // The font size of the tail window. Defaults to the font size set in the style editor.
+  fontSize = Settings.styles.tailFontSize;
+
   // Number of threads that this script is running with
   threads = 1 as PositiveInteger;
 

@@ -749,6 +749,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             height: logProps.height,
           },
     title: runningScript.title,
+    fontSize: runningScript.fontSize,
     threads: runningScript.threads,
     temporary: runningScript.temporary,
   };

@@ -113,6 +113,7 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { Settings } from "./Settings/Settings";
 
 export const enums: NSEnums = {
   CityName,
@@ -612,6 +613,19 @@ export const ns: InternalAPI<NSFull> = {
       }
       runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
       runningScriptObj.tailProps?.rerender();
+    },
+  setTailFontSize:
+    (ctx) =>
+    (_pixel = Settings.styles.tailFontSize, _pid = ctx.workerScript.scriptRef.pid) => {
+      const pixel = helpers.number(ctx, "pixel", _pixel);
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningSCriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningSCriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningSCriptObj.fontSize = pixel;
+      runningSCriptObj.tailProps?.rerender();
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
