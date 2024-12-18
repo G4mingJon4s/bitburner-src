@@ -616,16 +616,15 @@ export const ns: InternalAPI<NSFull> = {
     },
   setTailFontSize:
     (ctx) =>
-    (_pixel = Settings.styles.tailFontSize, scriptID, hostname, ...scriptArgs) => {
-      const pixel = helpers.number(ctx, "pixel", _pixel);
+    (_pixel, scriptID, hostname, ...scriptArgs) => {
       const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
       const runningScriptObj = helpers.getRunningScript(ctx, ident);
       if (runningScriptObj == null) {
         helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
         return;
       }
-      if (runningScriptObj.tailProps) runningScriptObj.tailProps.fontSize = pixel;
-      runningScriptObj.tailProps?.rerender();
+      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
+      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
