@@ -192,6 +192,8 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
+  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  fontSize: number;
 }
 
 /**
@@ -277,8 +279,6 @@ interface RunningScript {
    * load.
    */
   title: string | ReactElement;
-  /** The font size of the tail window. Defaults to the font size set in the style editor. */
-  fontSize: number;
   /** Number of threads that this script runs with */
   threads: number;
   /** Whether this RunningScript is excluded from saves */

@@ -620,12 +620,12 @@ export const ns: InternalAPI<NSFull> = {
       const pixel = helpers.number(ctx, "pixel", _pixel);
       const pid = helpers.number(ctx, "pid", _pid);
       const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningSCriptObj == null) {
+      if (runningScriptObj == null) {
         helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
         return;
       }
-      runningSCriptObj.fontSize = pixel;
-      runningSCriptObj.tailProps?.rerender();
+      if (runningScriptObj.tailProps) runningScriptObj.tailProps.fontSize = pixel;
+      runningScriptObj.tailProps?.rerender();
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
