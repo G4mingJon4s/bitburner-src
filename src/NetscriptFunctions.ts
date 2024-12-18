@@ -616,12 +616,12 @@ export const ns: InternalAPI<NSFull> = {
     },
   setTailFontSize:
     (ctx) =>
-    (_pixel = Settings.styles.tailFontSize, _pid = ctx.workerScript.scriptRef.pid) => {
+    (_pixel = Settings.styles.tailFontSize, scriptID, hostname, ...scriptArgs) => {
       const pixel = helpers.number(ctx, "pixel", _pixel);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      const runningScriptObj = helpers.getRunningScript(ctx, ident);
       if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
         return;
       }
       if (runningScriptObj.tailProps) runningScriptObj.tailProps.fontSize = pixel;
