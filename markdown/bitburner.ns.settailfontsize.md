@@ -9,7 +9,7 @@ Set the font size of the tail window of a script.
 **Signature:**
 
 ```typescript
-setTailFontSize(pixel?: number, pid?: number): void;
+setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 ```
 
 ## Parameters
@@ -17,7 +17,9 @@ setTailFontSize(pixel?: number, pid?: number): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  pixel | number | _(Optional)_ Optional. The new font size in pixels. If omitted, the default tail font size is used. |
-|  pid | number | _(Optional)_ Optional. PID of the script having its tail closed. If omitted, the current script is used. |
+|  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the target script. If omitted, the current script is used. |
+|  host | string | _(Optional)_ Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments for the target script. |
 
 **Returns:**
 
@@ -31,7 +33,7 @@ This overwrites the tail font size and forces an update of the tail window's con
 
 The font size is saved across restarts.
 
-If the pid is unspecified, it will modify the current script's logs.
+If ran without a filename or pid, this will affect the current script's tail window.
 
-Otherwise, the pid argument can be used to change the logs from another script.
+Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script. Remember that scripts are uniquely identified by both their names and arguments.
 

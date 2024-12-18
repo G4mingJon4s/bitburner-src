@@ -18,7 +18,6 @@ interface RunningScript
 |  [args](./bitburner.runningscript.args.md) |  | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments the script was called with |
 |  [dynamicRamUsage](./bitburner.runningscript.dynamicramusage.md) |  | number \| undefined | <p>The dynamic RAM usage of (one thread of) this script instance. Does not affect overall RAM consumption (ramUsage is for that), but rather shows how much of the reserved RAM is currently in use via all the ns functions the script has called. Initially 1.6GB, this increases as new functions are called.</p><p>Only set for scripts that are still running.</p> |
 |  [filename](./bitburner.runningscript.filename.md) |  | string | Filename of the script |
-|  [fontSize](./bitburner.runningscript.fontsize.md) |  | number | The font size of the tail window. Defaults to the font size set in the style editor. |
 |  [logs](./bitburner.runningscript.logs.md) |  | string\[\] | Script logs as an array. The newest log entries are at the bottom. Timestamps, if enabled, are placed inside <code>[brackets]</code> at the start of each line. |
 |  [offlineExpGained](./bitburner.runningscript.offlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when offline |
 |  [offlineMoneyMade](./bitburner.runningscript.offlinemoneymade.md) |  | number | Total amount of money made by this script when offline |
