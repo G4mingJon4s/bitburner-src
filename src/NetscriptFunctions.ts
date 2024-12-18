@@ -619,7 +619,7 @@ export const ns: InternalAPI<NSFull> = {
     (_pixel = Settings.styles.tailFontSize, _pid = ctx.workerScript.scriptRef.pid) => {
       const pixel = helpers.number(ctx, "pixel", _pixel);
       const pid = helpers.number(ctx, "pid", _pid);
-      const runningSCriptObj = helpers.getRunningScript(ctx, pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
       if (runningSCriptObj == null) {
         helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
         return;
