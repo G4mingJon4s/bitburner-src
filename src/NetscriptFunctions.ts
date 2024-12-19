@@ -113,7 +113,6 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
-import { Settings } from "./Settings/Settings";
 
 export const enums: NSEnums = {
   CityName,
