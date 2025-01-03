@@ -98,8 +98,20 @@ export class CodingContract {
     return this.type;
   }
 
-  isSolution(solution: string): boolean {
-    return CodingContractTypes[this.type].solver(this.state, solution);
+  /** Checks if the answer is in the correct format. */
+  isValid(answer: unknown): boolean {
+    if (typeof answer === "string") answer = CodingContractTypes[this.type].convertAnswer(answer);
+    return CodingContractTypes[this.type].validateAnswer(answer);
+  }
+
+  isSolution(solution: unknown): boolean {
+    const type = CodingContractTypes[this.type];
+    if (typeof solution === "string") solution = type.convertAnswer(solution);
+    if (!this.isValid(solution)) return false;
+
+    const expected = type.solver(this.state) as unknown;
+    if (type.isCorrectAnswer) return type.isCorrectAnswer(expected, solution);
+    return expected === solution;
   }
 
   /** Creates a popup to prompt the player to solve the problem */

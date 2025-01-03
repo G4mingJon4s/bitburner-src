@@ -23,17 +23,15 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
 
-      if (typeof answer !== "number" && typeof answer !== "string" && !Array.isArray(answer))
-        throw new Error("The answer provided was not a number, string, or array");
-
-      // Convert answer to string.
-      // Todo: better typing for contracts, don't do this weird string conversion of the player answer
-      const answerStr = typeof answer === "string" ? answer : JSON.stringify(answer);
-      const creward = contract.reward;
+      if (!contract.isValid(answer))
+        throw helpers.errorMessage(
+          ctx,
+          `Answer is not in the right format for contract '${contract.type}'. Got: ${answer}`,
+        );
 
       const serv = helpers.getServer(ctx, hostname);
-      if (contract.isSolution(answerStr)) {
-        const reward = Player.gainCodingContractReward(creward, contract.getDifficulty());
+      if (contract.isSolution(answer)) {
+        const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
         helpers.log(ctx, () => `Successfully completed Coding Contract '${filename}'. Reward: ${reward}`);
         serv.removeContract(filename);
         return reward;
