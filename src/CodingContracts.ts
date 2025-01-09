@@ -109,9 +109,7 @@ export class CodingContract {
     if (typeof solution === "string") solution = type.convertAnswer(solution);
     if (!this.isValid(solution)) return false;
 
-    const expected = type.solver(this.state) as unknown;
-    if (type.isCorrectAnswer) return type.isCorrectAnswer(expected, solution);
-    return expected === solution;
+    return type.solver(this.state, solution);
   }
 
   /** Creates a popup to prompt the player to solve the problem */
