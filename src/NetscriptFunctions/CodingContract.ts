@@ -87,7 +87,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       },
     getContract: (ctx) => (_filename: unknown, _hostname?: unknown) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname; 
+      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
       // asserting type here is required, since it is not feasible to properly type getData
       return {

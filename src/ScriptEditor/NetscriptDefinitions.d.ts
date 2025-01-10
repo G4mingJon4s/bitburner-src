@@ -3938,11 +3938,11 @@ export interface CodingContract {
    * Get the type and data of the contract.
    * @remarks
    * RAM cost: 10 GB
-   * 
+   *
    * Both the type and data of the contract are returned in an object.
    * Depending on the type of the contract, the data is typed differently.
    * Using type-narrowing, you can get the correct type of the data:
-   * 
+   *
    * @example
    * ```js
    * const contract = ns.codingcontract.getContract(fileName, hostName);
@@ -3951,7 +3951,7 @@ export interface CodingContract {
    *   // ^? data: number
    * }
    * ```
-   * 
+   *
    * @param filename - Filename of the contract.
    * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
    * @returns An object containing both the type and data, typed depending on the type.
