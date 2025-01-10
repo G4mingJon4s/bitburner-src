@@ -999,8 +999,8 @@ export const CodingContractDefinitions: CodingContractDefinitions<CodingContract
       const dstX = width - 1;
       const minPathLength = dstY + dstX; // Math.abs(dstY - srcY) + Math.abs(dstX - srcX)
 
-      const grid: (1 | 0)[][] = new Array(height);
-      for (let y = 0; y < height; y++) grid[y] = new Array(width).fill(0);
+      const grid: (1 | 0)[][] = new Array<(1 | 0)[]>(height);
+      for (let y = 0; y < height; y++) grid[y] = new Array<1 | 0>(width).fill(0);
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
