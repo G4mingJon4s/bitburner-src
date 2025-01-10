@@ -1,9 +1,5 @@
-import {
-  CodingContract,
-  CodingContractRewardType,
-  CodingContractTypes,
-  ICodingContractReward,
-} from "./CodingContracts";
+import { CodingContract, CodingContractRewardType, ICodingContractReward } from "./CodingContracts";
+import { CodingContractTypes } from "./data/codingcontracttypes";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { Factions } from "./Faction/Factions";
 import { Player } from "@player";

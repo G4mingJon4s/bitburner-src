@@ -1,13 +1,10 @@
 import { FactionName, CodingContractName } from "@enums";
-import { codingContractTypesMetadata } from "./data/codingcontracttypes";
+import { CodingContractTypes } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 import { objectAssert } from "./utils/helpers/typeAssertion";
-
-/* Contract Types */
-export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -64,7 +61,11 @@ export class CodingContract {
   /* String representing the contract's type. Must match type in ContractTypes */
   type: CodingContractName;
 
-  constructor(fn = "default.cct", type = CodingContractName.FindLargestPrimeFactor, reward: ICodingContractReward | null = null) {
+  constructor(
+    fn = "default.cct",
+    type = CodingContractName.FindLargestPrimeFactor,
+    reward: ICodingContractReward | null = null,
+  ) {
     const path = resolveContractFilePath(fn);
     if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
     if (!CodingContractTypes[type]) {

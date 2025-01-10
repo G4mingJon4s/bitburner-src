@@ -3853,9 +3853,15 @@ export interface CodingContract {
    *
    * Attempts to solve the Coding Contract with the provided solution.
    *
+   * There is an optional fourth parameter where you can assert the contract type.
+   * This will type the answer format you need to provide.
+   * Be aware that this function throws if the specified type does not match the type of the contract with that filename.
+   *
    * @example
    * ```js
-   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt("solution as a string", filename, hostname);
+   * // or
+   * const reward = ns.codingcontract.attempt(["answer", "in", "the", "correct", "format"], filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
    * } else {
@@ -3863,14 +3869,19 @@ export interface CodingContract {
    * }
    * ```
    *
-   * @param answer - Attempted solution for the contract.
+   * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
    *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
-  attempt(answer: string | any, filename: string, host?: string): string;
-  attempt<T extends CodingContractName | `${CodingContractName}`>(answer: CodingContractAnswer<T>, filename: string, host: string | undefined, type: T): string;
+  attempt(answer: any, filename: string, host?: string): string;
+  attempt<T extends CodingContractName | `${CodingContractName}`>(
+    answer: CodingContractAnswer<T>,
+    filename: string,
+    host: string | undefined,
+    type: T,
+  ): string;
 
   /**
    * Get the type of a coding contract.
@@ -3908,12 +3919,20 @@ export interface CodingContract {
    * Note that this is not the same as the contract’s description.
    * This is just the data that the contract wants you to act on in order to solve the contract.
    *
+   * There is an optional third parameter where you can assert the contract type.
+   * This will type the data returned for that specific contract type.
+   * Be aware that this function will throw if the type in the fourth parameter is not the same as the type of the contract with that filename.
+   *
    * @param filename - Filename of the contract.
    * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
   getData(filename: string, host?: string): any;
-  getData<T extends CodingContractName | `${CodingContractName}`>(filename: string, host: string | undefined, type: T): CodingContractData<T>;
+  getData<T extends CodingContractName | `${CodingContractName}`>(
+    filename: string,
+    host: string | undefined,
+    type: T,
+  ): CodingContractData<T>;
 
   /**
    * Get the number of attempts remaining.
@@ -3945,7 +3964,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): (`${CodingContractName}`)[];
+  getContractTypes(): `${CodingContractName}`[];
 }
 
 /**
@@ -8318,26 +8337,30 @@ export type CodingContractSignatures = {
   [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
   [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
   [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIV]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
   [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
   [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
   [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
   [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
   [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
   [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
-  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [string, string];
-  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, string];
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
   [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
   [CodingContractName.CompressionIRLECompression]: [string, string];
   [CodingContractName.CompressionIILZDecompression]: [string, string];
   [CodingContractName.CompressionIIILZCompression]: [string, string];
   [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
-  [CodingContractName.EncryptionIIVigenereCipher]: [[string, number], string];
-  [CodingContractName.SquareRoot]: [bigint, bigint];
+  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
+  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
 };
 
-export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}` ? CodingContractSignatures[T][0] : any;
-export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}` ? CodingContractSignatures[T][1] : any;
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][0]
+  : any;
+export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][1]
+  : any;
 
 /** @public */
 export type NSEnums = {

@@ -168,8 +168,8 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       for (const contract of server.contracts) {
         //Rename old "HammingCodes: Integer to encoded Binary" contracts
         //to "HammingCodes: Integer to Encoded Binary"
-        if (contract.type as string == "HammingCodes: Integer to encoded Binary") {
-          contract.type = CodingContractName.HammingCodesIntegerToEncodedBinary
+        if ((contract.type as string) == "HammingCodes: Integer to encoded Binary") {
+          contract.type = CodingContractName.HammingCodesIntegerToEncodedBinary;
         }
       }
     }
