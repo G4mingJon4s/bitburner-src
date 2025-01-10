@@ -88,6 +88,37 @@ function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
+export enum CodingContractName {
+  FindLargestPrimeFactor = "Find Largest Prime Factor",
+  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
+  TotalWaysToSum = "Total Ways to Sum",
+  TotalWaysToSumII = "Total Ways to Sum II",
+  SpiralizeMatrix = "Spiralize Matrix",
+  ArrayJumpingGame = "Array Jumping Game",
+  ArrayJumpingGameII = "Array Jumping Game II",
+  MergeOverlappingIntervals = "Merge Overlapping Intervals",
+  GenerateIPAddresses = "Generate IP Addresses",
+  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
+  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
+  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
+  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
+  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
+  UniquePathsInAGridI = "Unique Paths in a Grid I",
+  UniquePathsInAGridII = "Unique Paths in a Grid II",
+  ShortestPathInAGrid = "Shortest Path in a Grid",
+  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
+  FindAllValidMathExpressions = "Find All Valid Math Expressions",
+  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
+  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
+  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
+  CompressionIRLECompression = "Compression I: RLE Compression",
+  CompressionIILZDecompression = "Compression II: LZ Decompression",
+  CompressionIIILZCompression = "Compression III: LZ Compression",
+  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
+  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
+  SquareRoot = "Square Root",
+}
+
 // Because functions are contravariant with their parameters, we can't consider
 // arbitrary CodingContractTypes as CodingContractType<unknown> directly.
 // So we use CodingContractType<any> here, which at least validates the shape.
@@ -854,7 +885,7 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
       ].join(" ");
     },
     difficulty: 3,
-    generate: (): number[] => {
+    generate: (): [number, number] => {
       const numRows: number = getRandomIntInclusive(2, 14);
       const numColumns: number = getRandomIntInclusive(2, 14);
 
@@ -880,7 +911,7 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
-  } satisfies CodingContractSimpleType<number[], number>,
+  } satisfies CodingContractSimpleType<[number, number], number>,
   {
     desc: (data: number[][]): string => {
       let gridString = "";
@@ -899,11 +930,11 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
       ].join(" ");
     },
     difficulty: 5,
-    generate: (): number[][] => {
+    generate: (): (1 | 0)[][] => {
       const numRows: number = getRandomIntInclusive(2, 12);
       const numColumns: number = getRandomIntInclusive(2, 12);
 
-      const grid: number[][] = [];
+      const grid: (1 | 0)[][] = [];
       grid.length = numRows;
       for (let i = 0; i < numRows; ++i) {
         grid[i] = [];
@@ -953,7 +984,7 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
     },
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
-  } satisfies CodingContractSimpleType<number[][], number>,
+  } satisfies CodingContractSimpleType<(1 | 0)[][], number>,
   {
     name: "Shortest Path in a Grid",
     desc: (data: number[][]): string => {
@@ -980,15 +1011,15 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
       ].join(" ");
     },
     difficulty: 7,
-    generate: (): number[][] => {
+    generate: (): (1 | 0)[][] => {
       const height = getRandomIntInclusive(6, 12);
       const width = getRandomIntInclusive(6, 12);
       const dstY = height - 1;
       const dstX = width - 1;
       const minPathLength = dstY + dstX; // Math.abs(dstY - srcY) + Math.abs(dstX - srcX)
 
-      const grid: number[][] = new Array<number[]>(height);
-      for (let y = 0; y < height; y++) grid[y] = new Array<number>(width).fill(0);
+      const grid: (1 | 0)[][] = new Array(height);
+      for (let y = 0; y < height; y++) grid[y] = new Array(width).fill(0);
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
@@ -1076,7 +1107,7 @@ export const codingContractTypesMetadata: CodingContractType<any, any>[] = [
     convertAnswer: (ans) => ans.replace(/\s/g, ""),
     validateAnswer: (ans): ans is string =>
       typeof ans === "string" && ans.split("").every((c) => ["U", "D", "L", "R"].includes(c)),
-  } satisfies CodingContractSimpleType<number[][], string>,
+  } satisfies CodingContractSimpleType<(1 | 0)[][], string>,
   {
     desc: (data: string): string => {
       return [
@@ -1880,9 +1911,9 @@ ${data}`;
       return ans * ans + BigInt(state[1]);
     },
     solver: (state, answer) => {
-      return state[0] === answer;
+      return state[0] === answer.toString();
     },
-    convertAnswer: (ans) => ans,
-    validateAnswer: (ans): ans is string => typeof ans === "string",
-  } satisfies CodingContractComplexType<bigint, string, [string, string]>,
+    convertAnswer: (ans) => BigInt(ans),
+    validateAnswer: (ans): ans is bigint => typeof ans === "bigint",
+  } satisfies CodingContractComplexType<bigint, bigint, [string, string]>,
 ];

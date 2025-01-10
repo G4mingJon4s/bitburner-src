@@ -14,6 +14,7 @@ import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import {
   CityName,
+  CodingContractName,
   CompletedProgramName,
   CrimeType,
   FactionWorkType,
@@ -125,6 +126,7 @@ export const enums: NSEnums = {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  CodingContractName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

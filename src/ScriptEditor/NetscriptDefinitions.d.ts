@@ -17,13 +17,6 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
-/**
- * Coding contract data will differ depending on coding contract.
- * @public
- */
-type CodingContractData = any;
-
 /** @public */
 type ScriptArg = string | number | boolean;
 
@@ -3876,7 +3869,8 @@ export interface CodingContract {
    *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
-  attempt(answer: string | number | any[], filename: string, host?: string): string;
+  attempt(answer: string | any, filename: string, host?: string): string;
+  attempt<T extends CodingContractName | `${CodingContractName}`>(answer: CodingContractAnswer<T>, filename: string, host: string | undefined, type: T): string;
 
   /**
    * Get the type of a coding contract.
@@ -3890,7 +3884,7 @@ export interface CodingContract {
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): string;
+  getContractType(filename: string, host?: string): `${CodingContractName}`;
 
   /**
    * Get the description.
@@ -3918,7 +3912,8 @@ export interface CodingContract {
    * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
-  getData(filename: string, host?: string): CodingContractData;
+  getData(filename: string, host?: string): any;
+  getData<T extends CodingContractName | `${CodingContractName}`>(filename: string, host: string | undefined, type: T): CodingContractData<T>;
 
   /**
    * Get the number of attempts remaining.
@@ -3950,7 +3945,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): string[];
+  getContractTypes(): (`${CodingContractName}`)[];
 }
 
 /**
@@ -8309,6 +8304,40 @@ declare enum CodingContractName {
   EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
   SquareRoot = "Square Root",
 }
+
+export type CodingContractSignatures = {
+  [CodingContractName.FindLargestPrimeFactor]: [number, number];
+  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
+  [CodingContractName.TotalWaysToSum]: [number, number];
+  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
+  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
+  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
+  [CodingContractName.ArrayJumpingGameII]: [number[], number];
+  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
+  [CodingContractName.GenerateIPAddresses]: [string, string[]];
+  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIV]: [number[], number];
+  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
+  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
+  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
+  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
+  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
+  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [string, string];
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, string];
+  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
+  [CodingContractName.CompressionIRLECompression]: [string, string];
+  [CodingContractName.CompressionIILZDecompression]: [string, string];
+  [CodingContractName.CompressionIIILZCompression]: [string, string];
+  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
+  [CodingContractName.EncryptionIIVigenereCipher]: [[string, number], string];
+  [CodingContractName.SquareRoot]: [bigint, bigint];
+};
+
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}` ? CodingContractSignatures[T][0] : any;
+export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}` ? CodingContractSignatures[T][1] : any;
 
 /** @public */
 export type NSEnums = {

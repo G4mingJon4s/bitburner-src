@@ -7,6 +7,7 @@ import {
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { Factions } from "./Faction/Factions";
 import { Player } from "@player";
+import { CodingContractName } from "@enums";
 import { GetServer, GetAllServers } from "./Server/AllServers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { Server } from "./Server/Server";
@@ -104,7 +105,7 @@ export function generateRandomContractOnHome(): void {
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: string): string => {
+export const generateDummyContract = (problemType: CodingContractName): string => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
   const serv = Player.getHomeComputer();
 
@@ -116,7 +117,7 @@ export const generateDummyContract = (problemType: string): string => {
 };
 
 interface IGenerateContractParams {
-  problemType?: string;
+  problemType?: CodingContractName;
   server?: string;
   fn?: ContractFilePath;
 }
@@ -176,8 +177,8 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
   return type;
 }
 
-function getRandomProblemType(): string {
-  const problemTypes = Object.keys(CodingContractTypes);
+function getRandomProblemType(): CodingContractName {
+  const problemTypes = Object.values(CodingContractName);
   const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 
   return problemTypes[randIndex];

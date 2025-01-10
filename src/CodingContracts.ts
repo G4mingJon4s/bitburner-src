@@ -1,4 +1,4 @@
-import type { FactionName } from "@enums";
+import { FactionName, CodingContractName } from "@enums";
 import { codingContractTypesMetadata } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
@@ -62,9 +62,9 @@ export class CodingContract {
   tries = 0;
 
   /* String representing the contract's type. Must match type in ContractTypes */
-  type: string;
+  type: CodingContractName;
 
-  constructor(fn = "default.cct", type = "Find Largest Prime Factor", reward: ICodingContractReward | null = null) {
+  constructor(fn = "default.cct", type = CodingContractName.FindLargestPrimeFactor, reward: ICodingContractReward | null = null) {
     const path = resolveContractFilePath(fn);
     if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
     if (!CodingContractTypes[type]) {
@@ -94,7 +94,7 @@ export class CodingContract {
     return CodingContractTypes[this.type].numTries ?? 10;
   }
 
-  getType(): string {
+  getType(): CodingContractName {
     return this.type;
   }
 

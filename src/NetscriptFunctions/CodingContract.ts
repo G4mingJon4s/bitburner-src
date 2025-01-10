@@ -3,7 +3,7 @@ import { CodingContract } from "../CodingContracts";
 import { CodingContract as ICodingContract } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { codingContractTypesMetadata } from "../data/codingcontracttypes";
+import { CodingContractName } from "@enums";
 import { generateDummyContract } from "../CodingContractGenerator";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
@@ -18,10 +18,15 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   };
 
   return {
-    attempt: (ctx) => (answer, _filename, _hostname?) => {
+    attempt: (ctx) => (answer: unknown, _filename: unknown, _hostname?: unknown, _type?: unknown) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
+
+      if (_type) {
+        const type = helpers.string(ctx, "type", _type);
+        if (contract.type !== type) return helpers.errorMessage(ctx, `The given type '${type}' is not the same as the one of contract '${contract.fn}' of type '${contract.type}'.`);
+      }
 
       if (!contract.isValid(answer))
         throw helpers.errorMessage(
@@ -59,10 +64,14 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const contract = getCodingContract(ctx, hostname, filename);
       return contract.getType();
     },
-    getData: (ctx) => (_filename, _hostname?) => {
+    getData: (ctx) => (_filename: unknown, _hostname?: unknown, _type?: unknown): any => {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
+      if (_type) {
+        const type = helpers.string(ctx, "type", _type);
+        if (contract.type !== type) return helpers.errorMessage(ctx, `The given type '${type}' is not the same as the one of contract '${contract.fn}' of type '${contract.type}'.`);
+      }
       return structuredClone(contract.getData());
     },
     getDescription: (ctx) => (_filename, _hostname?) => {
@@ -79,8 +88,9 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     },
     createDummyContract: (ctx) => (_type) => {
       const type = helpers.string(ctx, "type", _type);
+      if (!((v: any): v is CodingContractName => Object.values(CodingContractName).includes(v))(type)) return helpers.errorMessage(ctx, `The given type is not a valid contract type. Got '${type}'`);
       return generateDummyContract(type);
     },
-    getContractTypes: () => () => codingContractTypesMetadata.map((c) => c.name),
+    getContractTypes: () => () => Object.values(CodingContractName),
   };
 }
