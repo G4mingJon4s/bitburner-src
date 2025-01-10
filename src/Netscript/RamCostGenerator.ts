@@ -333,6 +333,7 @@ const codingcontract = {
   attempt: RamCostConstants.CodingContractBase,
   getContractType: RamCostConstants.CodingContractBase / 2,
   getData: RamCostConstants.CodingContractBase / 2,
+  getContract: RamCostConstants.CodingContractBase,
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,
   createDummyContract: RamCostConstants.CodingContractBase / 5,

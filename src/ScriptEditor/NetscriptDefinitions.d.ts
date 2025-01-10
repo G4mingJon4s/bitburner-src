@@ -3935,6 +3935,30 @@ export interface CodingContract {
   ): CodingContractData<T>;
 
   /**
+   * Get the type and data of the contract.
+   * @remarks
+   * RAM cost: 10 GB
+   * 
+   * Both the type and data of the contract are returned in an object.
+   * Depending on the type of the contract, the data is typed differently.
+   * Using type-narrowing, you can get the correct type of the data:
+   * 
+   * @example
+   * ```js
+   * const contract = ns.codingcontract.getContract(fileName, hostName);
+   * if (contract.type === ns.enums.CodingContractName.FindLargestPrimeFactor) {
+   *   const data = contract.data;
+   *   // ^? data: number
+   * }
+   * ```
+   * 
+   * @param filename - Filename of the contract.
+   * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
+   * @returns An object containing both the type and data, typed depending on the type.
+   */
+  getContract(filename: string, host?: string): CodingContractSet;
+
+  /**
    * Get the number of attempts remaining.
    * @remarks
    * RAM cost: 2 GB
@@ -8361,6 +8385,13 @@ export type CodingContractData<T extends string> = T extends `${keyof CodingCont
 export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
   ? CodingContractSignatures[T][1]
   : any;
+
+export type CodingContractSet = {
+  [T in keyof CodingContractSignatures]: {
+    type: T;
+    data: CodingContractSignatures[T][0];
+  };
+}[keyof CodingContractSignatures];
 
 /** @public */
 export type NSEnums = {
