@@ -1059,8 +1059,8 @@ export const CodingContractDefinitions: CodingContractDefinitions<CodingContract
         }
       }
 
-      const minDistance = Number.isFinite(distance[dstY][dstX]) ? distance[dstY][dstX] : Infinity;
-      if (answer.length > minDistance) return false;
+      if (!Number.isFinite(distance[dstY][dstX])) return answer === "";
+      if (answer.length > distance[dstY][dstX]) return false;
 
       let ansX = 0;
       let ansY = 0;
