@@ -1475,13 +1475,14 @@ export const CodingContractDefinitions: CodingContractDefinitions<CodingContract
     },
     convertAnswer: (ans) => {
       const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
+      if (sanitized === "") return [];
       const arr = sanitized.split(",").map((s) => parseInt(s, 10));
       // An inline function is needed here, so that TS knows this returns true if it matches the type
-      if (((a): a is (1 | 0)[] => a.every((n) => n === 1 || n === 0))(arr)) return arr;
+      if (((a): a is (1 | 0)[] => !a.some((n) => n !== 1 && n !== 0))(arr)) return arr;
       return null;
     },
     validateAnswer: (ans): ans is (1 | 0)[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((a) => a === 1 || a === 0),
+      typeof ans === "object" && Array.isArray(ans) && !ans.some((a) => a !== 1 && a !== 0),
   },
   [CodingContractName.CompressionIRLECompression]: {
     difficulty: 2,
