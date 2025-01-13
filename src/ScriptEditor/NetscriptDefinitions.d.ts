@@ -3859,9 +3859,9 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = ns.codingcontract.attempt("solution as a string", filename, hostname);
+   * const reward = ns.codingcontract.attempt("[solution, as, a, string]", filename, hostname);
    * // or
-   * const reward = ns.codingcontract.attempt(["answer", "in", "the", "correct", "format"], filename, hostname);
+   * const reward = ns.codingcontract.attempt(["answer", "as", "an", "array"], filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
    * } else {
@@ -8386,10 +8386,12 @@ export type CodingContractAnswer<T extends string> = T extends `${keyof CodingCo
   ? CodingContractSignatures[T][1]
   : any;
 
-export type CodingContractSet = {
+export type CodingContractObj = {
   [T in keyof CodingContractSignatures]: {
     type: T;
     data: CodingContractSignatures[T][0];
+    description: string;
+    numTriesRemaining: number;
   };
 }[keyof CodingContractSignatures];
 

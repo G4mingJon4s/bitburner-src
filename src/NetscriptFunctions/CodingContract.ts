@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { CodingContract } from "../CodingContracts";
-import { CodingContractSet, CodingContract as ICodingContract } from "@nsdefs";
+import { CodingContractObj, CodingContract as ICodingContract } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { CodingContractName } from "@enums";
@@ -85,7 +85,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
         }
         return structuredClone(contract.getData());
       },
-    getContract: (ctx) => (_filename: unknown, _hostname?: unknown) => {
+    getContract: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
@@ -93,7 +93,9 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       return {
         type: contract.type,
         data: contract.getData(),
-      } as CodingContractSet;
+        description: contract.getDescription(),
+        numTriesRemaining: contract.getMaxNumTries() - contract.tries,
+      } as CodingContractObj;
     },
     getDescription: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
