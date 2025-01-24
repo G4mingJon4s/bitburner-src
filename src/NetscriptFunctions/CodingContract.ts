@@ -1,11 +1,12 @@
 import { Player } from "@player";
 import { CodingContract } from "../CodingContracts";
-import { CodingContractObj, CodingContract as ICodingContract } from "@nsdefs";
+import { CodingContractObject, CodingContract as ICodingContract } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { CodingContractName } from "@enums";
 import { generateDummyContract } from "../CodingContractGenerator";
 import { isCodingContractName } from "../data/codingcontracttypes";
+import { type BaseServer } from "../Server/BaseServer";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   const getCodingContract = function (ctx: NetscriptContext, hostname: string, filename: string): CodingContract {
@@ -18,20 +19,40 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     return contract;
   };
 
+  function attemptContract(
+    ctx: NetscriptContext,
+    server: BaseServer,
+    contract: CodingContract,
+    answer: unknown,
+  ): string {
+    if (contract.isSolution(answer)) {
+      const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
+      helpers.log(ctx, () => `Successfully completed Coding Contract '${contract.fn}'. Reward: ${reward}`);
+      server.removeContract(contract.fn);
+      return reward;
+    }
+
+    if (++contract.tries >= contract.getMaxNumTries()) {
+      helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
+      server.removeContract(contract.fn);
+    } else {
+      helpers.log(
+        ctx,
+        () =>
+          `Coding Contract attempt '${contract.fn}' failed. ${
+            contract.getMaxNumTries() - contract.tries
+          } attempt(s) remaining.`,
+      );
+    }
+
+    return "";
+  }
+
   return {
-    attempt: (ctx) => (answer: unknown, _filename: unknown, _hostname?: unknown, _type?: unknown) => {
+    attempt: (ctx) => (answer, _filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, hostname, filename);
-
-      if (_type) {
-        const type = helpers.string(ctx, "type", _type);
-        if (contract.type !== type)
-          throw helpers.errorMessage(
-            ctx,
-            `The given type '${type}' is not the same as the one of contract '${contract.fn}' of type '${contract.type}'.`,
-          );
-      }
 
       if (!contract.isValid(answer))
         throw helpers.errorMessage(
@@ -40,28 +61,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
         );
 
       const serv = helpers.getServer(ctx, hostname);
-      if (contract.isSolution(answer)) {
-        const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
-        helpers.log(ctx, () => `Successfully completed Coding Contract '${filename}'. Reward: ${reward}`);
-        serv.removeContract(filename);
-        return reward;
-      } else {
-        ++contract.tries;
-        if (contract.tries >= contract.getMaxNumTries()) {
-          helpers.log(ctx, () => `Coding Contract attempt '${filename}' failed. Contract is now self-destructing`);
-          serv.removeContract(filename);
-        } else {
-          helpers.log(
-            ctx,
-            () =>
-              `Coding Contract attempt '${filename}' failed. ${
-                contract.getMaxNumTries() - contract.tries
-              } attempts remaining.`,
-          );
-        }
-
-        return "";
-      }
+      return attemptContract(ctx, serv, contract, answer);
     },
     getContractType: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
@@ -69,33 +69,29 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const contract = getCodingContract(ctx, hostname, filename);
       return contract.getType();
     },
-    getData:
-      (ctx) =>
-      (_filename: unknown, _hostname?: unknown, _type?: unknown): any => {
-        const filename = helpers.string(ctx, "filename", _filename);
-        const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-        const contract = getCodingContract(ctx, hostname, filename);
-        if (_type) {
-          const type = helpers.string(ctx, "type", _type);
-          if (contract.type !== type)
-            throw helpers.errorMessage(
-              ctx,
-              `The given type '${type}' is not the same as the one of contract '${contract.fn}' of type '${contract.type}'.`,
-            );
-        }
-        return structuredClone(contract.getData());
-      },
+    getData: (ctx) => (_filename, _hostname?) => {
+      const filename = helpers.string(ctx, "filename", _filename);
+      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, hostname, filename);
+
+      return structuredClone(contract.getData());
+    },
     getContract: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
+      const server = helpers.getServer(ctx, hostname);
       const contract = getCodingContract(ctx, hostname, filename);
       // asserting type here is required, since it is not feasible to properly type getData
       return {
         type: contract.type,
         data: contract.getData(),
+        attempt: (answer: unknown) => {
+          helpers.checkEnvFlags(ctx);
+          return attemptContract(ctx, server, contract, answer);
+        },
         description: contract.getDescription(),
         numTriesRemaining: contract.getMaxNumTries() - contract.tries,
-      } as CodingContractObj;
+      } as CodingContractObject;
     },
     getDescription: (ctx) => (_filename, _hostname?) => {
       const filename = helpers.string(ctx, "filename", _filename);
