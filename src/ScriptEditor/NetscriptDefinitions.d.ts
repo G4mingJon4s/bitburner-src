@@ -3918,7 +3918,7 @@ export interface CodingContract {
   /**
    * Get various data about a specific contract.
    * @remarks
-   * RAM cost: 10 GB
+   * RAM cost: 15 GB
    *
    * The returned object includes the type, data, description as well as methods for getting the number of tries remaining and submitting your answer.
    * Depending on the type of the contract, the data is typed differently.
