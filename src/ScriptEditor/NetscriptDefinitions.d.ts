@@ -8371,9 +8371,9 @@ export type CodingContractObject = {
   [T in keyof CodingContractSignatures]: {
     type: T;
     data: CodingContractSignatures[T][0];
-    attempt: (answer: CodingContractSignatures[T][1] | string) => string;
+    submit: (answer: CodingContractSignatures[T][1] | string) => string;
     description: string;
-    numTriesRemaining: number;
+    numTriesRemaining: () => number;
   };
 }[keyof CodingContractSignatures];
 

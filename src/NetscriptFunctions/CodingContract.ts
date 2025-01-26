@@ -85,12 +85,15 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       return {
         type: contract.type,
         data: contract.getData(),
-        attempt: (answer: unknown) => {
+        submit: (answer: unknown) => {
           helpers.checkEnvFlags(ctx);
           return attemptContract(ctx, server, contract, answer);
         },
         description: contract.getDescription(),
-        numTriesRemaining: contract.getMaxNumTries() - contract.tries,
+        numTriesRemaining: () => {
+          helpers.checkEnvFlags(ctx);
+          return contract.getMaxNumTries() - contract.tries;
+        },
       } as CodingContractObject;
     },
     getDescription: (ctx) => (_filename, _hostname?) => {
