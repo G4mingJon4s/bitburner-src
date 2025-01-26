@@ -3916,11 +3916,11 @@ export interface CodingContract {
   getData(filename: string, host?: string): any;
 
   /**
-   * Get the type and data of the contract.
+   * Get various data about a specific contract.
    * @remarks
    * RAM cost: 10 GB
    *
-   * Both the type and data of the contract are returned in an object.
+   * The returned object includes the type, data, description as well as methods for getting the number of tries remaining and submitting your answer.
    * Depending on the type of the contract, the data is typed differently.
    * Using type-narrowing, you can get the correct type of the data:
    *
@@ -3935,7 +3935,7 @@ export interface CodingContract {
    *
    * @param filename - Filename of the contract.
    * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
-   * @returns An object containing both the type and data, typed depending on the type.
+   * @returns An object containing various data about the contract specified.
    */
   getContract(filename: string, host?: string): CodingContractObject;
 
