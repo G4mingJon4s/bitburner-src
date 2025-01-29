@@ -5,7 +5,7 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { CodingContractName } from "@enums";
 import { generateDummyContract } from "../CodingContract/ContractGenerator";
-import { isCodingContractName } from "../CodingContract/ContractTypes";
+import { isCodingContractName } from "../CodingContract/Enums";
 import { type BaseServer } from "../Server/BaseServer";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
