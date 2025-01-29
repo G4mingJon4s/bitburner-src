@@ -9,7 +9,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { generateContract, generateRandomContract, generateRandomContractOnHome } from "../../CodingContract/ContractGenerator";
+import {
+  generateContract,
+  generateRandomContract,
+  generateRandomContractOnHome,
+} from "../../CodingContract/ContractGenerator";
 import { isCodingContractName } from "../../CodingContract/ContractTypes";
 import { CodingContractName } from "@enums";
 

@@ -103,7 +103,7 @@ export const CodingContractDefinitions: CodingContractDefinitions<CodingContract
   ...mathDefinitions,
   ...optimizationDefinitions,
   ...stringDefinitions,
-  ...traderDefinitions
+  ...traderDefinitions,
 };
 
 // This untyped variant is easier to work with when the specific type is not known.
