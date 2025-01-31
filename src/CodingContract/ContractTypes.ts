@@ -88,7 +88,26 @@ export function convert2DArrayToString(arr: number[][]): string {
 export const isCodingContractName = (v: unknown): v is CodingContractName =>
   Object.values(CodingContractName).some((a) => a === v);
 
-export const CodingContractDefinitions: CodingContractTypes = Object.assign({}, ...Object.values(contracts));
+export const CodingContractDefinitions: CodingContractTypes = {
+  ...contracts.algorithmicStockTrader,
+  ...contracts.arrayJumpingGame,
+  ...contracts.compression,
+  ...contracts.encryption,
+  ...contracts.findAllValidMathExpressions,
+  ...contracts.findLargestPrimeFactor,
+  ...contracts.generateIPAddresses,
+  ...contracts.hammingCode,
+  ...contracts.mergeOverlappingIntervals,
+  ...contracts.minimumPathSumInATriangle,
+  ...contracts.proper2ColoringOfAGraph,
+  ...contracts.sanitizeParenthesesInExpression,
+  ...contracts.shortestPathInAGrid,
+  ...contracts.spiralizeMatrix,
+  ...contracts.squareRoot,
+  ...contracts.subarrayWithMaximumSum,
+  ...contracts.totalWaysToSum,
+  ...contracts.uniquePathsInAGrid,
+};
 
 // This untyped variant is easier to work with when the specific type is not known.
 // The specific shape is already checked by the CodingContractDefinitions type, so it is safe to assert the type.
