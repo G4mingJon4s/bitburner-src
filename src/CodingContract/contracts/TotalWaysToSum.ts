@@ -2,7 +2,10 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const totalWaysToSum: Pick<CodingContractTypes, CodingContractName.TotalWaysToSum | CodingContractName.TotalWaysToSumII> = {
+export const totalWaysToSum: Pick<
+  CodingContractTypes,
+  CodingContractName.TotalWaysToSum | CodingContractName.TotalWaysToSumII
+> = {
   [CodingContractName.TotalWaysToSum]: {
     desc: (n: number): string => {
       return [

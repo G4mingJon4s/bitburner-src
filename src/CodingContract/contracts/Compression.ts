@@ -2,7 +2,12 @@ import { comprGenChar, comprLZDecode, comprLZEncode, comprLZGenerate } from "../
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const compression: Pick<CodingContractTypes, CodingContractName.CompressionIRLECompression | CodingContractName.CompressionIILZDecompression | CodingContractName.CompressionIIILZCompression> = {
+export const compression: Pick<
+  CodingContractTypes,
+  | CodingContractName.CompressionIRLECompression
+  | CodingContractName.CompressionIILZDecompression
+  | CodingContractName.CompressionIIILZCompression
+> = {
   [CodingContractName.CompressionIRLECompression]: {
     difficulty: 2,
     desc: (plaintext: string): string => {

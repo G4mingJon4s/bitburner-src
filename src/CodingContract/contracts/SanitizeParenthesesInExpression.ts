@@ -2,7 +2,10 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes, removeBracketsFromArrayString, removeQuotesFromString } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const sanitizeParenthesesInExpression: Pick<CodingContractTypes, CodingContractName.SanitizeParenthesesInExpression> = {
+export const sanitizeParenthesesInExpression: Pick<
+  CodingContractTypes,
+  CodingContractName.SanitizeParenthesesInExpression
+> = {
   [CodingContractName.SanitizeParenthesesInExpression]: {
     desc: (data: string): string => {
       return [

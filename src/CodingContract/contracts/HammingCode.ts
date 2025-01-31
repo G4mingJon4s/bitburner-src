@@ -3,7 +3,10 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const hammingCode: Pick<CodingContractTypes, CodingContractName.HammingCodesEncodedBinaryToInteger | CodingContractName.HammingCodesIntegerToEncodedBinary> = {
+export const hammingCode: Pick<
+  CodingContractTypes,
+  CodingContractName.HammingCodesEncodedBinaryToInteger | CodingContractName.HammingCodesIntegerToEncodedBinary
+> = {
   [CodingContractName.HammingCodesIntegerToEncodedBinary]: {
     difficulty: 5,
     desc: (n: number): string => {

@@ -1,7 +1,10 @@
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "../Enums";
 
-export const encryption: Pick<CodingContractTypes, CodingContractName.EncryptionICaesarCipher | CodingContractName.EncryptionIIVigenereCipher> = {
+export const encryption: Pick<
+  CodingContractTypes,
+  CodingContractName.EncryptionICaesarCipher | CodingContractName.EncryptionIIVigenereCipher
+> = {
   [CodingContractName.EncryptionICaesarCipher]: {
     desc: (data: [string, number]): string => {
       return [

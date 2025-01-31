@@ -2,7 +2,10 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const arrayJumpingGame: Pick<CodingContractTypes, CodingContractName.ArrayJumpingGame | CodingContractName.ArrayJumpingGameII> = {
+export const arrayJumpingGame: Pick<
+  CodingContractTypes,
+  CodingContractName.ArrayJumpingGame | CodingContractName.ArrayJumpingGameII
+> = {
   [CodingContractName.ArrayJumpingGame]: {
     desc: (arr: number[]): string => {
       return [

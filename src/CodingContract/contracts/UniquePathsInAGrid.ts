@@ -2,7 +2,10 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const uniquePathsInAGrid: Pick<CodingContractTypes, CodingContractName.UniquePathsInAGridI | CodingContractName.UniquePathsInAGridII> = {
+export const uniquePathsInAGrid: Pick<
+  CodingContractTypes,
+  CodingContractName.UniquePathsInAGridI | CodingContractName.UniquePathsInAGridII
+> = {
   [CodingContractName.UniquePathsInAGridI]: {
     desc: (data: number[]): string => {
       const numRows = data[0];

@@ -2,7 +2,13 @@ import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive
 import { CodingContractTypes } from "../ContractTypes";
 import { CodingContractName } from "@enums";
 
-export const algorithmicStockTrader: Pick<CodingContractTypes, CodingContractName.AlgorithmicStockTraderI | CodingContractName.AlgorithmicStockTraderII | CodingContractName.AlgorithmicStockTraderIII | CodingContractName.AlgorithmicStockTraderIV> = {
+export const algorithmicStockTrader: Pick<
+  CodingContractTypes,
+  | CodingContractName.AlgorithmicStockTraderI
+  | CodingContractName.AlgorithmicStockTraderII
+  | CodingContractName.AlgorithmicStockTraderIII
+  | CodingContractName.AlgorithmicStockTraderIV
+> = {
   [CodingContractName.AlgorithmicStockTraderI]: {
     desc: (data: number[]): string => {
       return [
