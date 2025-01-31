@@ -1,7 +1,7 @@
-import { CodingContractName } from "@enums";
-import { type CodingContractTypes } from "../ContractTypes";
+import { CodingContractTypes } from "../ContractTypes";
+import { CodingContractName } from "../Enums";
 
-export const encryptionDefinitions = {
+export const encryption: Pick<CodingContractTypes, CodingContractName.EncryptionICaesarCipher | CodingContractName.EncryptionIIVigenereCipher> = {
   [CodingContractName.EncryptionICaesarCipher]: {
     desc: (data: [string, number]): string => {
       return [
@@ -234,4 +234,4 @@ export const encryptionDefinitions = {
     convertAnswer: (ans) => ans,
     validateAnswer: (ans): ans is string => typeof ans === "string",
   },
-} satisfies Partial<CodingContractTypes>;
+};

@@ -1,34 +1,8 @@
-import { randomBigIntExclusive } from "../../utils/helpers/randomBigIntExclusive";
-import { type CodingContractTypes } from "../ContractTypes";
-import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CodingContractName } from "@enums";
+import { type CodingContractTypes } from "../ContractTypes";
+import { randomBigIntExclusive } from "../../utils/helpers/randomBigIntExclusive";
 
-export const mathDefinitions = {
-  [CodingContractName.FindLargestPrimeFactor]: {
-    desc: (n: number): string => {
-      return ["A prime factor is a factor that is a prime number.", `What is the largest prime factor of ${n}?`].join(
-        " ",
-      );
-    },
-    difficulty: 1,
-    generate: (): number => {
-      return getRandomIntInclusive(500, 1e9);
-    },
-    solver: (data, answer) => {
-      let fac = 2;
-      let n: number = data;
-      while (n > (fac - 1) * (fac - 1)) {
-        while (n % fac === 0) {
-          n = Math.round(n / fac);
-        }
-        ++fac;
-      }
-
-      return (n === 1 ? fac - 1 : n) === answer;
-    },
-    convertAnswer: (ans) => parseInt(ans, 10),
-    validateAnswer: (ans): ans is number => typeof ans === "number",
-  },
+export const squareRoot: Pick<CodingContractTypes, CodingContractName.SquareRoot> = {
   [CodingContractName.SquareRoot]: {
     difficulty: 5,
     desc(data: bigint): string {
@@ -66,4 +40,4 @@ ${data}`;
     convertAnswer: (ans) => BigInt(ans),
     validateAnswer: (ans): ans is bigint => typeof ans === "bigint",
   },
-} satisfies Partial<CodingContractTypes>;
+};

@@ -1,14 +1,7 @@
 import { CodingContractName } from "@enums";
 import { CodingContractSignatures } from "@nsdefs";
 
-import { encodingDefinitions } from "./contracts/encoding";
-import { generalDefinitions } from "./contracts/general";
-import { graphDefinitions } from "./contracts/graph";
-import { mathDefinitions } from "./contracts/math";
-import { optimizationDefinitions } from "./contracts/optimization";
-import { stringDefinitions } from "./contracts/string";
-import { traderDefinitions } from "./contracts/trader";
-import { encryptionDefinitions } from "./contracts/encryption";
+import * as contracts from "./contracts/Contracts";
 
 // This is the base interface, but should not be used for
 // typechecking individual entries. Use the two types below for that.
@@ -95,16 +88,7 @@ export function convert2DArrayToString(arr: number[][]): string {
 export const isCodingContractName = (v: unknown): v is CodingContractName =>
   Object.values(CodingContractName).some((a) => a === v);
 
-export const CodingContractDefinitions: CodingContractDefinitions<CodingContractSignatures> = {
-  ...encryptionDefinitions,
-  ...encodingDefinitions,
-  ...generalDefinitions,
-  ...graphDefinitions,
-  ...mathDefinitions,
-  ...optimizationDefinitions,
-  ...stringDefinitions,
-  ...traderDefinitions,
-};
+export const CodingContractDefinitions: CodingContractTypes = Object.assign({}, ...Object.values(contracts));
 
 // This untyped variant is easier to work with when the specific type is not known.
 // The specific shape is already checked by the CodingContractDefinitions type, so it is safe to assert the type.

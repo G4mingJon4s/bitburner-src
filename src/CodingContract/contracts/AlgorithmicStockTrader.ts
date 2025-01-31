@@ -1,8 +1,8 @@
-import { CodingContractName } from "@enums";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { type CodingContractTypes } from "../ContractTypes";
+import { CodingContractTypes } from "../ContractTypes";
+import { CodingContractName } from "@enums";
 
-export const traderDefinitions = {
+export const algorithmicStockTrader: Pick<CodingContractTypes, CodingContractName.AlgorithmicStockTraderI | CodingContractName.AlgorithmicStockTraderII | CodingContractName.AlgorithmicStockTraderIII | CodingContractName.AlgorithmicStockTraderIV> = {
   [CodingContractName.AlgorithmicStockTraderI]: {
     desc: (data: number[]): string => {
       return [
@@ -188,4 +188,4 @@ export const traderDefinitions = {
     convertAnswer: (ans) => parseInt(ans, 10),
     validateAnswer: (ans): ans is number => typeof ans === "number",
   },
-} satisfies Partial<CodingContractTypes>;
+};
