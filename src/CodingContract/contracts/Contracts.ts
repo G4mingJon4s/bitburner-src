@@ -1,7 +1,7 @@
 export { algorithmicStockTrader } from "./AlgorithmicStockTrader";
 export { arrayJumpingGame } from "./ArrayJumpingGame";
 export { compression } from "./Compression";
-export { encryption } from "./encryption";
+export { encryption } from "./Encryption";
 export { findAllValidMathExpressions } from "./FindAllValidMathExpressions";
 export { findLargestPrimeFactor } from "./FindLargestPrimeFactor";
 export { generateIPAddresses } from "./GenerateIPAddresses";
