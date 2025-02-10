@@ -1,7 +1,24 @@
 import { CodingContractName } from "@enums";
 import { CodingContractSignatures } from "@nsdefs";
 
-import * as contracts from "./contracts/Contracts";
+import { algorithmicStockTrader } from "./contracts/AlgorithmicStockTrader";
+import { arrayJumpingGame } from "./contracts/ArrayJumpingGame";
+import { compression } from "./contracts/Compression";
+import { encryption } from "./contracts/Encryption";
+import { findAllValidMathExpressions } from "./contracts/FindAllValidMathExpressions";
+import { findLargestPrimeFactor } from "./contracts/FindLargestPrimeFactor";
+import { generateIPAddresses } from "./contracts/GenerateIPAddresses";
+import { hammingCode } from "./contracts/HammingCode";
+import { mergeOverlappingIntervals } from "./contracts/MergeOverlappingIntervals";
+import { minimumPathSumInATriangle } from "./contracts/MinimumPathSumInATriangle";
+import { proper2ColoringOfAGraph } from "./contracts/Proper2ColoringOfAGraph";
+import { sanitizeParenthesesInExpression } from "./contracts/SanitizeParenthesesInExpression";
+import { shortestPathInAGrid } from "./contracts/ShortestPathInAGrid";
+import { spiralizeMatrix } from "./contracts/SpiralizeMatrix";
+import { squareRoot } from "./contracts/SquareRoot";
+import { subarrayWithMaximumSum } from "./contracts/SubarrayWithMaximumSum";
+import { totalWaysToSum } from "./contracts/TotalWaysToSum";
+import { uniquePathsInAGrid } from "./contracts/UniquePathsInAGrid";
 
 // This is the base interface, but should not be used for
 // typechecking individual entries. Use the two types below for that.
@@ -89,24 +106,24 @@ export const isCodingContractName = (v: unknown): v is CodingContractName =>
   Object.values(CodingContractName).some((a) => a === v);
 
 export const CodingContractDefinitions: CodingContractTypes = {
-  ...contracts.algorithmicStockTrader,
-  ...contracts.arrayJumpingGame,
-  ...contracts.compression,
-  ...contracts.encryption,
-  ...contracts.findAllValidMathExpressions,
-  ...contracts.findLargestPrimeFactor,
-  ...contracts.generateIPAddresses,
-  ...contracts.hammingCode,
-  ...contracts.mergeOverlappingIntervals,
-  ...contracts.minimumPathSumInATriangle,
-  ...contracts.proper2ColoringOfAGraph,
-  ...contracts.sanitizeParenthesesInExpression,
-  ...contracts.shortestPathInAGrid,
-  ...contracts.spiralizeMatrix,
-  ...contracts.squareRoot,
-  ...contracts.subarrayWithMaximumSum,
-  ...contracts.totalWaysToSum,
-  ...contracts.uniquePathsInAGrid,
+  ...algorithmicStockTrader,
+  ...arrayJumpingGame,
+  ...compression,
+  ...encryption,
+  ...findAllValidMathExpressions,
+  ...findLargestPrimeFactor,
+  ...generateIPAddresses,
+  ...hammingCode,
+  ...mergeOverlappingIntervals,
+  ...minimumPathSumInATriangle,
+  ...proper2ColoringOfAGraph,
+  ...sanitizeParenthesesInExpression,
+  ...shortestPathInAGrid,
+  ...spiralizeMatrix,
+  ...squareRoot,
+  ...subarrayWithMaximumSum,
+  ...totalWaysToSum,
+  ...uniquePathsInAGrid,
 };
 
 // This untyped variant is easier to work with when the specific type is not known.
