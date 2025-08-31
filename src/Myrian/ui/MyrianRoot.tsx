@@ -9,7 +9,7 @@ import { MD } from "../../ui/MD/MD";
 import { tutorial } from "./tutorial";
 import { Grid } from "./Grid";
 
-const tut = <MD md={tutorial} />;
+const tut = <MD pageFilePath={null as any} rawString={tutorial} />;
 
 export const MyrianRoot = (): React.ReactElement => {
   useRerender(50);

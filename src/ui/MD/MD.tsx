@@ -12,8 +12,8 @@ import { FilePath } from "../../Paths/FilePath";
 import { getPage } from "../../Documentation/root";
 import { DocImages } from "../../Documentation/pages";
 
-export function MD({ pageFilePath }: { pageFilePath: FilePath }): React.ReactElement {
-  const pageContent = getPage(pageFilePath);
+export function MD({ pageFilePath, rawString }: { pageFilePath: FilePath, rawString?: string }): React.ReactElement {
+  const pageContent = rawString !== undefined ? rawString : getPage(pageFilePath);
 
   return (
     <ReactMarkdown
