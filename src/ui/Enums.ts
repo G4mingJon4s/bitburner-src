@@ -24,6 +24,7 @@ export enum SimplePage {
   Factions = "Factions",
   Gang = "Gang",
   Go = "IPvGO Subnet",
+  MyrianOS = "Myrian OS",
   Hacknet = "Hacknet",
   Milestones = "Milestones",
   Options = "Options",

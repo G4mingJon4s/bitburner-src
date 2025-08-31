@@ -2,7 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { AugmentationName, CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
-import { CorruptableText } from "../ui/React/CorruptableText";
+import { CorruptibleText } from "../ui/React/CorruptibleText";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -548,11 +548,23 @@ export function initBitNodes() {
     "MyrianOS",
     "l̷i̵g̵h̴t̵ ̴a̷t̸ ̶t̵h̵e̸ ̶e̷n̵d̶ ̶o̸f̶ ̸t̴h̸e̴ ̸t̷u̶n̸n̸e̷l̵.̷",
     (
-      <CorruptableText
+      <CorruptibleText
         content={`yNjHLAgecI ASW1fQdKx5 n9DQ3rmHp3 mnv0XEdwH2 sBkAlBOPhx NohIDL9eRy TbIl8U3WKz 1wjnJ9iuwS VML36vYLNH K06StviNvI cRboTarefZ 7BSNntPpJj DfayVbfxU6 46xvOPQd2Y Ogyj2gnyLr FIND THE GLITCH IN ISHIMA S6E0Vpmxk6 GTF9dWvE6n EEGg7xvtYR Um8YIC0Qww PG4vauBKBk JWG8V1j5Z5 bfYYTTFnBY 7uoicoqIaV IeUu0F42aA EhTF7Fkxyt OBYgGSu0es bJQpenVoO6 L9cL39tRhh xfLroUMvY8 xmMckUHLSQ`}
         spoiler={false}
       />
     ),
+    (
+      <>
+        This Source-File grants the following benefits:
+        <br />
+        <br />
+        Level 1: Reduce the effect of the Rust Glitch
+        <br />
+        Level 2: Reduce the effect of the Magnetism Glitch
+        <br />
+        Level 3: Reduce the effect of the Friction, Isolation, Virtualization, and Jamming Glitch
+      </>
+    )
   );
 }
 
@@ -1104,7 +1116,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         PurchasedServerSoftcap: 100,
         PurchasedServerLimit: 0.01,
         PurchasedServerMaxRam: 0.01,
-        RepToDonateToFaction: 10000,
+        FavorToDonateToFaction: 3,
         ScriptHackMoney: 0.01,
         ScriptHackMoneyGain: 0.01,
         ServerGrowthRate: 0.01,

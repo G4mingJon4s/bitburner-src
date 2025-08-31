@@ -1,5 +1,13 @@
 import type { NetscriptContext } from "./APIWrapper";
-import type { RunningScript as IRunningScript, Person as IPerson, Server as IServer, ScriptArg } from "@nsdefs";
+import type {
+  RunningScript as IRunningScript,
+  Person as IPerson,
+  Server as IServer,
+  ScriptArg,
+  BitNodeOptions,
+  DeviceID,
+} from "@nsdefs";
+import type { WorkerScript } from "./WorkerScript";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
