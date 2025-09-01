@@ -1,7 +1,6 @@
-import { DeviceType, Glitch } from "@enums";
+import { DeviceTypeEnum, Glitch } from "@enums";
 import { myrian, myrianSize } from "../Myrian";
 import { findDevice, inMyrianBounds } from "../Myrian";
-import { roamingTime } from "../formulas/glitches";
 
 const clamp = (min: number, v: number, max: number) => Math.min(Math.max(v, min), max);
 
@@ -34,7 +33,7 @@ export const processRoaming = () => {
   if (roaming === 0) return;
 
   myrian.devices.forEach((device) => {
-    if (device.type !== DeviceType.OSocket && device.type !== DeviceType.ISocket) return;
+    if (device.type !== DeviceTypeEnum.OSocket && device.type !== DeviceTypeEnum.ISocket) return;
     if (device.isBusy) return;
     let canMove = false;
     for (const dir of dirs) {

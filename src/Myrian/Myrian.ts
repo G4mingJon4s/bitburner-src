@@ -1,5 +1,5 @@
-import { Device, DeviceID } from "@nsdefs";
-import { DeviceType, Component, Glitch } from "@enums";
+import { Device, DeviceType, DeviceID } from "@nsdefs";
+import { ComponentEnum, Glitch } from "@enums";
 import { glitchMult, roamingTime } from "./formulas/glitches";
 import { isDeviceISocket, pickOne } from "./utils";
 import { componentTiers } from "./formulas/components";
@@ -55,7 +55,7 @@ export const loadMyrian = (save: string) => {
   const savedMyrian = JSON.parse(save);
   Object.assign(myrian, savedMyrian);
   myrian.devices.forEach((d) => (d.isBusy = false));
-  myrian.devices.filter(isDeviceISocket).forEach((d) => (d.content = new Array(d.maxContent).fill(d.emitting)));
+  myrian.devices.filter(isDeviceISocket).forEach((d) => (d.content = Array.from({ length: d.maxContent }, () => d.emitting)));
 };
 
 export const inMyrianBounds = (x: number, y: number) => x >= 0 && x < myrianSize && y >= 0 && y < myrianSize;
@@ -97,9 +97,9 @@ export const resetMyrian = () => {
 
   NewBus("alice", Math.floor(myrianSize / 2), Math.floor(myrianSize / 2));
 
-  NewISocket("isocket0", Math.floor(myrianSize / 4), 0, Component.R0);
-  NewISocket("isocket1", Math.floor(myrianSize / 2), 0, Component.G0);
-  NewISocket("isocket2", Math.floor((myrianSize * 3) / 4), 0, Component.B0);
+  NewISocket("isocket0", Math.floor(myrianSize / 4), 0, ComponentEnum.R0);
+  NewISocket("isocket1", Math.floor(myrianSize / 2), 0, ComponentEnum.G0);
+  NewISocket("isocket2", Math.floor((myrianSize * 3) / 4), 0, ComponentEnum.B0);
 
   NewOSocket("osocket0", Math.floor(myrianSize / 4), Math.floor(myrianSize - 1));
   NewOSocket("osocket1", Math.floor(myrianSize / 2), Math.floor(myrianSize - 1));

@@ -1,6 +1,5 @@
 import React from "react";
 import { Device } from "@nsdefs";
-import { DeviceType } from "@enums";
 
 import { BusIcon } from "./BusIcon";
 import { ReducerIcon } from "./Reducer";

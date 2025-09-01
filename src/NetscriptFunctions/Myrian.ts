@@ -36,7 +36,9 @@ import {
 import {
   adjacent,
   adjacentCoord2D,
+  compareComponentMap,
   contentVulnsValue,
+  extendsContainerDevice,
   inventoryMatches,
   isDeviceBus,
   isDeviceContainer,
@@ -49,13 +51,14 @@ import {
   isMovingDevice,
   isReducingDevice,
   isTransferingDevice,
+  makeComponentMap,
   pickOne,
 } from "../Myrian/utils";
 import { installSpeed, emissionSpeed, moveSpeed, reduceSpeed, transferSpeed } from "../Myrian/formulas/speed";
 import { NewBattery, NewBus, NewCache, NewISocket, NewLock, NewOSocket, NewReducer } from "../Myrian/NewDevices";
 import { rustBus } from "../Myrian/glitches/rust";
-import { Bus, Myrian as IMyrian, Reducer, Battery, ISocket } from "@nsdefs";
-import { DeviceType, Component, Glitch } from "@enums";
+import { Bus, Myrian as IMyrian, Reducer, Battery, ISocket, DeviceType, Component } from "@nsdefs";
+import { DeviceTypeEnum, Glitch } from "@enums";
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
   return {
@@ -68,9 +71,9 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const id = helpers.deviceID(ctx, "id", _id);
       const device = findDevice(id);
       if (!device) return;
-      return JSON.parse(JSON.stringify(device));
+      return structuredClone(device);
     },
-    getDevices: (__ctx) => () => JSON.parse(JSON.stringify(myrian.devices)),
+    getDevices: (__ctx) => () => structuredClone(myrian.devices),
     getVulns: () => () => myrian.vulns,
     renameDevice: (ctx) => (_id, _name) => {
       const id = helpers.deviceID(ctx, "id", _id);
@@ -83,60 +86,60 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
     },
     moveBus:
       (ctx) =>
-      async (_bus, _coord): Promise<boolean> => {
-        const busID = helpers.string(ctx, "bus", _bus);
-        const [x, y] = helpers.coord2d(ctx, "coord", _coord);
+        async (_bus, _coord): Promise<boolean> => {
+          const busID = helpers.string(ctx, "bus", _bus);
+          const [x, y] = helpers.coord2d(ctx, "coord", _coord);
 
-        const bus = findDevice(busID, DeviceType.Bus) as Bus;
-        if (!bus) {
-          helpers.log(ctx, () => `bus does not exist`);
-          return Promise.resolve(false);
-        }
+          const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+          if (!bus) {
+            helpers.log(ctx, () => `bus does not exist`);
+            return Promise.resolve(false);
+          }
 
-        if (!adjacentCoord2D(bus, [x, y])) {
-          helpers.log(ctx, () => `bus ${busID} is not adjacent to [${x}, ${y}]`);
-          return Promise.resolve(false);
-        }
-        if (!inMyrianBounds(x, y)) {
-          helpers.log(ctx, () => `[${x}, ${y}] is out of bounds`);
-          return Promise.resolve(false);
-        }
+          if (!adjacentCoord2D(bus, [x, y])) {
+            helpers.log(ctx, () => `bus ${busID} is not adjacent to [${x}, ${y}]`);
+            return Promise.resolve(false);
+          }
+          if (!inMyrianBounds(x, y)) {
+            helpers.log(ctx, () => `[${x}, ${y}] is out of bounds`);
+            return Promise.resolve(false);
+          }
 
-        if (findDevice([x, y])) {
-          helpers.log(ctx, () => `[${x}, ${y}] is occupied`);
-          return Promise.resolve(false);
-        }
+          if (findDevice([x, y])) {
+            helpers.log(ctx, () => `[${x}, ${y}] is occupied`);
+            return Promise.resolve(false);
+          }
 
-        if (bus.isBusy) {
-          helpers.log(ctx, () => `bus ${busID} is busy`);
-          return Promise.resolve(false);
-        }
+          if (bus.isBusy) {
+            helpers.log(ctx, () => `bus ${busID} is busy`);
+            return Promise.resolve(false);
+          }
 
-        const outOfEnergy = bus.energy === 0 ? 10 : 1;
+          const outOfEnergy = bus.energy === 0 ? 10 : 1;
 
-        bus.isBusy = true;
-        return helpers
-          .netscriptDelay(
-            ctx,
-            moveSpeed(bus.moveLvl) * frictionMult(myrian.glitches[Glitch.Friction]) * outOfEnergy,
-            true,
-          )
-          .then(() => {
-            bus.isBusy = false;
-            bus.energy = Math.max(0, bus.energy - magnetismLoss(myrian.glitches[Glitch.Magnetism]));
-            if (findDevice([x, y])) {
-              helpers.log(ctx, () => `[${x}, ${y}] is occupied`);
-              return Promise.resolve(false);
-            }
-            bus.x = x;
-            bus.y = y;
-            if (myrian.rust[`${x}:${y}`]) rustBus(bus, myrian.glitches[Glitch.Rust]);
-            return Promise.resolve(true);
-          })
-          .finally(() => {
-            bus.isBusy = false;
-          });
-      },
+          bus.isBusy = true;
+          return helpers
+            .netscriptDelay(
+              ctx,
+              moveSpeed(bus.moveLvl) * frictionMult(myrian.glitches[Glitch.Friction]) * outOfEnergy,
+              true,
+            )
+            .then(() => {
+              bus.isBusy = false;
+              bus.energy = Math.max(0, bus.energy - magnetismLoss(myrian.glitches[Glitch.Magnetism]));
+              if (findDevice([x, y])) {
+                helpers.log(ctx, () => `[${x}, ${y}] is occupied`);
+                return Promise.resolve(false);
+              }
+              bus.x = x;
+              bus.y = y;
+              if (myrian.rust[`${x}:${y}`]) rustBus(bus, myrian.glitches[Glitch.Rust]);
+              return Promise.resolve(true);
+            })
+            .finally(() => {
+              bus.isBusy = false;
+            });
+        },
     formatContent: (ctx) => (_device) => {
       const deviceID = helpers.deviceID(ctx, "device", _device);
 
@@ -157,7 +160,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
         const cooldown = emissionSpeed(device.emissionLvl);
         device.cooldownUntil = Date.now() + cooldown;
         setTimeout(() => {
-          device.content = new Array(device.maxContent).fill(device.emitting);
+          device.content = new Array<Component>(device.maxContent).fill(device.emitting);
         }, cooldown);
       }
 
@@ -165,181 +168,172 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
     },
     transfer:
       (ctx) =>
-      async (_from, _to, _input, _output): Promise<boolean> => {
-        const fromID = helpers.deviceID(ctx, "from", _from);
-        const toID = helpers.deviceID(ctx, "to", _to);
-        const input = _input as Component[];
-        const output = (_output ?? []) as Component[];
+        async (_from, _to, _input, _output): Promise<boolean> => {
+          const fromID = helpers.deviceID(ctx, "from", _from);
+          const toID = helpers.deviceID(ctx, "to", _to);
+          const input = _input as Component[];
+          const output = (_output ?? []) as Component[];
 
-        const fromDevice = findDevice(fromID);
-        if (!fromDevice) {
-          helpers.log(ctx, () => `device ${fromID} not found`);
-          return Promise.resolve(false);
-        }
+          const fromDevice = findDevice(fromID);
+          if (!fromDevice) {
+            helpers.log(ctx, () => `device ${fromID} not found`);
+            return Promise.resolve(false);
+          }
 
-        if (!isDeviceContainer(fromDevice)) {
-          helpers.log(ctx, () => `device ${fromID} is not a container`);
-          return Promise.resolve(false);
-        }
+          if (!extendsContainerDevice(fromDevice)) {
+            helpers.log(ctx, () => `device ${fromID} is not a container`);
+            return Promise.resolve(false);
+          }
 
-        const toDevice = findDevice(toID);
-        if (!toDevice) {
-          helpers.log(ctx, () => `device ${toID} not found`);
-          return Promise.resolve(false);
-        }
+          const toDevice = findDevice(toID);
+          if (!toDevice) {
+            helpers.log(ctx, () => `device ${toID} not found`);
+            return Promise.resolve(false);
+          }
 
-        if (!isDeviceContainer(toDevice)) {
-          helpers.log(ctx, () => `device ${toID} is not a container`);
-          return Promise.resolve(false);
-        }
+          if (!extendsContainerDevice(toDevice)) {
+            helpers.log(ctx, () => `device ${toID} is not a container`);
+            return Promise.resolve(false);
+          }
 
-        if (!adjacent(fromDevice, toDevice)) {
-          helpers.log(ctx, () => "entities are not adjacent");
-          return Promise.resolve(false);
-        }
+          if (!adjacent(fromDevice, toDevice)) {
+            helpers.log(ctx, () => "entities are not adjacent");
+            return Promise.resolve(false);
+          }
 
-        if (!isDeviceBus(fromDevice) && !isDeviceBus(toDevice)) {
-          helpers.log(ctx, () => "neither device is a bus");
-          return Promise.resolve(false);
-        }
+          const devices = [fromDevice, toDevice];
+          const busIndex = devices.findIndex(d => isDeviceBus(d));
 
-        const fromFinalSize = fromDevice.content.length - input.length + output.length;
-        const toFinalSize = toDevice.content.length - output.length + input.length;
-        if (fromFinalSize > fromDevice.maxContent || toFinalSize > toDevice.maxContent) {
-          helpers.log(ctx, () => "not enough space in one of the containers");
-          return Promise.resolve(false);
-        }
-        if (fromDevice.isBusy || toDevice.isBusy) {
-          helpers.log(ctx, () => "one of the entities is busy");
-          return Promise.resolve(false);
-        }
+          if (busIndex === -1) {
+            helpers.log(ctx, () => "neither device is a bus");
+            return Promise.resolve(false);
+          }
 
-        const fromContentMap = fromDevice.content.reduce(
-          (acc, c) => ({ ...acc, [c]: (acc[c] ?? 0) + 1 }),
-          {} as Record<Component, number>,
-        );
-        const toContentMap = toDevice.content.reduce(
-          (acc, c) => ({ ...acc, [c]: (acc[c] ?? 0) + 1 }),
-          {} as Record<Component, number>,
-        );
+          const bus = devices[busIndex] as Bus;
+          const container = devices[busIndex === 0 ? 1 : 0];
 
-        const inputContentMap = input.reduce(
-          (acc, c) => ({ ...acc, [c]: (acc[c] ?? 0) + 1 }),
-          {} as Record<Component, number>,
-        );
-        const outputContentMap = output.reduce(
-          (acc, c) => ({ ...acc, [c]: (acc[c] ?? 0) + 1 }),
-          {} as Record<Component, number>,
-        );
+          let transferLvl = bus.transferLvl;
+          if (isDeviceBus(container)) transferLvl = Math.min(transferLvl, container.transferLvl);
 
-        const fromHas = (Object.keys(inputContentMap) as Component[]).every(
-          (k) => fromContentMap[k] >= inputContentMap[k],
-        );
-        const toHas = (Object.keys(outputContentMap) as Component[]).every(
-          (k) => toContentMap[k] >= outputContentMap[k],
-        );
-        if (!fromHas || !toHas) {
-          helpers.log(ctx, () => "one of the entities does not have the items");
-          return Promise.resolve(false);
-        }
+          const fromFinalSize = fromDevice.content.length - input.length + output.length;
+          const toFinalSize = toDevice.content.length - output.length + input.length;
+          if (fromFinalSize > fromDevice.maxContent || toFinalSize > toDevice.maxContent) {
+            helpers.log(ctx, () => "not enough space in one of the containers");
+            return Promise.resolve(false);
+          }
+          if (fromDevice.isBusy || toDevice.isBusy) {
+            helpers.log(ctx, () => "one of the entities is busy");
+            return Promise.resolve(false);
+          }
 
-        const bus = [fromDevice, toDevice].find((e) => e.type === DeviceType.Bus) as Bus;
-        const container = [fromDevice, toDevice].find((e) => e.type !== DeviceType.Bus)!;
-        fromDevice.isBusy = true;
-        toDevice.isBusy = true;
+          const fromContentMap = makeComponentMap(fromDevice.content);
+          const toContentMap = makeComponentMap(toDevice.content);
+          const inputContentMap = makeComponentMap(input);
+          const outputContentMap = makeComponentMap(output);
 
-        return helpers
-          .netscriptDelay(ctx, transferSpeed(bus.transferLvl) * isolationMult(myrian.glitches[Glitch.Isolation]), true)
-          .then(() => {
-            const previousSize = container.content.length;
+          const fromHas = compareComponentMap(fromContentMap, inputContentMap, (a, b) => a >= b, false);
+          const toHas = compareComponentMap(toContentMap, outputContentMap, (a, b) => a >= b, false);
 
-            (Object.keys(inputContentMap) as Component[]).forEach((k) => {
-              fromContentMap[k] = (fromContentMap[k] ?? 0) - inputContentMap[k];
-              toContentMap[k] = (toContentMap[k] ?? 0) + inputContentMap[k];
+          if (!fromHas || !toHas) {
+            helpers.log(ctx, () => "one of the entities does not have the items");
+            return Promise.resolve(false);
+          }
+
+          fromDevice.isBusy = true;
+          toDevice.isBusy = true;
+
+          return helpers
+            .netscriptDelay(ctx, transferSpeed(transferLvl) * isolationMult(myrian.glitches[Glitch.Isolation]), true)
+            .then(() => {
+              const previousSize = container.content.length;
+
+              (Object.keys(inputContentMap) as Component[]).forEach((k) => {
+                fromContentMap[k] = (fromContentMap[k] ?? 0) - (inputContentMap[k] ?? 0);
+                toContentMap[k] = (toContentMap[k] ?? 0) + (inputContentMap[k] ?? 0);
+              });
+              (Object.keys(outputContentMap) as Component[]).forEach((k) => {
+                toContentMap[k] = (toContentMap[k] ?? 0) - (outputContentMap[k] ?? 0);
+                fromContentMap[k] = (fromContentMap[k] ?? 0) + (outputContentMap[k] ?? 0);
+              });
+              toDevice.content = (Object.keys(toContentMap) as Component[])
+                .map((k) => new Array<Component>(toContentMap[k] ?? 0).fill(k))
+                .flat();
+
+              fromDevice.content = (Object.keys(fromContentMap) as Component[])
+                .map((k) => new Array<Component>(fromContentMap[k] ?? 0).fill(k))
+                .flat();
+
+              if (isDeviceISocket(container) && previousSize > container.content.length) {
+                const cooldown = emissionSpeed(container.emissionLvl);
+                container.cooldownUntil = Date.now() + cooldown;
+                setTimeout(() => {
+                  container.content = new Array<Component>(container.maxContent).fill(container.emitting);
+                }, cooldown);
+              }
+              if (isDeviceOSocket(container) && inventoryMatches(container.currentRequest, container.content)) {
+                const gain = contentVulnsValue(container.content) * getTotalGlitchMult();
+                myrian.vulns += gain;
+                myrian.totalVulns += gain;
+                container.content = [];
+                const request = getNextOSocketRequest(myrian.glitches[Glitch.Encryption]);
+                container.currentRequest = request;
+                container.maxContent = request.length;
+              }
+              return Promise.resolve(true);
+            })
+            .finally(() => {
+              fromDevice.isBusy = false;
+              toDevice.isBusy = false;
             });
-            (Object.keys(outputContentMap) as Component[]).forEach((k) => {
-              toContentMap[k] = (toContentMap[k] ?? 0) - outputContentMap[k];
-              fromContentMap[k] = (fromContentMap[k] ?? 0) + outputContentMap[k];
-            });
-            toDevice.content = (Object.keys(toContentMap) as Component[])
-              .map((k) => new Array(toContentMap[k]).fill(k))
-              .flat();
-
-            fromDevice.content = (Object.keys(fromContentMap) as Component[])
-              .map((k) => new Array(fromContentMap[k]).fill(k))
-              .flat();
-
-            if (isDeviceISocket(container) && previousSize > container.content.length) {
-              const cooldown = emissionSpeed(container.emissionLvl);
-              container.cooldownUntil = Date.now() + cooldown;
-              setTimeout(() => {
-                container.content = new Array(container.maxContent).fill(container.emitting);
-              }, cooldown);
-            }
-            if (isDeviceOSocket(container) && inventoryMatches(container.currentRequest, container.content)) {
-              const gain = contentVulnsValue(container.content) * getTotalGlitchMult();
-              myrian.vulns += gain;
-              myrian.totalVulns += gain;
-              container.content = [];
-              const request = getNextOSocketRequest(myrian.glitches[Glitch.Encryption]);
-              container.currentRequest = request;
-              container.maxContent = request.length;
-            }
-            return Promise.resolve(true);
-          })
-          .finally(() => {
-            fromDevice.isBusy = false;
-            toDevice.isBusy = false;
-          });
-      },
+        },
     reduce:
       (ctx) =>
-      async (_busID, _reducerID): Promise<boolean> => {
-        const busID = helpers.deviceID(ctx, "bus", _busID);
-        const reducerID = helpers.deviceID(ctx, "reducer", _reducerID);
+        async (_busID, _reducerID): Promise<boolean> => {
+          const busID = helpers.deviceID(ctx, "bus", _busID);
+          const reducerID = helpers.deviceID(ctx, "reducer", _reducerID);
 
-        const bus = findDevice(busID, DeviceType.Bus) as Bus;
-        if (!bus) {
-          helpers.log(ctx, () => `bus ${busID} not found`);
-          return Promise.resolve(false);
-        }
+          const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+          if (!bus) {
+            helpers.log(ctx, () => `bus ${busID} not found`);
+            return Promise.resolve(false);
+          }
 
-        const reducer = findDevice(reducerID, DeviceType.Reducer) as Reducer;
-        if (!reducer) {
-          helpers.log(ctx, () => `reducer ${reducerID} not found`);
-          return Promise.resolve(false);
-        }
+          const reducer = findDevice(reducerID, DeviceTypeEnum.Reducer) as Reducer;
+          if (!reducer) {
+            helpers.log(ctx, () => `reducer ${reducerID} not found`);
+            return Promise.resolve(false);
+          }
 
-        if (!adjacent(bus, reducer)) {
-          helpers.log(ctx, () => "entites are not adjacent");
-          return Promise.resolve(false);
-        }
+          if (!adjacent(bus, reducer)) {
+            helpers.log(ctx, () => "entites are not adjacent");
+            return Promise.resolve(false);
+          }
 
-        const recipe = recipes[reducer.tier].find((r) => inventoryMatches(r.input, reducer.content));
+          const recipe = recipes[reducer.tier].find((r) => inventoryMatches(r.input, reducer.content));
 
-        if (!recipe) {
-          helpers.log(ctx, () => "reducer content matches no recipe");
-          return Promise.resolve(false);
-        }
+          if (!recipe) {
+            helpers.log(ctx, () => "reducer content matches no recipe");
+            return Promise.resolve(false);
+          }
 
-        if (bus.isBusy || reducer.isBusy) {
-          helpers.log(ctx, () => "bus or reducer is busy");
-          return Promise.resolve(false);
-        }
+          if (bus.isBusy || reducer.isBusy) {
+            helpers.log(ctx, () => "bus or reducer is busy");
+            return Promise.resolve(false);
+          }
 
-        bus.isBusy = true;
-        reducer.isBusy = true;
-        return helpers
-          .netscriptDelay(ctx, reduceSpeed(bus.reduceLvl) * jammingMult(myrian.glitches[Glitch.Jamming]), true)
-          .then(() => {
-            reducer.content = [recipe.output];
-            return Promise.resolve(true);
-          })
-          .finally(() => {
-            bus.isBusy = false;
-            reducer.isBusy = false;
-          });
-      },
+          bus.isBusy = true;
+          reducer.isBusy = true;
+          return helpers
+            .netscriptDelay(ctx, reduceSpeed(bus.reduceLvl) * jammingMult(myrian.glitches[Glitch.Jamming]), true)
+            .then(() => {
+              reducer.content = [recipe.output];
+              return Promise.resolve(true);
+            })
+            .finally(() => {
+              bus.isBusy = false;
+              reducer.isBusy = false;
+            });
+        },
     tweakISocket: (ctx) => async (_bus, _isocket, _component) => {
       const busID = helpers.deviceID(ctx, "bus", _bus);
       const isocketID = helpers.deviceID(ctx, "isocket", _isocket);
@@ -350,12 +344,12 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
         return Promise.resolve(false);
       }
 
-      const bus = findDevice(busID, DeviceType.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);
       }
-      const isocket = findDevice(isocketID, DeviceType.ISocket) as ISocket;
+      const isocket = findDevice(isocketID, DeviceTypeEnum.ISocket) as ISocket;
       if (!isocket) {
         helpers.log(ctx, () => `isocket ${isocketID} not found`);
         return Promise.resolve(false);
@@ -381,7 +375,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           const cooldown = emissionSpeed(isocket.emissionLvl);
           isocket.cooldownUntil = Date.now() + cooldown;
           setTimeout(() => {
-            isocket.content = new Array(isocket.maxContent).fill(isocket.emitting);
+            isocket.content = new Array<Component>(isocket.maxContent).fill(isocket.emitting);
           }, cooldown);
           return Promise.resolve(true);
         })
@@ -394,13 +388,13 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const busID = helpers.deviceID(ctx, "bus", _bus);
       const batteryID = helpers.deviceID(ctx, "battery", _battery);
 
-      const bus = findDevice(busID, DeviceType.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(-1);
       }
 
-      const battery = findDevice(batteryID, DeviceType.Battery) as Battery;
+      const battery = findDevice(batteryID, DeviceTypeEnum.Battery) as Battery;
       if (!battery) {
         helpers.log(ctx, () => `battery ${batteryID} not found`);
         return Promise.resolve(-1);
@@ -474,7 +468,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const [x, y] = helpers.coord2d(ctx, "coord", _coord);
       const deviceType = helpers.string(ctx, "deviceType", _deviceType) as DeviceType;
 
-      const bus = findDevice(busID, DeviceType.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);
@@ -504,12 +498,12 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
 
       myrian.vulns -= cost;
 
-      if (deviceType === DeviceType.ISocket && y !== 0) {
+      if (deviceType === DeviceTypeEnum.ISocket && y !== 0) {
         helpers.log(ctx, () => `ISocket must be placed on the top row`);
         return Promise.resolve(false);
       }
 
-      if (deviceType === DeviceType.OSocket && y !== myrianSize - 1) {
+      if (deviceType === DeviceTypeEnum.OSocket && y !== myrianSize - 1) {
         helpers.log(ctx, () => `OSocket must be placed on the bottom row`);
         return Promise.resolve(false);
       }
@@ -528,27 +522,27 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           bus.isBusy = false;
           removeDevice(lockName);
           switch (deviceType) {
-            case DeviceType.Bus: {
+            case DeviceTypeEnum.Bus: {
               NewBus(name, x, y);
               break;
             }
-            case DeviceType.ISocket: {
+            case DeviceTypeEnum.ISocket: {
               NewISocket(name, x, y, pickOne(componentTiers[0]));
               break;
             }
-            case DeviceType.OSocket: {
+            case DeviceTypeEnum.OSocket: {
               NewOSocket(name, x, y);
               break;
             }
-            case DeviceType.Reducer: {
+            case DeviceTypeEnum.Reducer: {
               NewReducer(name, x, y);
               break;
             }
-            case DeviceType.Cache: {
+            case DeviceTypeEnum.Cache: {
               NewCache(name, x, y);
               break;
             }
-            case DeviceType.Battery: {
+            case DeviceTypeEnum.Battery: {
               NewBattery(name, x, y);
               break;
             }
@@ -563,7 +557,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const busID = helpers.string(ctx, "bus", _bus);
       const [x, y] = helpers.coord2d(ctx, "coord", _coord);
 
-      const bus = findDevice(busID, DeviceType.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);

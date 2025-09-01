@@ -5887,85 +5887,88 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
-// declare enum DeviceType {
-//   Bus = "bus",
-//   ISocket = "isocket",
-//   OSocket = "osocket",
-//   Reducer = "reducer",
-//   Cache = "cache",
-//   Lock = "lock",
-//   Battery = "battery",
-// }
+type DeviceTypeEnumType = {
+  Bus: "bus",
+  ISocket: "isocket",
+  OSocket: "osocket",
+  Reducer: "reducer",
+  Cache: "cache",
+  Lock: "lock",
+  Battery: "battery",
+};
 
-// declare enum Component {
-//   // tier 0
-//   R0 = "r0",
-//   G0 = "g0",
-//   B0 = "b0",
+type DeviceType = _ValueOf<DeviceTypeEnumType>;
 
-//   // tier 1
-//   R1 = "r1",
-//   G1 = "g1",
-//   B1 = "b1",
+type ComponentEnumType = {
+  // tier 0
+  R0: "r0",
+  G0: "g0",
+  B0: "b0",
 
-//   Y1 = "y1",
-//   C1 = "c1",
-//   M1 = "m1",
+  // tier 1
+  R1: "r1",
+  G1: "g1",
+  B1: "b1",
 
-//   // tier 2
-//   R2 = "r2",
-//   G2 = "g2",
-//   B2 = "b2",
+  Y1: "y1",
+  C1: "c1",
+  M1: "m1",
 
-//   Y2 = "y2",
-//   C2 = "c2",
-//   M2 = "m2",
+  // tier 2
+  R2: "r2",
+  G2: "g2",
+  B2: "b2",
 
-//   W2 = "w2",
+  Y2: "y2",
+  C2: "c2",
+  M2: "m2",
 
-//   // tier 3
-//   R3 = "r3",
-//   G3 = "g3",
-//   B3 = "b3",
+  W2: "w2",
 
-//   Y3 = "y3",
-//   C3 = "c3",
-//   M3 = "m3",
+  // tier 3
+  R3: "r3",
+  G3: "g3",
+  B3: "b3",
 
-//   W3 = "w3",
+  Y3: "y3",
+  C3: "c3",
+  M3: "m3",
 
-//   // tier 4
-//   R4 = "r4",
-//   G4 = "g4",
-//   B4 = "b4",
+  W3: "w3",
 
-//   Y4 = "y4",
-//   C4 = "c4",
-//   M4 = "m4",
+  // tier 4
+  R4: "r4",
+  G4: "g4",
+  B4: "b4",
 
-//   W4 = "w4",
+  Y4: "y4",
+  C4: "c4",
+  M4: "m4",
 
-//   // tier 5
-//   R5 = "r5",
-//   G5 = "g5",
-//   B5 = "b5",
+  W4: "w4",
 
-//   Y5 = "y5",
-//   C5 = "c5",
-//   M5 = "m5",
+  // tier 5
+  R5: "r5",
+  G5: "g5",
+  B5: "b5",
 
-//   W5 = "w5",
+  Y5: "y5",
+  C5: "c5",
+  M5: "m5",
 
-//   // tier 6
-//   Y6 = "y6",
-//   C6 = "c6",
-//   M6 = "m6",
+  W5: "w5",
 
-//   W6 = "w6",
+  // tier 6
+  Y6: "y6",
+  C6: "c6",
+  M6: "m6",
 
-//   // tier 7
-//   W7 = "w7",
-// }
+  W6: "w6",
+
+  // tier 7
+  W7: "w7",
+}
+type Component = _ValueOf<ComponentEnumType>;
 
 // declare enum Glitch {
 //   // Locks spawn at random
@@ -5990,14 +5993,13 @@ interface Stanek {
 
 export interface BaseDevice {
   name: string;
-  type: DeviceType;
   x: number;
   y: number;
   isBusy: boolean;
 }
 
 export interface Bus extends ContainerDevice, EnergyDevice {
-  type: DeviceType.Bus;
+  type: DeviceTypeEnumType["Bus"];
   moveLvl: number;
   transferLvl: number;
   reduceLvl: number;
@@ -6019,31 +6021,31 @@ export interface ContainerDevice extends BaseDevice {
 }
 
 export interface ISocket extends ContainerDevice {
-  type: DeviceType.ISocket;
+  type: DeviceTypeEnumType["ISocket"];
   emitting: Component;
   emissionLvl: number;
   cooldownUntil: number;
 }
 
 export interface OSocket extends ContainerDevice {
-  type: DeviceType.OSocket;
+  type: DeviceTypeEnumType["OSocket"];
   currentRequest: Component[];
 }
 
 export interface Cache extends ContainerDevice {
-  type: DeviceType.Cache;
+  type: DeviceTypeEnumType["Cache"];
 }
 
 export interface Reducer extends ContainerDevice, TieredDevice {
-  type: DeviceType.Reducer;
+  type: DeviceTypeEnumType["Reducer"];
 }
 
 export interface Lock extends BaseDevice {
-  type: DeviceType.Lock;
+  type: DeviceTypeEnumType["Lock"];
 }
 
 export interface Battery extends EnergyDevice, TieredDevice {
-  type: DeviceType.Battery;
+  type: DeviceTypeEnumType["Battery"];
 }
 
 export interface Recipe {

@@ -1,12 +1,12 @@
-import { Battery, Bus, Cache, ISocket, Lock, OSocket, Reducer } from "@nsdefs";
-import { Component, DeviceType } from "@enums";
+import { Battery, Bus, Cache, Component, ISocket, Lock, OSocket, Reducer } from "@nsdefs";
+import { DeviceTypeEnum } from "@enums";
 import { myrian } from "./Myrian";
 import { getNextOSocketRequest } from "./Myrian";
 
 export const NewBus = (name: string, x: number, y: number) => {
   const bus: Bus = {
     name,
-    type: DeviceType.Bus,
+    type: DeviceTypeEnum.Bus,
     isBusy: false,
     x,
     y,
@@ -26,7 +26,7 @@ export const NewBus = (name: string, x: number, y: number) => {
 export const NewCache = (name: string, x: number, y: number) => {
   const cache: Cache = {
     name,
-    type: DeviceType.Cache,
+    type: DeviceTypeEnum.Cache,
     isBusy: false,
     content: [],
     maxContent: 1,
@@ -40,7 +40,7 @@ export const NewCache = (name: string, x: number, y: number) => {
 export const NewReducer = (name: string, x: number, y: number) => {
   const reducer: Reducer = {
     name,
-    type: DeviceType.Reducer,
+    type: DeviceTypeEnum.Reducer,
     isBusy: false,
     x,
     y,
@@ -55,7 +55,7 @@ export const NewReducer = (name: string, x: number, y: number) => {
 export const NewISocket = (name: string, x: number, y: number, emitting: Component) => {
   const isocket: ISocket = {
     name,
-    type: DeviceType.ISocket,
+    type: DeviceTypeEnum.ISocket,
     isBusy: false,
     x,
     y,
@@ -71,7 +71,7 @@ export const NewISocket = (name: string, x: number, y: number, emitting: Compone
 export const NewOSocket = (name: string, x: number, y: number) => {
   const osocket: OSocket = {
     name,
-    type: DeviceType.OSocket,
+    type: DeviceTypeEnum.OSocket,
     isBusy: false,
     x,
     y,
@@ -86,7 +86,7 @@ export const NewOSocket = (name: string, x: number, y: number) => {
 export const NewLock = (name: string, x: number, y: number) => {
   const lock: Lock = {
     name,
-    type: DeviceType.Lock,
+    type: DeviceTypeEnum.Lock,
     isBusy: false,
     x,
     y,
@@ -98,7 +98,7 @@ export const NewLock = (name: string, x: number, y: number) => {
 export const NewBattery = (name: string, x: number, y: number) => {
   const battery: Battery = {
     name,
-    type: DeviceType.Battery,
+    type: DeviceTypeEnum.Battery,
     isBusy: false,
     x,
     y,
