@@ -58,7 +58,8 @@ import { installSpeed, emissionSpeed, moveSpeed, reduceSpeed, transferSpeed } fr
 import { NewBattery, NewBus, NewCache, NewISocket, NewLock, NewOSocket, NewReducer } from "../Myrian/NewDevices";
 import { rustBus } from "../Myrian/glitches/rust";
 import { Bus, Myrian as IMyrian, Reducer, Battery, ISocket, DeviceType, Component } from "@nsdefs";
-import { DeviceTypeEnum, Glitch } from "@enums";
+import { DeviceTypeEnum, GlitchEnum } from "@enums";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
   return {
@@ -121,19 +122,19 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           return helpers
             .netscriptDelay(
               ctx,
-              moveSpeed(bus.moveLvl) * frictionMult(myrian.glitches[Glitch.Friction]) * outOfEnergy,
+              moveSpeed(bus.moveLvl) * frictionMult(myrian.glitches[GlitchEnum.Friction]) * outOfEnergy,
               true,
             )
             .then(() => {
               bus.isBusy = false;
-              bus.energy = Math.max(0, bus.energy - magnetismLoss(myrian.glitches[Glitch.Magnetism]));
+              bus.energy = Math.max(0, bus.energy - magnetismLoss(myrian.glitches[GlitchEnum.Magnetism]));
               if (findDevice([x, y])) {
                 helpers.log(ctx, () => `[${x}, ${y}] is occupied`);
                 return Promise.resolve(false);
               }
               bus.x = x;
               bus.y = y;
-              if (myrian.rust[`${x}:${y}`]) rustBus(bus, myrian.glitches[Glitch.Rust]);
+              if (myrian.rust[`${x}:${y}`]) rustBus(bus, myrian.glitches[GlitchEnum.Rust]);
               return Promise.resolve(true);
             })
             .finally(() => {
@@ -243,7 +244,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           toDevice.isBusy = true;
 
           return helpers
-            .netscriptDelay(ctx, transferSpeed(transferLvl) * isolationMult(myrian.glitches[Glitch.Isolation]), true)
+            .netscriptDelay(ctx, transferSpeed(transferLvl) * isolationMult(myrian.glitches[GlitchEnum.Isolation]), true)
             .then(() => {
               const previousSize = container.content.length;
 
@@ -275,7 +276,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
                 myrian.vulns += gain;
                 myrian.totalVulns += gain;
                 container.content = [];
-                const request = getNextOSocketRequest(myrian.glitches[Glitch.Encryption]);
+                const request = getNextOSocketRequest(myrian.glitches[GlitchEnum.Encryption]);
                 container.currentRequest = request;
                 container.maxContent = request.length;
               }
@@ -324,7 +325,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           bus.isBusy = true;
           reducer.isBusy = true;
           return helpers
-            .netscriptDelay(ctx, reduceSpeed(bus.reduceLvl) * jammingMult(myrian.glitches[Glitch.Jamming]), true)
+            .netscriptDelay(ctx, reduceSpeed(bus.reduceLvl) * jammingMult(myrian.glitches[GlitchEnum.Jamming]), true)
             .then(() => {
               reducer.content = [recipe.output];
               return Promise.resolve(true);
@@ -337,7 +338,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
     tweakISocket: (ctx) => async (_bus, _isocket, _component) => {
       const busID = helpers.deviceID(ctx, "bus", _bus);
       const isocketID = helpers.deviceID(ctx, "isocket", _isocket);
-      const component = helpers.string(ctx, "component", _component) as Component;
+      const component = getEnumHelper("ComponentEnum").nsGetMember(ctx, _component, "component");
 
       if (!componentTiers[0].includes(component)) {
         helpers.log(ctx, () => `component ${component} is not a valid component`);
@@ -366,7 +367,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[Glitch.Virtualization]),
+          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
@@ -458,7 +459,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
     },
 
     getDeviceCost: (ctx) => (_type) => {
-      const type = helpers.string(ctx, "type", _type);
+      const type = getEnumHelper("DeviceTypeEnum").nsGetMember(ctx, _type, "type");
       return installDeviceCost(type as DeviceType, countDevices(type as DeviceType));
     },
 
@@ -466,7 +467,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const busID = helpers.deviceID(ctx, "bus", _bus);
       const name = helpers.string(ctx, "name", _name);
       const [x, y] = helpers.coord2d(ctx, "coord", _coord);
-      const deviceType = helpers.string(ctx, "deviceType", _deviceType) as DeviceType;
+      const deviceType = getEnumHelper("DeviceTypeEnum").nsGetMember(ctx, _deviceType, "deviceType");
 
       const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
       if (!bus) {
@@ -515,7 +516,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[Glitch.Virtualization]),
+          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
@@ -579,7 +580,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[Glitch.Virtualization]),
+          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
@@ -720,24 +721,24 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return true;
     },
     setGlitchLvl: (ctx) => async (_glitch, _lvl) => {
-      const glitch = helpers.string(ctx, "glitch", _glitch);
+      const glitch = getEnumHelper("GlitchEnum").nsGetMember(ctx, _glitch, "glitch");
       const lvl = helpers.number(ctx, "lvl", _lvl);
-      if (lvl < 0 || lvl > glitchMaxLvl[glitch as Glitch]) return Promise.resolve();
-      const currentLvl = myrian.glitches[glitch as Glitch];
+      if (lvl < 0 || lvl > glitchMaxLvl[glitch]) return Promise.resolve();
+      const currentLvl = myrian.glitches[glitch];
       return helpers.netscriptDelay(ctx, Math.abs(lvl - currentLvl) * 5000, true).then(() => {
-        myrian.glitches[glitch as Glitch] = lvl;
+        myrian.glitches[glitch] = lvl;
       });
     },
     getGlitchLvl: (ctx) => (_glitch) => {
-      const glitch = helpers.string(ctx, "glitch", _glitch) as Glitch;
+      const glitch = getEnumHelper("GlitchEnum").nsGetMember(ctx, _glitch, "glitch");
       return myrian.glitches[glitch];
     },
     getGlitchMaxLvl: (ctx) => (_glitch) => {
-      const glitch = helpers.string(ctx, "glitch", _glitch) as Glitch;
+      const glitch = getEnumHelper("GlitchEnum").nsGetMember(ctx, _glitch, "glitch");
       return glitchMaxLvl[glitch];
     },
     getGlitchMult: (ctx) => (_glitch) => {
-      const glitch = helpers.string(ctx, "glitch", _glitch) as Glitch;
+      const glitch = getEnumHelper("GlitchEnum").nsGetMember(ctx, _glitch, "glitch");
       return glitchMult(glitch, myrian.glitches[glitch]);
     },
     getTotalGlitchMult: () => () => getTotalGlitchMult(),

@@ -1,5 +1,5 @@
-import { Device, DeviceType, DeviceID } from "@nsdefs";
-import { ComponentEnum, Glitch } from "@enums";
+import { Device, DeviceType, DeviceID, Glitch } from "@nsdefs";
+import { ComponentEnum, GlitchEnum } from "@enums";
 import { glitchMult, roamingTime } from "./formulas/glitches";
 import { isDeviceISocket, pickOne } from "./utils";
 import { componentTiers } from "./formulas/components";
@@ -19,7 +19,7 @@ export interface Myrian {
 
 export const myrianSize = 12;
 
-const defaultGlitches = Object.values(Glitch).reduce((acc, g) => ({ ...acc, [g]: 0 }), {}) as Record<Glitch, number>;
+const defaultGlitches = Object.values(GlitchEnum).reduce((acc, g) => ({ ...acc, [g]: 0 }), {}) as Record<Glitch, number>;
 
 export const myrian: Myrian = {
   vulns: 0,
@@ -44,7 +44,7 @@ const processGlitch = (func: () => void, time: () => number): (() => void) => {
 export const initMyrian = () => {
   processes = [
     processGlitch(processBattery, () => 1000),
-    processGlitch(processRoaming, () => roamingTime(myrian.glitches[Glitch.Roaming])),
+    processGlitch(processRoaming, () => roamingTime(myrian.glitches[GlitchEnum.Roaming])),
     processGlitch(processRust, () => 30000),
     processGlitch(processSegmentation, () => 30000)
   ];

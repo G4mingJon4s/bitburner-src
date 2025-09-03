@@ -44,6 +44,7 @@ export async function main(ns) {
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for [hacknet](./bitburner.hacknet.md) functions. Some of this API contains spoilers. |
 |  [heart](./bitburner.ns.heart.md) | <code>readonly</code> | { break(): number; } |  |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for [infiltration](./bitburner.infiltration.md) functions. |
+|  [myrian](./bitburner.ns.myrian.md) | <code>readonly</code> | [Myrian](./bitburner.myrian.md) | Namespace for myrian functions. Contains spoilers. |
 |  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
 |  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for [singularity](./bitburner.singularity.md) functions. Contains spoilers. |
 |  [sleeve](./bitburner.ns.sleeve.md) | <code>readonly</code> | [Sleeve](./bitburner.sleeve.md) | Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers. |

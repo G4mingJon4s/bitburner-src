@@ -1,4 +1,4 @@
-import { DeviceTypeEnum, Glitch } from "@enums";
+import { DeviceTypeEnum, GlitchEnum } from "@enums";
 import { myrian, myrianSize } from "../Myrian";
 import { findDevice, inMyrianBounds } from "../Myrian";
 
@@ -29,7 +29,7 @@ const dirs = [
 ];
 
 export const processRoaming = () => {
-  const roaming = myrian.glitches[Glitch.Roaming];
+  const roaming = myrian.glitches[GlitchEnum.Roaming];
   if (roaming === 0) return;
 
   myrian.devices.forEach((device) => {

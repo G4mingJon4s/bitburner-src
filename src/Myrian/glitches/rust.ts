@@ -1,11 +1,11 @@
 import { Bus } from "@nsdefs";
-import { Glitch } from "@enums";
+import { GlitchEnum } from "@enums";
 import { myrian, myrianSize } from "../Myrian";
 import { pickOne } from "../utils";
 
 export const processRust = () => {
   myrian.rust = {};
-  const rust = myrian.glitches[Glitch.Rust];
+  const rust = myrian.glitches[GlitchEnum.Rust];
   for (let i = 0; i < rust * 3; i++) {
     const x = Math.floor(Math.random() * myrianSize);
     const y = Math.floor(Math.random() * myrianSize);

@@ -12,8 +12,10 @@
 |  [AugmentPair](./bitburner.augmentpair.md) | Return value of [getSleevePurchasableAugs](./bitburner.sleeve.getsleevepurchasableaugs.md) |
 |  [AutocompleteData](./bitburner.autocompletedata.md) | Used for autocompletion |
 |  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
+|  [BaseDevice](./bitburner.basedevice.md) |  |
 |  [BaseTask](./bitburner.basetask.md) | Base interface of all tasks. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
+|  [Battery](./bitburner.battery.md) |  |
 |  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) | <p>Note:</p><p>- restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.</p><p>- disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.</p> |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
 |  [BitNodeOptions](./bitburner.bitnodeoptions.md) | <p>Default value:</p><p>- sourceFileOverrides: an empty Map</p><p>- intelligenceOverride: undefined</p><p>- All boolean options: false</p><p>If you specify intelligenceOverride, it must be a non-negative integer.</p> |
@@ -22,11 +24,14 @@
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
 |  [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
 |  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
+|  [Bus](./bitburner.bus.md) |  |
+|  [Cache\_2](./bitburner.cache_2.md) |  |
 |  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
 |  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
 |  [CompanyReputationRequirement](./bitburner.companyreputationrequirement.md) | Player must have at least this much reputation with this company. |
 |  [CompanyWorkTask](./bitburner.companyworktask.md) | Company Work |
+|  [ContainerDevice](./bitburner.containerdevice.md) |  |
 |  [CorpConstants](./bitburner.corpconstants.md) | Corporation related constants |
 |  [CorpIndustryData](./bitburner.corpindustrydata.md) | Data for an individual industry |
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
@@ -38,6 +43,7 @@
 |  [CrimeTask](./bitburner.crimetask.md) | Crime |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
+|  [EnergyDevice](./bitburner.energydevice.md) |  |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
 |  [EveryRequirement](./bitburner.everyrequirement.md) | All sub-conditions must be satisfied. |
 |  [Export](./bitburner.export.md) | Export order for a material |
@@ -82,15 +88,18 @@
 |  [InfiltrationLocation](./bitburner.infiltrationlocation.md) |  |
 |  [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
 |  [InvestmentOffer](./bitburner.investmentoffer.md) | Corporation investment offer |
+|  [ISocket](./bitburner.isocket.md) |  |
 |  [IStyleSettings](./bitburner.istylesettings.md) | Interface Styles |
 |  [JobTitleRequirement](./bitburner.jobtitlerequirement.md) | Player must have this job title at some company. |
 |  [KarmaRequirement](./bitburner.karmarequirement.md) | Player must have less than this much karma. |
 |  [LocationRequirement](./bitburner.locationrequirement.md) | Player must be at this location within a city. |
+|  [Lock\_2](./bitburner.lock_2.md) |  |
 |  [Material](./bitburner.material.md) | Material in a warehouse |
 |  [MoneyRequirement](./bitburner.moneyrequirement.md) | Player must have at least this much money. |
 |  [MoneySource](./bitburner.moneysource.md) |  |
 |  [MoneySources](./bitburner.moneysources.md) |  |
 |  [Multipliers](./bitburner.multipliers.md) |  |
+|  [Myrian](./bitburner.myrian.md) |  |
 |  [NetscriptPort](./bitburner.netscriptport.md) | Object representing a port. A port is a serialized queue. |
 |  [NodeStats](./bitburner.nodestats.md) | Object representing all the values related to a hacknet node. |
 |  [NotRequirement](./bitburner.notrequirement.md) | The sub-condition must not be satisfied. |
@@ -99,6 +108,7 @@
 |  [NumInfiltrationsRequirement](./bitburner.numinfiltrationsrequirement.md) | Player must have completed this many infiltrations. |
 |  [Office](./bitburner.office.md) | Office for a division in a city. |
 |  [OfficeAPI](./bitburner.officeapi.md) | Corporation Office API |
+|  [OSocket](./bitburner.osocket.md) |  |
 |  [PeopleKilledRequirement](./bitburner.peoplekilledrequirement.md) | Player must have killed at least this many people. |
 |  [Person](./bitburner.person.md) |  |
 |  [Player](./bitburner.player.md) |  |
@@ -106,6 +116,8 @@
 |  [Product](./bitburner.product.md) | Product in a warehouse |
 |  [ReactElement](./bitburner.reactelement.md) | A stand-in for the real React.ReactElement. Use React.createElement to make these. See [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation. |
 |  [RecentScript](./bitburner.recentscript.md) |  |
+|  [Recipe](./bitburner.recipe.md) |  |
+|  [Reducer](./bitburner.reducer.md) |  |
 |  [ReputationFormulas](./bitburner.reputationformulas.md) | Reputation formulas |
 |  [ResetInfo](./bitburner.resetinfo.md) | Various info about resets |
 |  [RunningScript](./bitburner.runningscript.md) |  |
@@ -126,6 +138,7 @@
 |  [StockOrder](./bitburner.stockorder.md) |  |
 |  [StudyTask](./bitburner.studytask.md) | Study |
 |  [TailProperties](./bitburner.tailproperties.md) |  |
+|  [TieredDevice](./bitburner.tiereddevice.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
 |  [UserInterfaceTheme](./bitburner.userinterfacetheme.md) | Interface Theme |
@@ -161,6 +174,8 @@
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CompanyName](./bitburner.companyname.md) |  |
 |  [CompanyNameEnumType](./bitburner.companynameenumtype.md) | Names of all companies |
+|  [Component](./bitburner.component.md) |  |
+|  [ComponentEnumType](./bitburner.componentenumtype.md) |  |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
@@ -173,11 +188,17 @@
 |  [CreatingCorporationCheckResultEnumType](./bitburner.creatingcorporationcheckresultenumtype.md) |  |
 |  [CrimeEnumType](./bitburner.crimeenumtype.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
+|  [Device](./bitburner.device.md) |  |
+|  [DeviceID](./bitburner.deviceid.md) |  |
+|  [DeviceType](./bitburner.devicetype.md) |  |
+|  [DeviceTypeEnumType](./bitburner.devicetypeenumtype.md) |  |
 |  [FactionName](./bitburner.factionname.md) |  |
 |  [FactionNameEnumType](./bitburner.factionnameenumtype.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkEnumType](./bitburner.factionworkenumtype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
+|  [Glitch](./bitburner.glitch.md) |  |
+|  [GlitchEnumType](./bitburner.glitchenumtype.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [GymEnumType](./bitburner.gymenumtype.md) |  |
 |  [GymLocationName](./bitburner.gymlocationname.md) |  |

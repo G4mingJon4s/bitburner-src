@@ -5970,26 +5970,27 @@ type ComponentEnumType = {
 }
 type Component = _ValueOf<ComponentEnumType>;
 
-// declare enum Glitch {
-//   // Locks spawn at random
-//   Segmentation = "segmentation",
-//   // ISockets and OSockets move around on their own
-//   Roaming = "roaming",
-//   // OSocket ask for more complicated components
-//   Encryption = "encryption",
-//   // Energy starts being consumed (level 0 is no consumption)
-//   Magnetism = "magnetism",
-//   // Hidden tiles on the board, when stepped on the bus loses upgrades
-//   Rust = "rust",
-//   // Move slows down
-//   Friction = "friction",
-//   // Transfer components and charging slows down
-//   Isolation = "isolation",
-//   // Install/Uninstall slows down
-//   Virtualization = "virtualization",
-//   // Reduce slows down
-//   Jamming = "jamming",
-// }
+export type GlitchEnumType = {
+  // Locks spawn at random
+  Segmentation: "segmentation",
+  // ISockets and OSockets move around on their own
+  Roaming: "roaming",
+  // OSocket ask for more complicated components
+  Encryption: "encryption",
+  // Energy starts being consumed (level 0 is no consumption)
+  Magnetism: "magnetism",
+  // Hidden tiles on the board, when stepped on the bus loses upgrades
+  Rust: "rust",
+  // Move slows down
+  Friction: "friction",
+  // Transfer components and charging slows down
+  Isolation: "isolation",
+  // Install/Uninstall slows down
+  Virtualization: "virtualization",
+  // Reduce slows down
+  Jamming: "jamming",
+}
+type Glitch = _ValueOf<GlitchEnumType>;
 
 export interface BaseDevice {
   name: string;
@@ -9268,6 +9269,9 @@ type NSEnums = {
   OrderType: OrderEnumType;
   BladeburnerActionType: BladeburnerActionEnumType;
   SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
+  DeviceType: DeviceTypeEnumType;
+  Component: ComponentEnumType;
+  Glitch: GlitchEnumType;
 };
 
 /**

@@ -1,10 +1,10 @@
-import { Glitch } from "@enums";
+import { GlitchEnum } from "@enums";
 import { myrian, myrianSize } from "../Myrian";
 import { findDevice } from "../Myrian";
 import { NewLock } from "../NewDevices";
 
 export const processSegmentation = () => {
-  const segmentation = myrian.glitches[Glitch.Segmentation];
+  const segmentation = myrian.glitches[GlitchEnum.Segmentation];
   for (let i = 0; i < segmentation; i++) {
     const x = Math.floor(Math.random() * myrianSize);
     const y = Math.floor(Math.random() * myrianSize);

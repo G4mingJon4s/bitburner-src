@@ -1,4 +1,4 @@
-import type { ComponentEnumType, DeviceTypeEnumType } from "@nsdefs";
+import type { ComponentEnumType, DeviceTypeEnumType, GlitchEnumType } from "@nsdefs";
 
 export const DeviceTypeEnum: DeviceTypeEnumType = {
   Bus: "bus",
@@ -80,23 +80,23 @@ export const ComponentEnum: ComponentEnumType = {
   W7: "w7",
 }
 
-export enum Glitch {
+export const GlitchEnum: GlitchEnumType = {
   // Locks spawn at random
-  Segmentation = "segmentation",
+  Segmentation: "segmentation",
   // ISockets and OSockets move around on their own
-  Roaming = "roaming",
+  Roaming: "roaming",
   // OSocket ask for more complicated components
-  Encryption = "encryption",
+  Encryption: "encryption",
   // Energy starts being consumed (level 0 is no consumption)
-  Magnetism = "magnetism",
+  Magnetism: "magnetism",
   // Hidden tiles on the board, when stepped on the bus loses upgrades
-  Rust = "rust",
+  Rust: "rust",
   // Move slows down
-  Friction = "friction",
+  Friction: "friction",
   // Transfer components and charging slows down
-  Isolation = "isolation",
+  Isolation: "isolation",
   // Install/Uninstall slows down
-  Virtualization = "virtualization",
+  Virtualization: "virtualization",
   // Reduce slows down
-  Jamming = "jamming",
+  Jamming: "jamming",
 }

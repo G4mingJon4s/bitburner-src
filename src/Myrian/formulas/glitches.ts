@@ -1,27 +1,28 @@
-import { Glitch } from "@enums";
+import { GlitchEnum } from "@enums";
+import { Glitch } from "@nsdefs";
 
 export const glitchMaxLvl: Record<Glitch, number> = {
-  [Glitch.Segmentation]: 10,
-  [Glitch.Roaming]: 10,
-  [Glitch.Encryption]: 7,
-  [Glitch.Magnetism]: 10,
-  [Glitch.Rust]: 10,
-  [Glitch.Friction]: 3,
-  [Glitch.Isolation]: 3,
-  [Glitch.Virtualization]: 3,
-  [Glitch.Jamming]: 3,
+  [GlitchEnum.Segmentation]: 10,
+  [GlitchEnum.Roaming]: 10,
+  [GlitchEnum.Encryption]: 7,
+  [GlitchEnum.Magnetism]: 10,
+  [GlitchEnum.Rust]: 10,
+  [GlitchEnum.Friction]: 3,
+  [GlitchEnum.Isolation]: 3,
+  [GlitchEnum.Virtualization]: 3,
+  [GlitchEnum.Jamming]: 3,
 };
 
 export const giltchMultCoefficients: Record<Glitch, number> = {
-  [Glitch.Segmentation]: 1,
-  [Glitch.Roaming]: 1,
-  [Glitch.Encryption]: 0.1,
-  [Glitch.Magnetism]: 0.2,
-  [Glitch.Rust]: 1,
-  [Glitch.Friction]: 0.2,
-  [Glitch.Isolation]: 0.2,
-  [Glitch.Virtualization]: 0.2,
-  [Glitch.Jamming]: 0.2,
+  [GlitchEnum.Segmentation]: 1,
+  [GlitchEnum.Roaming]: 1,
+  [GlitchEnum.Encryption]: 0.1,
+  [GlitchEnum.Magnetism]: 0.2,
+  [GlitchEnum.Rust]: 1,
+  [GlitchEnum.Friction]: 0.2,
+  [GlitchEnum.Isolation]: 0.2,
+  [GlitchEnum.Virtualization]: 0.2,
+  [GlitchEnum.Jamming]: 0.2,
 };
 
 // vulns mult by glitch lvl
