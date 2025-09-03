@@ -49,6 +49,7 @@ import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
+import { initMyrian } from "./Myrian/Myrian";
 
 declare global {
   // This property is only available in the dev build
@@ -323,6 +324,8 @@ const Engine = {
       Go.storeCycles(numCyclesOffline);
 
       staneksGift.process(numCyclesOffline);
+
+      initMyrian();
 
       // Sleeves offline progress
       Player.sleeves.forEach((sleeve) => sleeve.process(numCyclesOffline));

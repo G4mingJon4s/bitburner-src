@@ -41,9 +41,7 @@ const processGlitch = (func: () => void, time: () => number): (() => void) => {
   return () => clearTimeout(timeout);
 };
 
-export const loadMyrian = (save: string) => {
-  resetMyrian();
-
+export const initMyrian = () => {
   processes = [
     processGlitch(processBattery, () => 1000),
     processGlitch(processRoaming, () => roamingTime(myrian.glitches[Glitch.Roaming])),
@@ -51,9 +49,6 @@ export const loadMyrian = (save: string) => {
     processGlitch(processSegmentation, () => 30000)
   ];
 
-  if (!save) return;
-  const savedMyrian = JSON.parse(save);
-  Object.assign(myrian, savedMyrian);
   myrian.devices.forEach((d) => (d.isBusy = false));
   myrian.devices.filter(isDeviceISocket).forEach((d) => (d.content = Array.from({ length: d.maxContent }, () => d.emitting)));
 };

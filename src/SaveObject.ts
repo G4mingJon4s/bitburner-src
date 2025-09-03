@@ -32,7 +32,8 @@ import { Reviver } from "./utils/GenericReviver";
 import { giveExportBonus } from "./ExportBonus";
 import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 import { InfiltrationState } from "./Infiltration/formulas/game";
-import { myrian, loadMyrian } from "./Myrian/Myrian";
+import { myrian } from "./Myrian/Myrian";
+import { loadMyrian } from "./Myrian/SaveLoad";
 
 /* SaveObject.js
  *  Defines the object used to save/load games

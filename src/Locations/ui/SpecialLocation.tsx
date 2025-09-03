@@ -39,6 +39,7 @@ import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNod
 import { useRerender } from "../../ui/React/hooks";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import { canAcceptStaneksGift } from "../../CotMG/Helper";
+import { initMyrian } from "../../Myrian/Myrian";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -332,6 +333,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       );
       Router.toPage(Page.MyrianOS);
       Player.myrianConnection = true;
+      initMyrian();
     };
     if (!Player.canAccessMyrian())
       return (
