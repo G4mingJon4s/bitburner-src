@@ -1,7 +1,7 @@
 import { Device, DeviceType, DeviceID, Glitch } from "@nsdefs";
 import { ComponentEnum, GlitchEnum } from "@enums";
 import { glitchMult, roamingTime } from "./formulas/glitches";
-import { isDeviceISocket, pickOne } from "./utils";
+import { isDeviceISocket, isDeviceOfType, pickOne } from "./utils";
 import { componentTiers } from "./formulas/components";
 import { NewBus, NewISocket, NewOSocket } from "./NewDevices";
 import { processRoaming } from "./glitches/roaming";
@@ -55,10 +55,14 @@ export const initMyrian = () => {
 
 export const inMyrianBounds = (x: number, y: number) => x >= 0 && x < myrianSize && y >= 0 && y < myrianSize;
 
-export const findDevice = (id: DeviceID, type?: DeviceType): Device | undefined =>
-  myrian.devices.find(
-    (e) => (typeof id === "string" ? e.name === id : e.x === id[0] && e.y === id[1]) && (!type || type === e.type),
-  );
+export const findDevice = <T extends DeviceType | undefined = undefined>(id: DeviceID, type?: T): (
+  T extends undefined ? Device : Extract<Device, { type: T }>
+) | undefined => {
+  const possible = myrian.devices.find(d => typeof id === "string" ? d.name === id : d.x === id[0] && d.y === id[1]);
+  if (possible === undefined) return undefined;
+  if (type === undefined) return possible as T extends undefined ? Device : never;
+  return isDeviceOfType(possible, type) ? possible : undefined;
+}
 
 export const removeDevice = (id: DeviceID, type?: DeviceType) => {
   myrian.devices = myrian.devices.filter(

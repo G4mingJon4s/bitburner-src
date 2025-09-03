@@ -91,7 +91,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           const busID = helpers.string(ctx, "bus", _bus);
           const [x, y] = helpers.coord2d(ctx, "coord", _coord);
 
-          const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+          const bus = findDevice(busID, DeviceTypeEnum.Bus);
           if (!bus) {
             helpers.log(ctx, () => `bus does not exist`);
             return Promise.resolve(false);
@@ -293,13 +293,13 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           const busID = helpers.deviceID(ctx, "bus", _busID);
           const reducerID = helpers.deviceID(ctx, "reducer", _reducerID);
 
-          const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+          const bus = findDevice(busID, DeviceTypeEnum.Bus);
           if (!bus) {
             helpers.log(ctx, () => `bus ${busID} not found`);
             return Promise.resolve(false);
           }
 
-          const reducer = findDevice(reducerID, DeviceTypeEnum.Reducer) as Reducer;
+          const reducer = findDevice(reducerID, DeviceTypeEnum.Reducer);
           if (!reducer) {
             helpers.log(ctx, () => `reducer ${reducerID} not found`);
             return Promise.resolve(false);
@@ -345,12 +345,12 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
         return Promise.resolve(false);
       }
 
-      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus);
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);
       }
-      const isocket = findDevice(isocketID, DeviceTypeEnum.ISocket) as ISocket;
+      const isocket = findDevice(isocketID, DeviceTypeEnum.ISocket);
       if (!isocket) {
         helpers.log(ctx, () => `isocket ${isocketID} not found`);
         return Promise.resolve(false);
@@ -389,13 +389,13 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const busID = helpers.deviceID(ctx, "bus", _bus);
       const batteryID = helpers.deviceID(ctx, "battery", _battery);
 
-      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus);
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(-1);
       }
 
-      const battery = findDevice(batteryID, DeviceTypeEnum.Battery) as Battery;
+      const battery = findDevice(batteryID, DeviceTypeEnum.Battery);
       if (!battery) {
         helpers.log(ctx, () => `battery ${batteryID} not found`);
         return Promise.resolve(-1);
@@ -469,7 +469,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const [x, y] = helpers.coord2d(ctx, "coord", _coord);
       const deviceType = getEnumHelper("DeviceTypeEnum").nsGetMember(ctx, _deviceType, "deviceType");
 
-      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus);
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);
@@ -558,7 +558,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       const busID = helpers.string(ctx, "bus", _bus);
       const [x, y] = helpers.coord2d(ctx, "coord", _coord);
 
-      const bus = findDevice(busID, DeviceTypeEnum.Bus) as Bus;
+      const bus = findDevice(busID, DeviceTypeEnum.Bus);
       if (!bus) {
         helpers.log(ctx, () => `bus ${busID} not found`);
         return Promise.resolve(false);

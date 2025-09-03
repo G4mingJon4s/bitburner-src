@@ -12,6 +12,7 @@ import {
   Battery,
   TieredDevice,
   EnergyDevice,
+  DeviceType,
 } from "@nsdefs";
 import { ComponentEnum, DeviceTypeEnum } from "@enums";
 
@@ -125,6 +126,9 @@ export const extendsTieredDevice = (device: Device): device is Extract<Device, T
   device.type === DeviceTypeEnum.Reducer
 );
 
+export const isDeviceOfType = <T extends DeviceType>(device: Device, type: T): device is Extract<Device, T> => (
+  device.type === type
+);
 export const isDeviceContainer = (device: BaseDevice): device is ContainerDevice => "content" in device;
 export const isDeviceBus = (d: Device): d is Bus => d.type === DeviceTypeEnum.Bus;
 export const isDeviceISocket = (d: Device): d is ISocket => d.type === DeviceTypeEnum.ISocket;
