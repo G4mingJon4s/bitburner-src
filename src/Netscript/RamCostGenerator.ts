@@ -393,14 +393,50 @@ const stanek = {
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 
-const myrian: any = new Proxy(
-  {},
-  {
-    get() {
-      return 0;
-    },
-  },
-);
+const myrian = {
+  DEBUG_GIVE_VULNS: 0,
+  DEUBG_RESET: 0,
+
+  moveBus: 0,
+  transfer: 0,
+  reduce: 0,
+  tweakISocket: 0,
+  energize: 0,
+  formatContent: 0,
+
+  getVulns: 0,
+  getDevice: 0,
+  getDevices: 0,
+
+  getDeviceCost: 0,
+  installDevice: 0,
+  renameDevice: 0,
+  uninstallDevice: 0,
+
+  getGlitchLvl: 0,
+  setGlitchLvl: 0,
+  getGlitchMaxLvl: 0,
+  getGlitchMult: 0,
+  getTotalGlitchMult: 0,
+
+  getUpgradeEmissionLvlCost: 0,
+  getUpgradeInstallLvlCost: 0,
+  getUpgradeMaxContentCost: 0,
+  getUpgradeMaxEnergyCost: 0,
+  getUpgradeMoveLvlCost: 0,
+  getUpgradeReduceLvlCost: 0,
+  getUpgradeTierCost: 0,
+  getUpgradeTransferLvlCost: 0,
+
+  upgradeEmissionLvl: 0,
+  upgradeInstallLvl: 0,
+  upgradeMaxContent: 0,
+  upgradeMaxEnergy: 0,
+  upgradeMoveLvl: 0,
+  upgradeReduceLvl: 0,
+  upgradeTier: 0,
+  upgradeTransferLvl: 0,
+} as const;
 
 // UI API
 const ui = {
