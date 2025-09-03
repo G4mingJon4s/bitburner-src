@@ -1,4 +1,4 @@
-export const tutorial = `# Myrian
+# Myrian
 
 Myrian is the name of the OS that the BitNodes run on.
 
@@ -106,4 +106,3 @@ Encryption is the only glitch that's always active. The level of Encryption dete
 ## Destabilization
 
 As the number of total vulns increase the bitnode becomes unstable and it's multiplier become more favorable.
-`;

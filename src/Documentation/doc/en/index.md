@@ -43,6 +43,7 @@
 - [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
 - [IPvGO](programming/go_algorithms.md)
+- [Myrian OS](advanced/myrian.md)
 
 ## Resources
 
