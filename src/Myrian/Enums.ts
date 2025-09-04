@@ -1,4 +1,4 @@
-import type { ComponentEnumType, DeviceTypeEnumType, GlitchEnumType } from "@nsdefs";
+import type { ComponentEnumType, DeviceTypeEnumType, GlitchEnumType, MyrianUpgradeEnumType } from "@nsdefs";
 
 export const DeviceTypeEnum: DeviceTypeEnumType = {
   Bus: "bus",
@@ -99,4 +99,15 @@ export const GlitchEnum: GlitchEnumType = {
   Virtualization: "virtualization",
   // Reduce slows down
   Jamming: "jamming",
+}
+
+export const MyrianUpgradeEnum: MyrianUpgradeEnumType = {
+  Content: "content",
+  Emission: "emission",
+  Energy: "energy",
+  Install: "install",
+  Movement: "movement",
+  Reduce: "reduce",
+  Tier: "tier",
+  Transfer: "transfer",
 }

@@ -11,17 +11,7 @@ import {
   myrian,
   myrianSize,
 } from "../Myrian/Myrian";
-import {
-  installDeviceCost,
-  upgradeEmissionCost,
-  upgradeInstallLvlCost,
-  upgradeMaxEnergyCost,
-  upgradeMoveLvlCost,
-  upgradeReduceLvlCost,
-  upgradeTierCost,
-  upgradeTransferLvlCost,
-  upgradeMaxContentCost,
-} from "../Myrian/formulas/costs";
+import { installDeviceCost } from "../Myrian/formulas/costs";
 import { recipes } from "../Myrian/formulas/recipes";
 import { componentTiers } from "../Myrian/formulas/components";
 import {
@@ -38,28 +28,21 @@ import {
   adjacentCoord2D,
   compareComponentMap,
   contentVulnsValue,
-  extendsContainerDevice,
+  hasContainer,
   inventoryMatches,
   isDeviceBus,
-  isDeviceContainer,
   isDeviceISocket,
   isDeviceOSocket,
-  isDeviceTiered,
-  isEmittingDevice,
-  isEnergyDevice,
-  isInstallingDevice,
-  isMovingDevice,
-  isReducingDevice,
-  isTransferingDevice,
   makeComponentMap,
   pickOne,
 } from "../Myrian/utils";
 import { installSpeed, emissionSpeed, moveSpeed, reduceSpeed, transferSpeed } from "../Myrian/formulas/speed";
 import { NewBattery, NewBus, NewCache, NewISocket, NewLock, NewOSocket, NewReducer } from "../Myrian/NewDevices";
 import { rustBus } from "../Myrian/glitches/rust";
-import { Bus, Myrian as IMyrian, Reducer, Battery, ISocket, DeviceType, Component } from "@nsdefs";
+import { Bus, Myrian as IMyrian, DeviceType, Component } from "@nsdefs";
 import { DeviceTypeEnum, GlitchEnum } from "@enums";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { getDeviceUpgradeCost, upgradeDevice } from "../Myrian/upgrade";
 
 export function NetscriptMyrian(): InternalAPI<IMyrian> {
   return {
@@ -122,7 +105,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           return helpers
             .netscriptDelay(
               ctx,
-              moveSpeed(bus.moveLvl) * frictionMult(myrian.glitches[GlitchEnum.Friction]) * outOfEnergy,
+              moveSpeed(bus.upgrades.movement) * frictionMult(myrian.glitches[GlitchEnum.Friction]) * outOfEnergy,
               true,
             )
             .then(() => {
@@ -150,7 +133,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
         return false;
       }
 
-      if (!isDeviceContainer(device)) {
+      if (!hasContainer(device)) {
         helpers.log(ctx, () => `device ${deviceID} is not a container`);
         return false;
       }
@@ -158,10 +141,10 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       device.content = [];
 
       if (isDeviceISocket(device)) {
-        const cooldown = emissionSpeed(device.emissionLvl);
+        const cooldown = emissionSpeed(device.upgrades.emission);
         device.cooldownUntil = Date.now() + cooldown;
         setTimeout(() => {
-          device.content = new Array<Component>(device.maxContent).fill(device.emitting);
+          device.content = new Array<Component>(device.upgrades.content).fill(device.emitting);
         }, cooldown);
       }
 
@@ -181,7 +164,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
             return Promise.resolve(false);
           }
 
-          if (!extendsContainerDevice(fromDevice)) {
+          if (!hasContainer(fromDevice)) {
             helpers.log(ctx, () => `device ${fromID} is not a container`);
             return Promise.resolve(false);
           }
@@ -192,7 +175,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
             return Promise.resolve(false);
           }
 
-          if (!extendsContainerDevice(toDevice)) {
+          if (!hasContainer(toDevice)) {
             helpers.log(ctx, () => `device ${toID} is not a container`);
             return Promise.resolve(false);
           }
@@ -213,12 +196,12 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           const bus = devices[busIndex] as Bus;
           const container = devices[busIndex === 0 ? 1 : 0];
 
-          let transferLvl = bus.transferLvl;
-          if (isDeviceBus(container)) transferLvl = Math.min(transferLvl, container.transferLvl);
+          let transferLvl = bus.upgrades.transfer;
+          if (isDeviceBus(container)) transferLvl = Math.min(transferLvl, container.upgrades.transfer);
 
           const fromFinalSize = fromDevice.content.length - input.length + output.length;
           const toFinalSize = toDevice.content.length - output.length + input.length;
-          if (fromFinalSize > fromDevice.maxContent || toFinalSize > toDevice.maxContent) {
+          if (fromFinalSize > fromDevice.upgrades.content || toFinalSize > toDevice.upgrades.content) {
             helpers.log(ctx, () => "not enough space in one of the containers");
             return Promise.resolve(false);
           }
@@ -265,10 +248,10 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
                 .flat();
 
               if (isDeviceISocket(container) && previousSize > container.content.length) {
-                const cooldown = emissionSpeed(container.emissionLvl);
+                const cooldown = emissionSpeed(container.upgrades.emission);
                 container.cooldownUntil = Date.now() + cooldown;
                 setTimeout(() => {
-                  container.content = new Array<Component>(container.maxContent).fill(container.emitting);
+                  container.content = new Array<Component>(container.upgrades.content).fill(container.emitting);
                 }, cooldown);
               }
               if (isDeviceOSocket(container) && inventoryMatches(container.currentRequest, container.content)) {
@@ -278,7 +261,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
                 container.content = [];
                 const request = getNextOSocketRequest(myrian.glitches[GlitchEnum.Encryption]);
                 container.currentRequest = request;
-                container.maxContent = request.length;
+                container.upgrades.content = request.length;
               }
               return Promise.resolve(true);
             })
@@ -310,7 +293,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
             return Promise.resolve(false);
           }
 
-          const recipe = recipes[reducer.tier].find((r) => inventoryMatches(r.input, reducer.content));
+          const recipe = recipes[reducer.upgrades.tier].find((r) => inventoryMatches(r.input, reducer.content));
 
           if (!recipe) {
             helpers.log(ctx, () => "reducer content matches no recipe");
@@ -325,7 +308,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           bus.isBusy = true;
           reducer.isBusy = true;
           return helpers
-            .netscriptDelay(ctx, reduceSpeed(bus.reduceLvl) * jammingMult(myrian.glitches[GlitchEnum.Jamming]), true)
+            .netscriptDelay(ctx, reduceSpeed(bus.upgrades.reduce) * jammingMult(myrian.glitches[GlitchEnum.Jamming]), true)
             .then(() => {
               reducer.content = [recipe.output];
               return Promise.resolve(true);
@@ -367,16 +350,16 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
+          installSpeed(bus.upgrades.install) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
           isocket.emitting = component;
           isocket.content = [];
-          const cooldown = emissionSpeed(isocket.emissionLvl);
+          const cooldown = emissionSpeed(isocket.upgrades.emission);
           isocket.cooldownUntil = Date.now() + cooldown;
           setTimeout(() => {
-            isocket.content = new Array<Component>(isocket.maxContent).fill(isocket.emitting);
+            isocket.content = new Array<Component>(isocket.upgrades.content).fill(isocket.emitting);
           }, cooldown);
           return Promise.resolve(true);
         })
@@ -401,7 +384,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
         return Promise.resolve(-1);
       }
 
-      const transfer = Math.min(battery.energy, bus.maxEnergy - bus.energy);
+      const transfer = Math.min(battery.energy, bus.upgrades.energy - bus.energy);
       bus.isBusy = true;
       battery.isBusy = true;
 
@@ -416,46 +399,6 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           bus.isBusy = false;
           battery.isBusy = false;
         });
-    },
-    upgradeMaxContent: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "id", _id);
-      const container = findDevice(id);
-      if (!container) {
-        helpers.log(ctx, () => `device ${id} not found`);
-        return false;
-      }
-
-      if (!isDeviceContainer(container)) {
-        helpers.log(ctx, () => `device ${id} is not a container`);
-        return false;
-      }
-
-      const cost = upgradeMaxContentCost(container.type, container.maxContent);
-      if (myrian.vulns < cost) {
-        helpers.log(ctx, () => `not enough vulns to upgrade container`);
-        return false;
-      }
-
-      myrian.vulns -= cost;
-      container.maxContent++;
-
-      return true;
-    },
-
-    getUpgradeMaxContentCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "id", _id);
-      const container = findDevice(id);
-      if (!container) {
-        helpers.log(ctx, () => `container ${id} not found`);
-        return -1;
-      }
-
-      if (!isDeviceContainer(container)) {
-        helpers.log(ctx, () => `device ${id} is not a container`);
-        return -1;
-      }
-
-      return upgradeMaxContentCost(container.type, container.maxContent);
     },
 
     getDeviceCost: (ctx) => (_type) => {
@@ -516,7 +459,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
+          installSpeed(bus.upgrades.install) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
@@ -580,7 +523,7 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
       return helpers
         .netscriptDelay(
           ctx,
-          installSpeed(bus.installLvl) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
+          installSpeed(bus.upgrades.install) * virtualizationMult(myrian.glitches[GlitchEnum.Virtualization]),
           true,
         )
         .then(() => {
@@ -594,131 +537,23 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           placedDevice.isBusy = false;
         });
     },
-    getUpgradeTierCost: (ctx) => (_id) => {
+    upgrade: (ctx) => (_id, _upgrade) => {
       const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isDeviceTiered(device)) return -1;
-      return upgradeTierCost(device.type, device.tier);
-    },
-    upgradeTier: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
+      const upgrade = getEnumHelper("MyrianUpgradeEnum").nsGetMember(ctx, _upgrade, "uprade");
+
       const device = findDevice(id);
       if (!device) return false;
-      if (!isDeviceTiered(device)) return false;
-      const cost = upgradeTierCost(device.type, device.tier);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.tier++;
-      return true;
+
+      return upgradeDevice(device, upgrade);
     },
-    getUpgradeEmissionLvlCost: (ctx) => (_id) => {
+    getUpgradeCost: (ctx) => (_id, _upgrade) => {
       const id = helpers.deviceID(ctx, "device", _id);
+      const upgrade = getEnumHelper("MyrianUpgradeEnum").nsGetMember(ctx, _upgrade, "uprade");
+
       const device = findDevice(id);
       if (!device) return -1;
-      if (!isEmittingDevice(device)) return -1;
-      return upgradeEmissionCost(device.type, device.emissionLvl);
-    },
-    upgradeEmissionLvl: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isEmittingDevice(device)) return false;
-      const cost = upgradeEmissionCost(device.type, device.emissionLvl);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.emissionLvl++;
-      return true;
-    },
-    getUpgradeMoveLvlCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isMovingDevice(device)) return -1;
-      return upgradeMoveLvlCost(device.type, device.moveLvl);
-    },
-    upgradeMoveLvl: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isMovingDevice(device)) return false;
-      const cost = upgradeMoveLvlCost(device.type, device.moveLvl);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.moveLvl++;
-      return true;
-    },
-    getUpgradeTransferLvlCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isTransferingDevice(device)) return -1;
-      return upgradeTransferLvlCost(device.type, device.transferLvl);
-    },
-    upgradeTransferLvl: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isTransferingDevice(device)) return false;
-      const cost = upgradeTransferLvlCost(device.type, device.transferLvl);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.transferLvl++;
-      return true;
-    },
-    getUpgradeReduceLvlCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isReducingDevice(device)) return -1;
-      return upgradeReduceLvlCost(device.type, device.reduceLvl);
-    },
-    upgradeReduceLvl: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isReducingDevice(device)) return false;
-      const cost = upgradeReduceLvlCost(device.type, device.reduceLvl);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.reduceLvl++;
-      return true;
-    },
-    getUpgradeInstallLvlCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isInstallingDevice(device)) return -1;
-      return upgradeInstallLvlCost(device.type, device.installLvl);
-    },
-    upgradeInstallLvl: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isInstallingDevice(device)) return false;
-      const cost = upgradeInstallLvlCost(device.type, device.installLvl);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.installLvl++;
-      return true;
-    },
-    getUpgradeMaxEnergyCost: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return -1;
-      if (!isEnergyDevice(device)) return -1;
-      return upgradeMaxEnergyCost(device.type, device.maxEnergy);
-    },
-    upgradeMaxEnergy: (ctx) => (_id) => {
-      const id = helpers.deviceID(ctx, "device", _id);
-      const device = findDevice(id);
-      if (!device) return false;
-      if (!isEnergyDevice(device)) return false;
-      const cost = upgradeMaxEnergyCost(device.type, device.maxEnergy);
-      if (myrian.vulns < cost) return false;
-      myrian.vulns -= cost;
-      device.maxEnergy++;
-      return true;
+
+      return getDeviceUpgradeCost(device, upgrade) ?? -1;
     },
     setGlitchLvl: (ctx) => async (_glitch, _lvl) => {
       const glitch = getEnumHelper("GlitchEnum").nsGetMember(ctx, _glitch, "glitch");

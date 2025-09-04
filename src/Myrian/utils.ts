@@ -1,6 +1,4 @@
 import {
-  BaseDevice,
-  ContainerDevice,
   Component,
   Device,
   Bus,
@@ -10,9 +8,9 @@ import {
   Cache,
   Lock,
   Battery,
-  TieredDevice,
-  EnergyDevice,
   DeviceType,
+  ContainerDevice,
+  EnergyDevice,
 } from "@nsdefs";
 import { ComponentEnum, DeviceTypeEnum } from "@enums";
 
@@ -114,22 +112,23 @@ const vulnsMap: Record<Component, number> = {
 
 export const contentVulnsValue = (content: Component[]) => content.map((i) => vulnsMap[i]).reduce((a, b) => a + b, 0);
 
-export const extendsContainerDevice = (device: Device): device is Extract<Device, ContainerDevice> => (
+export const hasContainer = (device: Device): device is ContainerDevice => (
   device.type === DeviceTypeEnum.Bus ||
   device.type === DeviceTypeEnum.Cache ||
   device.type === DeviceTypeEnum.ISocket ||
   device.type === DeviceTypeEnum.OSocket ||
   device.type === DeviceTypeEnum.Reducer
 );
-export const extendsTieredDevice = (device: Device): device is Extract<Device, TieredDevice> => (
-  device.type === DeviceTypeEnum.Battery ||
-  device.type === DeviceTypeEnum.Reducer
+
+export const hasEnergy = (device: Device): device is EnergyDevice => (
+  device.type === DeviceTypeEnum.Bus ||
+  device.type === DeviceTypeEnum.Battery
 );
 
 export const isDeviceOfType = <T extends DeviceType>(device: Device, type: T): device is Extract<Device, T> => (
   device.type === type
 );
-export const isDeviceContainer = (device: BaseDevice): device is ContainerDevice => "content" in device;
+
 export const isDeviceBus = (d: Device): d is Bus => d.type === DeviceTypeEnum.Bus;
 export const isDeviceISocket = (d: Device): d is ISocket => d.type === DeviceTypeEnum.ISocket;
 export const isDeviceOSocket = (d: Device): d is OSocket => d.type === DeviceTypeEnum.OSocket;
@@ -137,10 +136,3 @@ export const isDeviceReducer = (d: Device): d is Reducer => d.type === DeviceTyp
 export const isDeviceCache = (d: Device): d is Cache => d.type === DeviceTypeEnum.Cache;
 export const isDeviceLock = (d: Device): d is Lock => d.type === DeviceTypeEnum.Lock;
 export const isDeviceBattery = (d: Device): d is Battery => d.type === DeviceTypeEnum.Battery;
-export const isDeviceTiered = (d: BaseDevice): d is TieredDevice => "tier" in d;
-export const isEmittingDevice = (d: BaseDevice): d is BaseDevice & { emissionLvl: number } => "emissionLvl" in d;
-export const isMovingDevice = (d: BaseDevice): d is BaseDevice & { moveLvl: number } => "moveLvl" in d;
-export const isTransferingDevice = (d: BaseDevice): d is BaseDevice & { transferLvl: number } => "transferLvl" in d;
-export const isReducingDevice = (d: BaseDevice): d is BaseDevice & { reduceLvl: number } => "reduceLvl" in d;
-export const isInstallingDevice = (d: BaseDevice): d is BaseDevice & { installLvl: number } => "installLvl" in d;
-export const isEnergyDevice = (d: BaseDevice): d is EnergyDevice => "maxEnergy" in d;

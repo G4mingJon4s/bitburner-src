@@ -50,7 +50,7 @@ export const initMyrian = () => {
   ];
 
   myrian.devices.forEach((d) => (d.isBusy = false));
-  myrian.devices.filter(isDeviceISocket).forEach((d) => (d.content = Array.from({ length: d.maxContent }, () => d.emitting)));
+  myrian.devices.filter(isDeviceISocket).forEach((d) => (d.content = Array.from({ length: d.upgrades.content }, () => d.emitting)));
 };
 
 export const inMyrianBounds = (x: number, y: number) => x >= 0 && x < myrianSize && y >= 0 && y < myrianSize;

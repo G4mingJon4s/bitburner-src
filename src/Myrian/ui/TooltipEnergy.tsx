@@ -8,6 +8,6 @@ interface ITooltipEnergyProps {
 
 export const TooltipEnergy = ({ device }: ITooltipEnergyProps): React.ReactElement => (
   <Typography>
-    {device.energy} / {device.maxEnergy} energy
+    {device.energy} / {device.upgrades.energy} energy
   </Typography>
 );

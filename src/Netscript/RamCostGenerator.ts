@@ -419,23 +419,8 @@ const myrian = {
   getGlitchMult: 0,
   getTotalGlitchMult: 0,
 
-  getUpgradeEmissionLvlCost: 0,
-  getUpgradeInstallLvlCost: 0,
-  getUpgradeMaxContentCost: 0,
-  getUpgradeMaxEnergyCost: 0,
-  getUpgradeMoveLvlCost: 0,
-  getUpgradeReduceLvlCost: 0,
-  getUpgradeTierCost: 0,
-  getUpgradeTransferLvlCost: 0,
-
-  upgradeEmissionLvl: 0,
-  upgradeInstallLvl: 0,
-  upgradeMaxContent: 0,
-  upgradeMaxEnergy: 0,
-  upgradeMoveLvl: 0,
-  upgradeReduceLvl: 0,
-  upgradeTier: 0,
-  upgradeTransferLvl: 0,
+  upgrade: 0,
+  getUpgradeCost: 0,
 } as const;
 
 // UI API

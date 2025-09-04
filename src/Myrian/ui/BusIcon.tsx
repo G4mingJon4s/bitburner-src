@@ -17,10 +17,10 @@ interface IBusIconProps {
 
 export const BusIcon = ({ bus }: IBusIconProps): React.ReactElement => (
   <DeviceTooltip device={bus} icon={Icon}>
-    <Typography>moveLvl: {bus.moveLvl}</Typography>
-    <Typography>transferLvl: {bus.transferLvl}</Typography>
-    <Typography>reduceLvl: {bus.reduceLvl}</Typography>
-    <Typography>installLvl: {bus.installLvl}</Typography>
+    <Typography>Movement: {bus.upgrades.movement}</Typography>
+    <Typography>Transfer: {bus.upgrades.transfer}</Typography>
+    <Typography>Reduce: {bus.upgrades.reduce}</Typography>
+    <Typography>Install: {bus.upgrades.install}</Typography>
     <TooltipEnergy device={bus} />
     <TooltipContent device={bus} />
   </DeviceTooltip>

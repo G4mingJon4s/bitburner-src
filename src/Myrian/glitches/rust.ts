@@ -13,16 +13,11 @@ export const processRust = () => {
   }
 };
 
-// DO NOT use `Object.keys` on a Rustable because it will return way more than just the rustable stats.
-const rustStats: (keyof Rustable)[] = ["moveLvl", "transferLvl", "reduceLvl", "installLvl", "maxEnergy"];
-type Rustable = Pick<Bus, "moveLvl" | "transferLvl" | "reduceLvl" | "installLvl" | "maxEnergy">;
+const rustableUpgrades: (keyof Bus["upgrades"])[] = ["movement", "transfer", "reduce", "install", "energy"];
 
 export const rustBus = (bus: Bus, rust: number) => {
-  const rustable = bus as Rustable;
-  const nonZero = rustStats.filter((stat) => rustable[stat] > 0);
-  const chosen = pickOne(nonZero);
-  rustable[chosen] = Math.max(0, rustable[chosen] - rust * 0.1);
-
-  // cap energy when maxEnergy is reduced
-  bus.energy = Math.min(bus.energy, bus.maxEnergy);
+  const possibleRustableUpgrades = rustableUpgrades.filter(u => bus.upgrades[u] > 0);
+  const chosenUpgrade = pickOne(possibleRustableUpgrades);
+  bus.upgrades[chosenUpgrade] = Math.max(0, bus.upgrades[chosenUpgrade] - rust * 0.1);
+  bus.energy = Math.min(bus.energy, bus.upgrades.energy);
 };

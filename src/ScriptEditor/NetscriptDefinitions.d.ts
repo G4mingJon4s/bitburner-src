@@ -5992,6 +5992,21 @@ export type GlitchEnumType = {
 }
 type Glitch = _ValueOf<GlitchEnumType>;
 
+export type MyrianUpgradeEnumType = {
+  Transfer: "transfer",
+  Reduce: "reduce",
+  Install: "install",
+  Emission: "emission",
+  Movement: "movement",
+  Tier: "tier",
+  Content: "content",
+  Energy: "energy",
+}
+
+export type MyrianUpgrade = _ValueOf<MyrianUpgradeEnumType>;
+
+type MyrianUpgradeMap<T extends MyrianUpgrade> = Record<T, number>;
+
 export interface BaseDevice {
   name: string;
   x: number;
@@ -5999,54 +6014,57 @@ export interface BaseDevice {
   isBusy: boolean;
 }
 
-export interface Bus extends ContainerDevice, EnergyDevice {
+export interface Bus extends BaseDevice {
   type: DeviceTypeEnumType["Bus"];
-  moveLvl: number;
-  transferLvl: number;
-  reduceLvl: number;
-  installLvl: number;
-}
+  upgrades: MyrianUpgradeMap<"content" | "energy" | "install" | "movement" | "reduce" | "transfer">;
 
-export interface EnergyDevice extends BaseDevice {
-  energy: number;
-  maxEnergy: number;
-}
-
-export interface TieredDevice extends BaseDevice {
-  tier: number;
-}
-
-export interface ContainerDevice extends BaseDevice {
   content: Component[];
-  maxContent: number;
+  energy: number;
 }
 
-export interface ISocket extends ContainerDevice {
+export interface ISocket extends BaseDevice {
   type: DeviceTypeEnumType["ISocket"];
+  upgrades: MyrianUpgradeMap<"content" | "emission">;
+
   emitting: Component;
-  emissionLvl: number;
   cooldownUntil: number;
+
+  content: Component[];
 }
 
-export interface OSocket extends ContainerDevice {
+export interface OSocket extends BaseDevice {
   type: DeviceTypeEnumType["OSocket"];
+  upgrades: MyrianUpgradeMap<"content">;
+
   currentRequest: Component[];
+
+  content: Component[];
 }
 
-export interface Cache extends ContainerDevice {
+export interface Cache extends BaseDevice {
   type: DeviceTypeEnumType["Cache"];
+  upgrades: MyrianUpgradeMap<"content">;
+
+  content: Component[];
 }
 
-export interface Reducer extends ContainerDevice, TieredDevice {
+export interface Reducer extends BaseDevice {
   type: DeviceTypeEnumType["Reducer"];
+  upgrades: MyrianUpgradeMap<"content" | "tier">;
+
+  content: Component[];
 }
 
 export interface Lock extends BaseDevice {
   type: DeviceTypeEnumType["Lock"];
+  upgrades: MyrianUpgradeMap<never>;
 }
 
-export interface Battery extends EnergyDevice, TieredDevice {
+export interface Battery extends BaseDevice {
   type: DeviceTypeEnumType["Battery"];
+  upgrades: MyrianUpgradeMap<"energy" | "tier">;
+
+  energy: number;
 }
 
 export interface Recipe {
@@ -6057,6 +6075,9 @@ export interface Recipe {
 export type DeviceID = string | [number, number];
 
 export type Device = Bus | ISocket | OSocket | Reducer | Cache | Lock | Battery;
+export type ContainerDevice = Extract<Device, { content: Component[]; }>;
+export type EnergyDevice = Extract<Device, { energy: number; }>;
+export type TieredDevice = Extract<Device, { upgrades: { tier: number; } }>;
 
 interface Myrian {
   /**
@@ -6169,132 +6190,16 @@ interface Myrian {
   renameDevice(device: DeviceID, name: string): boolean;
 
   /**
-   * Upgrade the max content of a device
-   * @remarks
-   * RAM cost: 0 GB
+   * Upgrade a specific upgrade of a device.
    * @returns true if the upgrade succeeded, false otherwise.
    */
-  upgradeMaxContent(device: DeviceID): boolean;
+  upgrade(device: DeviceID, upgrade: MyrianUpgrade): boolean;
 
   /**
-   * Get the cost of upgrading the content of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the content of a device, -1 on failure.
+   *  Get the cost of upgrading a specific upgrade of a device.
+   * @returns cost of upgrading the upgrade of the device, -1 if unavailable.
    */
-  getUpgradeMaxContentCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the tier of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeTier(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the tier of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the tier of a device, -1 on failure.
-   */
-  getUpgradeTierCost(device: DeviceID): number;
-
-  /**
-   * Get the cost of upgrading the emission of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the emission of a device, -1 on failure.
-   */
-  getUpgradeEmissionLvlCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the emissionLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeEmissionLvl(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the moveLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the moveLvl of a device, -1 on failure.
-   */
-  getUpgradeMoveLvlCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the moveLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeMoveLvl(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the transferLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the transferLvl of a device, -1 on failure.
-   */
-  getUpgradeTransferLvlCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the moveLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeTransferLvl(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the reduceLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the reduceLvl of a device, -1 on failure.
-   */
-  getUpgradeReduceLvlCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the reduceLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeReduceLvl(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the installLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the installLvl of a device, -1 on failure.
-   */
-  getUpgradeInstallLvlCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the installLvl of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeInstallLvl(device: DeviceID): boolean;
-
-  /**
-   * Get the cost of upgrading the maxEnergy of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns cost of upgrading the maxEnergy of a device, -1 on failure.
-   */
-  getUpgradeMaxEnergyCost(device: DeviceID): number;
-
-  /**
-   * Upgrade the maxEnergy of a device
-   * @remarks
-   * RAM cost: 0 GB
-   * @returns true if the upgrade succeeded, false otherwise.
-   */
-  upgradeMaxEnergy(device: DeviceID): boolean;
+  getUpgradeCost(device: DeviceID, upgrade: MyrianUpgrade): number;
 
   /**
    * Set the lvl of a glitch

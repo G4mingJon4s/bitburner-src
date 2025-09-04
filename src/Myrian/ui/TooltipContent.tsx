@@ -7,7 +7,7 @@ export const TooltipContent = ({ device }: { device: ContainerDevice }): React.R
   <>
     {device.content.length !== 0 && (
       <Typography>
-        content ({device.content.length} / {device.maxContent}):
+        content ({device.content.length} / {device.upgrades.content}):
         <br />
         {device.content.map((component, i) => (
           <ComponentText key={i} component={component} />

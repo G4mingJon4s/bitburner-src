@@ -7,5 +7,5 @@ interface ITooltipTierProps {
 }
 
 export const TooltipTier = ({ device }: ITooltipTierProps): React.ReactElement => (
-  <Typography>Tier: {device.tier}</Typography>
+  <Typography>Tier: {device.upgrades.tier}</Typography>
 );
