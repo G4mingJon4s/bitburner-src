@@ -215,8 +215,8 @@ export function NetscriptMyrian(): InternalAPI<IMyrian> {
           const inputContentMap = makeComponentMap(input);
           const outputContentMap = makeComponentMap(output);
 
-          const fromHas = compareComponentMap(fromContentMap, inputContentMap, (a, b) => a >= b, false);
-          const toHas = compareComponentMap(toContentMap, outputContentMap, (a, b) => a >= b, false);
+          const fromHas = compareComponentMap(inputContentMap, fromContentMap, (a, b) => a <= b, false);
+          const toHas = compareComponentMap(outputContentMap, fromContentMap, (a, b) => a <= b, false);
 
           if (!fromHas || !toHas) {
             helpers.log(ctx, () => "one of the entities does not have the items");

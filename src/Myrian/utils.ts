@@ -27,6 +27,10 @@ export type ComponentMap = Partial<Record<Component, number>>;
 export const makeComponentMap = (content: Component[]) =>
   content.reduce((acc, c) => ({ ...acc, [c]: (acc[c] ?? 0) + 1 }), {} as ComponentMap);
 
+/**
+ * CAUTION: This is not commutative!!!
+ * For non-strict comparisons, only the keys of A are checked
+ */
 export const compareComponentMap = (a: ComponentMap, b: ComponentMap, cmp = (a: number, b: number) => a === b, strict = true) => {
   const aKeys = Object.keys(a) as Component[];
   const bKeys = Object.keys(b) as Component[];
